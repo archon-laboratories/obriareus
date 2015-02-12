@@ -1,0 +1,281 @@
+	public static void Exploration(Bandit b, Agent a)
+	{
+		int t = 0;
+		int i = 0;
+		while(a.getExplrBudget() >= minCost(b.getArms()))
+		{
+			i = t % b.getNumArms(); //chooses arm based on time and no. of arms
+			if(a.getExplrBudget() - b.getArms().get(i).getCost() >= 0)
+			{
+				a.pullArmExplr(b.getArms().get(i), i); //agent updates memory
+			}
+			t++;
+		}
+	}
+
+	public static void ExplorationRandom(Bandit b, Agent a){
+		int t = 0;
+		int i = 0;
+		ArrayList<Integer> temp = new ArrayList<Integer>();
+
+		while(a.getExplrBudget() >= minCost(b.getArms()))
+		{
+			if(t%b.getNumArms() == 0)//Refill list for multiple passes
+			{
+				for(int j = 0; j < b.getNumArms(); j++)
+					temp.add(j);
+			}
+			i = randomIndex(temp);
+			if(a.getExplrBudget() - b.getArms().get(i).getCost() >= 0)
+			{
+				//System.out.println("\nArm " + i + " pulled");
+				a.pullArmExplr(b.getArms().get(i), i); //agent updates memory
+			}
+			t++;
+		}
+	}
+
+
+	public static void Exploitation(Bandit b, Agent a)
+	{
+		ArrayList<ArmMemory> n = a.getMemory();
+		ArmMemory i;
+		while(a.getBudget() >= minCost(b.getArms()))
+		{
+			i = maxRewardDensity(n);
+			while(a.getBudget() >= i.getCost())
+			{
+				a.pullArmExplt(b.getArms().get(n.indexOf(i)),n.indexOf(i));
+			}
+		n.set(n.indexOf(i), new ArmMemory(0));
+		}
+
+	}
+
+	public static void DynamicExploitation(Bandit b, Agent a)
+	{
+		ArrayList<ArmMemory> n = a.getMemory();
+		//int t = 1;
+		ArmMemory i;
+		while(a.getBudget() >= minCost(b.getArms()))
+		{
+			i = maxRewardDensity(n);
+			if(a.getBudget() >= i.getCost())
+			{
+				a.pullArmDynamicExplt(b.getArms().get(n.indexOf(i)), n.indexOf(i));
+			}
+			else
+			{
+				n.set(n.indexOf(i), new ArmMemory(0));
+			}
+		}
+	}
+
+	public static TrialData KubeAlg(Bandit b, Agent a, boolean optimistic)
+	{
+		//----------------------------------------
+		//Initialize Variables
+		TrialData myTrial = new TrialData();
+		int t = 0; //first arm is index 0
+		ArrayList<ArmMemory> agentMemory = a.getMemory();
+		int numArms = b.getNumArms();
+
+		double[] armsEstRD = new double[numArms]; //stores estimated reward densities of arms
+		double minCost = minCost(b.getArms());
+
+		//----------------------------------------
+		//Main KUBE loop
+		while(a.getBudget() >= minCost)
+		{
+			if( t < numArms ) // initial phase:  pull each arm once sequentially
+			{
+				if(b.getArms().get(t).getCost() <= a.getBudget()) //checks if agent can afford arm t
+				{
+					a.pullArmDynamicExplt(b.getArms().get(t), t);
+					armsEstRD[t] = KubeConfEst(agentMemory.get(t), optimistic, a.getTotalPulls());//t is 1-indexed in the text: get UCB estimate and store in array
+					myTrial.addValues(a.getTotalPulls()-1,a.getMeanReward(),a.getRegret(),a.getKubeBound(0),a.getKubeBound(1),b.getOMR(a.getTotalPulls()));
+				}
+			}
+			else // combined exploration/exploitation phase
+			{
+				//Get M*, the best combination of arms to pull
+				int[] bestComb = KubeDOG(a.getBudget(),minCost,agentMemory,armsEstRD);
+
+				//Get the total number of probable pulls stored in M*
+				double mSum = 0;
+				for( int k = 0; k < numArms; k++ )
+				{
+					mSum += bestComb[k];
+				}
+
+				//Use M* to determine which arm to pull, with the fractional probability of each (subtracted from a random fraction)
+				double tempVal = rnd.nextDouble();
+				int i = 0;
+				while(tempVal >= 0 && i < numArms)
+				{
+					tempVal -= ((double)bestComb[i])/mSum;
+					i++;
+				}
+				if(i > numArms) i = numArms; //account for doubles' inaccuracy-- what if the random double is barely more than the sum of all fractions?
+				a.pullArmDynamicExplt(b.getArms().get(i-1), i-1); //i-1 is an artifact of the probability algorithm
+				armsEstRD[i-1] = KubeConfEst(agentMemory.get(i-1), optimistic, a.getTotalPulls());// reevaluate; t is 1-indexed in the text
+				myTrial.addValues(a.getTotalPulls()-1,a.getMeanReward(),a.getRegret(),a.getKubeBound(0),a.getKubeBound(1),b.getOMR(a.getTotalPulls()));
+			}//end else (which phase we are in)
+			t++;
+		}//end while (KUBE algorithm main loop)
+		return myTrial;
+	}
+
+/*
+	private static TrialData KdeAlg(Bandit b, Agent a, double gamma, double dVal)
+	{
+		if(gamma <= 0)
+		{
+			System.out.println("Non-positive gamma value; KDE cannot function.");
+			return null;
+		}
+		TrialData myTrial = new TrialData();
+		int t = 0;
+		int numArms = b.getNumArms();
+		int numFeasibleArms = numArms;
+		ArrayList<ArmMemory> agentMemory = a.getMemory();
+		int bestArm;
+		boolean[] feasibleArms = new boolean[numArms];
+		double minCost = minCost(b.getArms());
+
+		for(int i = 0; i < numArms; i++) feasibleArms[i] = true;
+
+		while(a.getBudget() >= minCost)
+		{
+			//Eliminate arms that exceed our current budget.
+			bestArm = -1;
+			for(int i = 0; i < numArms; i++)
+			{
+				if(agentMemory.get(i).getCost() > a.getBudget())
+				{
+					feasibleArms[i] = false;
+					numFeasibleArms--;
+				}
+				if(bestArm < 0)
+				{
+					if(agentMemory.get(i).getCost() <= a.getBudget())
+						bestArm = i;
+					//else just move on
+				}
+				else if(agentMemory.get(i).getRatio() > agentMemory.get(bestArm).getRatio() && feasibleArms[i])
+					bestArm = i;
+			}
+
+			//Get "best" arms combination M* to pull from
+			int[] bestComb = KdeDOG(a.getBudget(), minCost, bestArm, agentMemory);
+
+			//Calculate Epsilon-T
+			double epsT = Math.min(1, gamma/((double)(t+1))); //t is 1-indexed in the text
+
+			//Determine which arm to pull, using the probability of each
+			double mSum = 0;
+			for( int k = 0; k < numArms; k++ )
+			{
+				mSum += bestComb[k];
+			}
+
+			//Use fractional probability to find which arm to pull
+			double[] armProb = new double[numArms]; //probabilities that arm will be pulled
+			for( int z = 0; z < numArms; z++)
+			{
+				if(feasibleArms[z] == true)
+				{
+					armProb[z] = (1-epsT) * ((double)bestComb[z]/mSum) + (epsT/(double)numFeasibleArms);
+				}
+				else
+					armProb[z] = 0;
+			}
+
+			double[] cmlProb = new double[numArms];
+			cmlProb[0] = armProb[0];
+
+			for(int z = 1; z < numArms; z++)  //calculates cumulative probabilities
+			cmlProb[z] = cmlProb[z-1] + armProb[z]; //probability of arm z is added to probabilities of all arms before it
+
+			double totalProb = 0;
+
+			for( int z = 0; z < numArms; z++)
+			{
+			totalProb += armProb[z];
+			}
+
+			double randomVal = rnd.nextDouble() * totalProb;
+
+			int i = -1;
+			for(int z = 0; z < numArms && i < 0; z++)
+			{
+				if(randomVal < cmlProb[z])
+					i = z;
+			}
+
+			a.pullArmDynamicExplt(b.getArms().get(i),  i);
+			myTrial.addValues(t,a.getMeanReward(),a.getRegret(),a.getKdeBound(0,gamma, dVal),a.getKdeBound(1,gamma,dVal),b.getOMR(a.getTotalPulls()));
+			t++;
+		}
+		return myTrial;
+	}
+
+	/**
+	* Fractional KUBE Algorithm
+	* Can be optimistic (in the paper) or pessimistic
+	*/
+	public static TrialData FractKubeAlg(Bandit b, Agent a, boolean optimistic)
+	{
+		//----------------------------------------
+		//Initialize Variables
+		int t = 0; //first arm is index 0
+		ArrayList<ArmMemory> agentMemory = a.getMemory();
+		ArrayList<Arm> banditArms = b.getArms();
+		int numArms = b.getNumArms();
+		double[] armsEstRD = new double[numArms]; //initial reward density estimates
+		double minCost = minCost(banditArms);
+		TrialData myTrial = new TrialData();
+
+		int bestArm = -1;
+		double bestFeasibleCost = 0;
+
+		//----------------------------------------
+		//Main Fractional KUBE loop
+		while(a.getBudget() >= minCost)
+		{
+			if( t < numArms ) // initial phase
+			{
+				//Make sure we can't go over budget here.
+				if(banditArms.get(t%numArms).getCost() <= a.getBudget())
+				{
+					a.pullArmDynamicExplt(banditArms.get(t%numArms), t%numArms);
+					armsEstRD[t%numArms] = KubeConfEst(agentMemory.get(t%numArms), optimistic, t+1);//t is 1-indexed in the text
+					myTrial.addValues(t,a.getMeanReward(),a.getRegret(),a.getKubeBound(0),a.getKubeBound(1),b.getOMR(a.getTotalPulls()));
+					t++;
+				}
+			}
+			else if (t == numArms) //start combined exploration/exploitation phase, get first best arm
+			{
+				bestArm = kubeGetBestArm(numArms, agentMemory, a.getBudget(), armsEstRD);
+				bestFeasibleCost = agentMemory.get(bestArm).getCost();
+				a.pullArmDynamicExplt(banditArms.get(bestArm), bestArm);
+				armsEstRD[bestArm] = KubeConfEst(agentMemory.get(bestArm), optimistic, t+1);//t is 1-indexed in the text
+				myTrial.addValues(t,a.getMeanReward(),a.getRegret(),a.getKubeBound(0),a.getKubeBound(1),b.getOMR(a.getTotalPulls()));
+				t++;
+			}
+			else // combined exploration/exploitation phase
+			{
+				//Find the current best arm, pull it, and re-estimate its value by the result
+				if(bestFeasibleCost > a.getBudget())
+				{
+					bestArm = kubeGetBestArm(numArms, agentMemory, a.getBudget(), armsEstRD);
+					bestFeasibleCost = agentMemory.get(bestArm).getCost();
+				}
+				a.pullArmDynamicExplt(banditArms.get(bestArm), bestArm);
+				armsEstRD[bestArm] = KubeConfEst(agentMemory.get(bestArm), optimistic, t+1);//t is 1-indexed in the text
+				myTrial.addValues(t,a.getMeanReward(),a.getRegret(),a.getKubeBound(0),a.getKubeBound(1),b.getOMR(a.getTotalPulls()));
+				t++;
+			}//end else (which phase are we in)
+		}//end while (main Fractional KUBE loop)
+		return myTrial;
+	}
