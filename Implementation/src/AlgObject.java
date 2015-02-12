@@ -71,7 +71,7 @@ public class AlgObject
         ArmMemory max = null;
         for (int i = 0; i < a.size(); i++)
         {
-            int index = (i+agent.getStartingArm()) % a.size();
+            int index = (i + agent.getStartingArm()) % a.size();
             if (max == null)
             {
                 if (a.get(index).getCost() <= agent.getBudget())
@@ -106,7 +106,7 @@ public class AlgObject
                 max = index;
             }
         }
-                //bestArmCost = agentMemory.get(i).getCost();
+        //bestArmCost = agentMemory.get(i).getCost();
         return max;
     }
 
