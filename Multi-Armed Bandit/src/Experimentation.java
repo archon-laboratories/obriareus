@@ -7,15 +7,12 @@ import java.util.Scanner;
 /**
  * @author sap471
  */
-public class Experimentation
-{
+public class Experimentation {
 
     final static Random rnd = new Random();
 
-    public static double mathFunctions(int which, double t, double totalTime)
-    {
-        switch (which)
-        {
+    public static double mathFunctions(int which, double t, double totalTime) {
+        switch (which) {
             case 0:
                 return t / totalTime; //linear
             case 1:
@@ -27,8 +24,7 @@ public class Experimentation
         }
     }
 
-    public static void profitPerPullVsArms(double budget/*starting budget*/, int startingArms, int totalArms, int whichFunction)
-    {
+    public static void profitPerPullVsArms(double budget/*starting budget*/, int startingArms, int totalArms, int whichFunction) {
         int stepNumber = 0;
         int numTrials = 1000;
         int numAlgorithms = 8;
@@ -46,8 +42,7 @@ public class Experimentation
 //		double[][][][] armUsage = new double[numArms][numAlgorithms][numSteps][numTrials];
 //		TrialData[][][] myTrialData = new TrialData[numAlgorithms][numSteps][numTrials];
 
-        for (stepNumber = startingArms; stepNumber < numSteps; stepNumber++)
-        {
+        for (stepNumber = startingArms; stepNumber < numSteps; stepNumber++) {
             int armsAdded = stepNumber * 10; //adds ten more arms each time
             Bandit myBandit = new Bandit(armsAdded);
             for (int arm = 0; arm < armsAdded; arm++)//initializes arms in bandit
@@ -58,16 +53,13 @@ public class Experimentation
             myBandit.genOptPulls(budget);
             for (int whichAlg = 0; whichAlg < numAlgorithms; whichAlg++)//starts algorithms loop
             {
-                for (int whichTrial = 0; whichTrial < numTrials; whichTrial++)
-                { //starts  trials loop
+                for (int whichTrial = 0; whichTrial < numTrials; whichTrial++) { //starts  trials loop
 
                     int bestArm = 0;
                     int secondBestArm = 0;
-                    for (int i = 1; i < myBandit.getNumArms(); i++)
-                    {
+                    for (int i = 1; i < myBandit.getNumArms(); i++) {
                         double temp = myBandit.getArms().get(i).getMean();
-                        if (temp > myBandit.getArms().get(bestArm).getMean())
-                        {
+                        if (temp > myBandit.getArms().get(bestArm).getMean()) {
                             secondBestArm = bestArm;
                             bestArm = i;
                         } else if (temp > myBandit.getArms().get(secondBestArm).getMean()) //finds d for gamma
@@ -83,8 +75,7 @@ public class Experimentation
                     {
                         myAgent.storeArm(myBandit.getArms().get(whichArm).getCost());
                     }
-                    switch (whichAlg)
-                    {
+                    switch (whichAlg) {
                         case 0:
                             AlgObject.eFirstAlg(myBandit, myAgent, epsilonValue, false);
                             break;
@@ -117,7 +108,7 @@ public class Experimentation
                     revenueData[whichAlg][stepNumber][whichTrial] = myAgent.getRevenue() / myAgent.getTotalPulls();  //stores profit/pull
                     netProfitData[whichAlg][stepNumber][whichTrial] = (myAgent.getRevenue() - budget - myAgent.getBudget());
                     regretData[whichAlg][stepNumber][whichTrial] = myAgent.getRegret();
-                    pullData[whichAlg][stepNumber][whichTrial] = (int) myAgent.getTotalPulls();
+                    pullData[whichAlg][stepNumber][whichTrial] = myAgent.getTotalPulls();
                     System.out.println("Data stored for trial " + whichTrial);
                     //	timeData[whichAlg][whichStep][whichTrial] = endTime - startTime;
 //			ArrayList<Integer> tempAU = myAgent.getArmUsage();
@@ -138,13 +129,10 @@ public class Experimentation
 //		double avgTime[] = new double[numAlgorithms];
 //		double avgArms[][][] = new double[numAlgorithms][numSteps][numArms];
 
-        for (int i = 0; i < numAlgorithms; i++)
-        {
-            for (int j = 0; j < numSteps; j++)
-            {
+        for (int i = 0; i < numAlgorithms; i++) {
+            for (int j = 0; j < numSteps; j++) {
                 avgRevenue[i][j] = 0;
-                for (int k = 0; k < numTrials; k++)
-                {
+                for (int k = 0; k < numTrials; k++) {
                     avgRevenue[i][j] += revenueData[i][j][k];
                     avgPulls[i][j] += pullData[i][j][k];
 //					avgRegret[i][j] += regretData[i][j][k];
@@ -161,8 +149,7 @@ public class Experimentation
 
                 double stdRevenuePart = 0;
 //				double stdRegretPart = 0;
-                for (int k = 0; k < numTrials; k++)
-                {
+                for (int k = 0; k < numTrials; k++) {
                     stdRevenuePart += Math.pow(revenueData[i][j][k] - avgRevenue[i][j], 2);
 //					stdRegretPart += Math.pow(regretData[i][j][k]-avgRegret[i][j],2);
                 }
@@ -171,15 +158,12 @@ public class Experimentation
             }
         }
 
-        try
-        {
+        try {
             //======================================
             //Revenue-per-Pull v. Number of Arms
-            for (int i = 0; i < numAlgorithms; i++)
-            {
+            for (int i = 0; i < numAlgorithms; i++) {
                 PrintWriter out = new PrintWriter(new FileWriter("data/numArmsReturnData_" + i + "_.txt"));
-                for (int j = 0; j < numSteps; j++)
-                {
+                for (int j = 0; j < numSteps; j++) {
                     out.print((10 * j) + "\t");
                     out.print(avgRevenue[i][j] / (avgPulls[i][j]) + "\t");
                     out.print(stdDevRevenue[i][j]);
@@ -202,16 +186,14 @@ public class Experimentation
             pOut.println("Number of Steps: " + numSteps);
             pOut.println("Arm Decay Rate: " + decayRate);
             pOut.close();
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             System.out.println("IOException: " + e);
         }
 
 
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         profitPerPullVsArms(1000, 1, 100, 0);
     }
 

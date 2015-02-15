@@ -3,8 +3,7 @@ import java.util.ArrayList;
 //import math3.distribution.BetaDistribution;
 //import uncommons-maths-1.2.3.org.uncommons.maths.random.*;
 
-public class Arm
-{
+public class Arm {
     Random rnd = new Random();
     private double mean;
     private double stdDev;
@@ -15,8 +14,7 @@ public class Arm
     private int numPulls;
     private ArrayList<Double> storedRewards;
 
-    public Arm(double cost, double mean, double std)
-    {
+    public Arm(double cost, double mean, double std) {
         this.cost = cost;
         this.mean = mean;
         this.stdDev = std;
@@ -25,9 +23,8 @@ public class Arm
 
     public void pullArm() //updates reward
     {
-        if (storedRewards.size() <= numPulls)
-        {
-            storedRewards.add(rnd.nextGaussian()*stdDev+mean);
+        if (storedRewards.size() <= numPulls) {
+            storedRewards.add(rnd.nextGaussian() * stdDev + mean);
             //storedRewards.add(((double)RandomNums.getPoisson(mean*10))/10.);
             //storedRewards.add((double) RandomNums.getPoisson(mean));
         }
@@ -37,41 +34,34 @@ public class Arm
         else if (recentReward > 2.0) recentReward = 2.0;
     }
 
-    public void reset()
-    {
+    public void reset() {
         recentReward = 0;
         numPulls = 0;
     }
 
-    public double getCost()
-    {
+    public double getCost() {
         return cost;
     }
 
-    public double getMean()
-    {
+    public double getMean() {
         return mean;
     }
 
-    public double getSD()
-    {
+    public double getSD() {
         return stdDev;
     }
 
-    public double getRecentReward()
-    {
+    public double getRecentReward() {
         if (recentReward < 0)
             System.out.println(recentReward);
         return recentReward;
     }
 
-    public double getRatio()
-    {
+    public double getRatio() {
         return mean / cost;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "Cost: " + cost + " \tReward: " + recentReward;
     }
 }

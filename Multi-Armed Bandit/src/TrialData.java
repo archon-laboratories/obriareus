@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
-public class TrialData
-{
+public class TrialData {
     private ArrayList<Integer> timeVals;
     private ArrayList<Double> rewardVals;
     private ArrayList<Double> regretVals;
@@ -10,8 +9,7 @@ public class TrialData
     private ArrayList<Integer> armsConsidered;
     private ArrayList<Boolean> switchedBest;
 
-    public TrialData()
-    {
+    public TrialData() {
         timeVals = new ArrayList<Integer>();
         rewardVals = new ArrayList<Double>();
         regretVals = new ArrayList<Double>();
@@ -21,8 +19,7 @@ public class TrialData
         switchedBest = new ArrayList<Boolean>();
     }
 
-    public void addValues(int t, double rew, double reg, double spec, double opt, int aC, boolean sB)
-    {
+    public void addValues(int t, double rew, double reg, double spec, double opt, int aC, boolean sB) {
         timeVals.add(t);
         rewardVals.add(rew);
         regretVals.add(reg);
@@ -33,68 +30,56 @@ public class TrialData
         //System.out.println("Added ("+aC+", "+sB+")");
     }
 
-    public int size()
-    {
+    public int size() {
         return timeVals.size();
     }
 
-    public double getReward(int idx)
-    {
+    public double getReward(int idx) {
         return rewardVals.get(idx);
     }
 
-    public double getRegret(int idx)
-    {
+    public double getRegret(int idx) {
         return regretVals.get(idx);
     }
 
-    public double getSpecial(int idx)
-    {
+    public double getSpecial(int idx) {
         return specialVals.get(idx);
     }
 
-    public double getOptimal(int idx)
-    {
+    public double getOptimal(int idx) {
         return optimalVals.get(idx);
     }
 
-    public int getArmsConsidered(int idx)
-    {
+    public int getArmsConsidered(int idx) {
         return armsConsidered.get(idx);
     }
 
-    public boolean getSwitchedBest(int idx)
-    {
+    public boolean getSwitchedBest(int idx) {
         return switchedBest.get(idx);
     }
 
-    public boolean hasReward(int idx)
-    {
+    public boolean hasReward(int idx) {
         if (idx > -1 && idx < rewardVals.size())
             return true;
         return false;
     }
 
-    public boolean hasRegret(int idx)
-    {
+    public boolean hasRegret(int idx) {
         if (idx > -1 && idx < regretVals.size())
             return true;
         return false;
     }
 
-    public boolean hasSpecial(int idx)
-    {
+    public boolean hasSpecial(int idx) {
         if (idx > -1 && idx < specialVals.size())
             return true;
         return false;
     }
 
-    public String skipPrint(int skipNum)
-    {
+    public String skipPrint(int skipNum) {
         String myString = "";
         String newLine = System.getProperty("line.separator");
-        for (int i = 0; i < timeVals.size(); i += skipNum)
-        {
+        for (int i = 0; i < timeVals.size(); i += skipNum) {
             myString += timeVals.get(i) + "\t";
             myString += rewardVals.get(i) + "\t";
             myString += regretVals.get(i) + "\t";
@@ -104,12 +89,10 @@ public class TrialData
         return myString;
     }
 
-    public String toString()
-    {
+    public String toString() {
         String myString = "";
         String newLine = System.getProperty("line.separator");
-        for (int i = 0; i < timeVals.size(); i++)
-        {
+        for (int i = 0; i < timeVals.size(); i++) {
             myString += timeVals.get(i) + "\t";
             myString += rewardVals.get(i) + "\t";
             myString += regretVals.get(i) + "\t";

@@ -4,14 +4,12 @@ import java.util.*;
 /**
  * @author sap471
  */
-public class SingleTrial
-{
+public class SingleTrial {
 
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         // TODO Auto-generated method stub
         double[] armCosts = new double[0];
         double[] armRewardMeans = new double[0];
@@ -24,8 +22,7 @@ public class SingleTrial
         int dataNum = in.nextInt();
         in.close();
 
-        try
-        {
+        try {
             System.out.println("Getting 'dataset" + dataNum + ".text");
             in = new Scanner(new File("datasets/dataset" + dataNum + ".txt"));
 
@@ -36,8 +33,7 @@ public class SingleTrial
             armCosts = new double[numArms];
             double sumCosts = 0;
 
-            for (int j = 0; j < numArms; j++)
-            {
+            for (int j = 0; j < numArms; j++) {
                 armCosts[j] = in.nextDouble();
                 sumCosts += armCosts[j];
             }
@@ -45,22 +41,19 @@ public class SingleTrial
             armRewardMeans = new double[numArms];
             double bestArmMean = 0;
 
-            for (int j = 0; j < numArms; j++)
-            {
+            for (int j = 0; j < numArms; j++) {
                 armRewardMeans[j] = in.nextDouble();
                 if (armRewardMeans[j] > bestArmMean)
                     bestArmMean = armRewardMeans[j];
             }
 
             armStdDeviations = new double[numArms];
-            for (int j = 0; j < numArms; j++)
-            {
+            for (int j = 0; j < numArms; j++) {
                 armStdDeviations[j] = in.nextDouble();
             }
 
             in.close();
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             System.out.println("IOException error: " + e);
         }
 
@@ -76,15 +69,13 @@ public class SingleTrial
         int distIdx = 0;
 
         myBandit = new Bandit(numArms);
-        for (int i = 0; i < numArms; i++)
-        {
+        for (int i = 0; i < numArms; i++) {
             //myBandit.createArm(distIdx, armCosts[i], armRewardMeans[i], armStdDeviations[i], decayRate);
         }
         myBandit.genOptPulls(budgetVal);
 
         myAgent = new Agent(budgetVal, myBandit);
-        for (int whichArm = 0; whichArm < numArms; whichArm++)
-        {
+        for (int whichArm = 0; whichArm < numArms; whichArm++) {
             myAgent.storeArm(armCosts[whichArm]);
         }
 

@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Implementation
-{
+public class Implementation {
     final static Random rnd = new Random();
     static int numTrials = 100; // start magic numbers
     static int numAlgorithms = 10;
@@ -17,18 +16,12 @@ public class Implementation
     static double costMean = 0.0;
     static double costStDv = 0.0;
 
-    public static double mathFunctions(int which, double t, double totalTime)
-    {
-        switch (which)
-        {
+    public static double mathFunctions(int which, double t, double totalTime) {
+        switch (which) {
             case 0:
                 return t / totalTime; // linear
             case 1:
-                return Math.log(((Math.exp(1) - 1) * t / totalTime) + 1); // concave
-            // down,
-            // "exponential"
-            // increase,
-            // 0-1
+                return Math.log(((Math.exp(1) - 1) * t / totalTime) + 1); // concave down, "exponential" increase, 0-1
             case 2:
                 return Math.pow(10 * (t / totalTime), 2) / 100; // concave up
             default:
@@ -36,14 +29,12 @@ public class Implementation
         }
     }
 
-    public static void clear(boolean[] choices)
-    {
+    public static void clear(boolean[] choices) {
         for (int i = 0; i < choices.length; i++)
             choices[i] = false;
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         final int numIterations = 100;
         double[] linValues = {.1, .2, .3, .4, .5, .6, .7, .8, .9, 1.0};
         double[] superLinValues = {0.1, 0.314, 0.466, 0.584, 0.680, 0.761,
@@ -51,8 +42,7 @@ public class Implementation
         double[] subLinValues = {.1, 0.111, 0.144, 0.2, 0.278, 0.378, 0.5,
                 0.644, 0.811, 1.0};
         double[][] means = new double[numAlgorithms][numIterations];
-        for (int largeIteration = 0; largeIteration < numIterations; largeIteration++)
-        {
+        for (int largeIteration = 0; largeIteration < numIterations; largeIteration++) {
             int dataNum = 0;
             int numArms = 0;
             double bestArmMean = 0;
@@ -73,17 +63,14 @@ public class Implementation
             numArms = 10;
 
             // Load in the cost for each arm.
-            for (int j = 0; j < numArms; j++)
-            {
+            for (int j = 0; j < numArms; j++) {
                 tempStorage.add(1.0);
             }
             armCosts = new double[tempStorage.size()];
-            for (int j = 0; j < tempStorage.size(); j++)
-            {
+            for (int j = 0; j < tempStorage.size(); j++) {
                 armCosts[j] = tempStorage.get(j);
 
-                if (varCosts)
-                {
+                if (varCosts) {
                     double temp = rnd.nextGaussian() * costStDv + costMean;
                     armCosts[j] += temp;
                     // System.out.println("Arm " + j + "'s cost is now "+
@@ -95,11 +82,9 @@ public class Implementation
             tempStorage.clear();
 
             // Load in the mean reward for each arm.
-            for (int j = 0; j < numArms; j++)
-            {
+            for (int j = 0; j < numArms; j++) {
                 int cur = 0;
-                do
-                {
+                do {
                     cur = rnd.nextInt(numArms);
                 } while (found[cur]);
 
@@ -116,20 +101,17 @@ public class Implementation
                     bestArmMean = temp;
             }
             armRewardMeans = new double[tempStorage.size()];
-            for (int j = 0; j < tempStorage.size(); j++)
-            {
+            for (int j = 0; j < tempStorage.size(); j++) {
                 armRewardMeans[j] = tempStorage.get(j);
             }
             tempStorage.clear();
 
             // Load in the standard deviation of arm rewards for each arm.
-            for (int j = 0; j < numArms; j++)
-            {
+            for (int j = 0; j < numArms; j++) {
                 tempStorage.add(.3);
             }
             armRewardStdDevs = new double[tempStorage.size()];
-            for (int j = 0; j < tempStorage.size(); j++)
-            {
+            for (int j = 0; j < tempStorage.size(); j++) {
                 armRewardStdDevs[j] = tempStorage.get(j);
             }
             tempStorage.clear();
@@ -157,7 +139,7 @@ public class Implementation
             double[] bestRevenue = new double[numAlgorithms];
             double[] worstRevenue = new double[numAlgorithms];
             /*
-			 * double[][][] netProfitData = new
+             * double[][][] netProfitData = new
 			 * double[numAlgorithms][numSteps][numTrials]; double[][][]
 			 * regretData = new double[numAlgorithms][numSteps][numTrials];
 			 * double[][][] timeData = new
@@ -169,16 +151,13 @@ public class Implementation
             // TrialData[numAlgorithms][numSteps][numTrials];
             TrialData[] myTrialData = new TrialData[numAlgorithms];
 
-            for (int whichStep = 0; whichStep < numSteps; whichStep++)
-            {
-                for (int whichTrial = 0; whichTrial < numTrials; whichTrial++)
-                {
+            for (int whichStep = 0; whichStep < numSteps; whichStep++) {
+                for (int whichTrial = 0; whichTrial < numTrials; whichTrial++) {
                     // Create the bandit for this step (reset between trials),
                     // and
                     // get the optimal pull combination for it (to get regret)
                     myBandit = new Bandit(numArms);
-                    for (int i = 0; i < numArms; i++)
-                    {
+                    for (int i = 0; i < numArms; i++) {
                         myBandit.createArm(armCosts[i], armRewardMeans[i],
                                 armRewardStdDevs[i] + whichStep);
                     }
@@ -187,8 +166,7 @@ public class Implementation
                     if (printRun)
                         System.out.println(" Running Trial " + whichTrial
                                 + "...");
-                    for (int whichAlg = 0; whichAlg < numAlgorithms; whichAlg++)
-                    {
+                    for (int whichAlg = 0; whichAlg < numAlgorithms; whichAlg++) {
                         if (printRun)
                             System.out.println(" Running "
                                     + getAlgName(whichAlg) + "...");
@@ -197,21 +175,17 @@ public class Implementation
                         int bestArm = 0;
                         int secondBestArm = 0;
                         int worstArm = 0;
-                        for (int i = 1; i < numArms; i++)
-                        {
+                        for (int i = 1; i < numArms; i++) {
                             double temp = myBandit.getArms().get(i).getMean();
                             if (temp > myBandit.getArms().get(bestArm)
-                                    .getMean())
-                            {
+                                    .getMean()) {
                                 secondBestArm = bestArm;
                                 bestArm = i;
                             } else if (temp > myBandit.getArms()
-                                    .get(secondBestArm).getMean())
-                            {
+                                    .get(secondBestArm).getMean()) {
                                 secondBestArm = i;
                             } else if (temp < myBandit.getArms().get(worstArm)
-                                    .getMean())
-                            {
+                                    .getMean()) {
                                 worstArm = i;
                             }
                         }
@@ -229,8 +203,7 @@ public class Implementation
                         // 1/3);
 
                         // Find the best arm, I*
-                        for (int n = 0; n < armRewardMeans.length; n++)
-                        {
+                        for (int n = 0; n < armRewardMeans.length; n++) {
                             if (armRewardMeans[bestMeanIndex] < armRewardMeans[n])
                                 bestMeanIndex = n;
                         }
@@ -268,13 +241,11 @@ public class Implementation
                         // explore
 
                         myAgent = new Agent(budgetVal, myBandit);
-                        for (int whichArm = 0; whichArm < numArms; whichArm++)
-                        {
+                        for (int whichArm = 0; whichArm < numArms; whichArm++) {
                             myAgent.storeArm(armCosts[whichArm]);
                         }
 
-                        switch (whichAlg)
-                        {
+                        switch (whichAlg) {
                             case 0:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = AlgObject
                                         .eFirstAlg(myBandit, myAgent, epsilonValue,
@@ -388,15 +359,12 @@ public class Implementation
             // double avgArms[][][] = new
             // double[numAlgorithms][numSteps][numArms];
 
-            for (int i = 0; i < numAlgorithms; i++)
-            {
+            for (int i = 0; i < numAlgorithms; i++) {
                 bestRevenue[i] = revenueData[i][0][0];
                 worstRevenue[i] = revenueData[i][0][0];
-                for (int j = 0; j < numSteps; j++)
-                {
+                for (int j = 0; j < numSteps; j++) {
                     avgRevenue[i][j] = 0;
-                    for (int k = 0; k < numTrials; k++)
-                    {
+                    for (int k = 0; k < numTrials; k++) {
                         avgRevenue[i][j] += revenueData[i][j][k];
                         if (revenueData[i][j][k] > bestRevenue[i])
                             bestRevenue[i] = revenueData[i][j][k];
@@ -415,8 +383,7 @@ public class Implementation
 
                     double stdRevenuePart = 0;
                     // double stdRegretPart = 0;
-                    for (int k = 0; k < numTrials; k++)
-                    {
+                    for (int k = 0; k < numTrials; k++) {
                         stdRevenuePart += Math.pow(revenueData[i][j][k]
                                 - avgRevenue[i][j], 2);
                         // stdRegretPart +=
@@ -439,8 +406,7 @@ public class Implementation
                 meanRev += avgRevenue[i][0];
             meanRev /= numAlgorithms;
             // System.out.println();
-            for (int j = 0; j < numAlgorithms; j++)
-            {
+            for (int j = 0; j < numAlgorithms; j++) {
                 // System.out.println("\""+getAlgName(j)+"\"");
 				/*
 				 * System.out.printf("%-25s\t%10.5f\n", getAlgName(j),
@@ -449,8 +415,7 @@ public class Implementation
                 // System.out.printf("%10.5f\n", avgRevenue[j][0] - meanRev);
                 means[j][largeIteration] = avgRevenue[j][0] - meanRev;
             }
-            for (int j = 0; j < numAlgorithms; j++)
-            {
+            for (int j = 0; j < numAlgorithms; j++) {
                 // System.out.printf("%25s\"\t", '"' + getAlgName(j));
                 // System.out.println(avgRevenue[j][0] + "\t" +
                 // stdDevRevenue[j][0]+ "\t");
@@ -491,8 +456,7 @@ public class Implementation
 			 * [j],avgRegret[j],avgMaxNumPulls[j],j*bestArmMean); } }
 			 */
 
-            try
-            {
+            try {
                 // ======================================
                 // Net Profit v. Mean
                 // for(int i = 0; i < numAlgorithms; i++)
@@ -679,17 +643,14 @@ public class Implementation
                 pOut.println("Number of Steps: " + numSteps);
                 pOut.close();
 
-            } catch (IOException e)
-            {
+            } catch (IOException e) {
 
             }
         }
         // Outputting stuff.
-        for (int j = 0; j < numAlgorithms; j++)
-        {
+        for (int j = 0; j < numAlgorithms; j++) {
             double curMean = 0;
-            for (int i = 0; i < numIterations; i++)
-            {
+            for (int i = 0; i < numIterations; i++) {
                 curMean += means[j][i];
             }
             curMean /= numIterations;
@@ -699,26 +660,20 @@ public class Implementation
     }// end main
 
     private void printData(String fileName, int iterations, int[] xArray,
-                           double[] yArray1, double[] yArray2)
-    {
-        try
-        {
+                           double[] yArray1, double[] yArray2) {
+        try {
             PrintWriter printer = new PrintWriter(new FileWriter(fileName));
-            for (int i = 0; i < iterations; i++)
-            {
+            for (int i = 0; i < iterations; i++) {
                 printer.println((xArray + "\t" + yArray1[i] + "\t" + yArray2[i]));
             }
             printer.close();
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             System.out.println("IOException: " + e);
         }
     }
 
-    private static String getAlgName(int i)
-    {
-        switch (i)
-        {
+    private static String getAlgName(int i) {
+        switch (i) {
             case 0:
                 return "Greedy";
             case 1:

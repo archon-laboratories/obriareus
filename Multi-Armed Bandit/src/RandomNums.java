@@ -1,15 +1,12 @@
 
-public class RandomNums
-{
+public class RandomNums {
 
-    public static int getPoisson(double lambda)
-    {
+    public static int getPoisson(double lambda) {
         double L = Math.exp(-lambda);
         double p = 1.0;
         int k = 0;
 
-        do
-        {
+        do {
             k++;
             p *= Math.random();
         } while (p > L);
@@ -17,11 +14,9 @@ public class RandomNums
         return k - 1;
     }
 
-    public static int getBinomial(int n, double p)
-    {
+    public static int getBinomial(int n, double p) {
         int x = 0;
-        for (int i = 0; i < n; i++)
-        {
+        for (int i = 0; i < n; i++) {
             if (Math.random() < p)
                 x++;
         }

@@ -1,8 +1,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Agent
-{
+public class Agent {
 
     private int startingArm;
     private double budget;
@@ -14,8 +13,7 @@ public class Agent
     private ArrayList<Integer> armUsage;
     private Bandit myBandit;
 
-    public Agent(double budget, Bandit b)
-    {
+    public Agent(double budget, Bandit b) {
         this.budget = budget;
         this.initBudget = budget;
         mem = new ArrayList<ArmMemory>();
@@ -27,72 +25,59 @@ public class Agent
         startingArm = b.getStartingArm();
     }
 
-    public void storeArm(double c)
-    {
+    public void storeArm(double c) {
         mem.add(new ArmMemory(c)); //stores cost
         armUsage.add(0);
     }
 
-    public ArrayList<ArmMemory> getMemory()
-    {
+    public ArrayList<ArmMemory> getMemory() {
         return mem;
     }
 
-    public ArrayList<Integer> getArmUsage()
-    {
+    public ArrayList<Integer> getArmUsage() {
         return armUsage;
     }
 
-    public int getArmUsage(int which)
-    {
+    public int getArmUsage(int which) {
         return armUsage.get(which);
     }
 
-    public double getBudget()
-    {
+    public double getBudget() {
         return budget;
     }
 
-    public int getStartingArm()
-    {
+    public int getStartingArm() {
         return startingArm;
     }
 
-    public int getTotalPulls()
-    {
+    public int getTotalPulls() {
         return totalPulls;
     }
 
-    public double getRevenue()
-    {
+    public double getRevenue() {
         return revenue;
     }
 
-    public double getHalfRevenue()
-    {
+    public double getHalfRevenue() {
         return halfRevenue;
     }
 
-    public double getMeanReward()
-    {
+    public double getMeanReward() {
         double actualMeanReward = 0;
         for (int i = 0; i < mem.size(); i++)
             actualMeanReward += mem.get(i).getPulls() * myBandit.getArms().get(i).getMean();
         return actualMeanReward;
     }
 
-    public double getRegret()
-    {
+    public double getRegret() {
         return myBandit.getOMR(totalPulls) - getMeanReward();
     }
 
-    public double getBudgetRegret()
-    {
+    public double getBudgetRegret() {
         return myBandit.getOMR(budget, totalPulls) - getMeanReward();
     }
 
-    public void pullArmNoMemory(Arm a, int i)
-    {
+    public void pullArmNoMemory(Arm a, int i) {
         //System.out.println("\t\tCost is " + a.getCost());
         budget -= a.getCost();
         //System.out.println("\t\tTotal budget is now " + budget);
@@ -107,8 +92,7 @@ public class Agent
         //System.out.println("\t\tRevenue is now " + revenue);
     }
 
-    public void pullArm(Arm a, int i)
-    {
+    public void pullArm(Arm a, int i) {
         //System.out.println("\t\tCost is " + a.getCost());
         budget -= a.getCost();
         //System.out.println("\t\tTotal budget is now " + budget);
@@ -123,16 +107,14 @@ public class Agent
         //System.out.println("\t\tRevenue is now " + revenue);
     }
 
-    public double getEFirstBound(int which, double epsilon)
-    {
+    public double getEFirstBound(int which, double epsilon) {
         double boundVal;
         if (which == 0) //(applies with probability (1-b)^K): (Only applies with sufficient budget to complete exploration, and with mean rewards <= 1, uses Hoeffding inequalities)
         {
             int bestArm = 0;
             int worstArm = 0;
             double sumCosts = mem.get(0).getCost();
-            for (int i = 1; i < mem.size(); i++)
-            {
+            for (int i = 1; i < mem.size(); i++) {
                 double temp = myBandit.getArms().get(i).getMean();
                 if (temp > myBandit.getArms().get(bestArm).getMean())
                     bestArm = i;
@@ -154,24 +136,19 @@ public class Agent
     public double getKubeBound(int which)//Always applies
     {
         double boundVal;
-        if (which == 0)
-        {
+        if (which == 0) {
             int bestArm = 0;
             int secondBestArm = 0;
             int worstArm = 0;
             double minCost = Double.MAX_VALUE;
-            for (int i = 1; i < mem.size(); i++)
-            {
+            for (int i = 1; i < mem.size(); i++) {
                 double temp = myBandit.getArms().get(i).getMean();
-                if (temp > myBandit.getArms().get(bestArm).getMean())
-                {
+                if (temp > myBandit.getArms().get(bestArm).getMean()) {
                     secondBestArm = bestArm;
                     bestArm = i;
-                } else if (temp > myBandit.getArms().get(secondBestArm).getMean())
-                {
+                } else if (temp > myBandit.getArms().get(secondBestArm).getMean()) {
                     secondBestArm = i;
-                } else if (temp < myBandit.getArms().get(worstArm).getMean())
-                {
+                } else if (temp < myBandit.getArms().get(worstArm).getMean()) {
                     worstArm = i;
                 }
                 if (mem.get(i).getCost() < minCost)
@@ -187,8 +164,7 @@ public class Agent
                 double delta = myBandit.getArms().get(bestArm).getCost() - myBandit.getArms().get(i).getCost();
                 if (temp > 0)
                     sumBigDeltas += temp;
-                if (delta > 0)
-                {
+                if (delta > 0) {
                     sumRatios += delta / mem.get(bestArm).getCost();
                 }
             }
@@ -198,8 +174,7 @@ public class Agent
         return 0;
     }
 
-    public double getKdeBound(int which, double gamma, double dVal)
-    {
+    public double getKdeBound(int which, double gamma, double dVal) {
         double boundVal;
         if (which == 0) //(mean rewards <= 1; uses Hoeffding, Bernoulli inequalities)
         {
@@ -208,11 +183,9 @@ public class Agent
             double sumCosts = mem.get(0).getCost();
             double sumDeltas = 0.5 * mem.size(); //some kind of bound, summed across the arms where it is positive
             double sumRatios = myBandit.getArms().get(0).getMean();
-            for (int i = 1; i < mem.size(); i++)
-            {
+            for (int i = 1; i < mem.size(); i++) {
                 double temp = myBandit.getArms().get(i).getMean();
-                if (temp > myBandit.getArms().get(bestArm).getMean())
-                {
+                if (temp > myBandit.getArms().get(bestArm).getMean()) {
                     bestArm = i;
                 }
                 sumCosts += mem.get(i).getCost();
