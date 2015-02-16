@@ -1,7 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 
 /**
@@ -77,32 +75,32 @@ public class Experimentation {
                     }
                     switch (whichAlg) {
                         case 0:
-                            AlgObject.eFirstAlg(myBandit, myAgent, epsilonValue, false);
+                            Algorithms.eFirstAlg(myBandit, myAgent, epsilonValue, false);
                             break;
                         case 1:
-                            AlgObject.eFirstAlg(myBandit, myAgent, epsilonValue, true);
+                            Algorithms.eFirstAlg(myBandit, myAgent, epsilonValue, true);
                             break;
                         case 2:
-                            AlgObject.KubeAlgRandom(myBandit, myAgent, true);
+                            Algorithms.KubeAlgRandom(myBandit, myAgent, true);
                             break;
                         case 3:
-                            AlgObject.KubeAlgRandom(myBandit, myAgent, false);
+                            Algorithms.KubeAlgRandom(myBandit, myAgent, false);
                             break;
                         case 4:
-                            AlgObject.FractKubeAlgRandom(myBandit, myAgent, true, true);
+                            Algorithms.FractKubeAlgRandom(myBandit, myAgent, true, true);
                             break;
                         case 5:
-                            AlgObject.FractKubeAlgRandom(myBandit, myAgent, false, true);
+                            Algorithms.FractKubeAlgRandom(myBandit, myAgent, false, true);
                             break;
                         case 6:
-                            AlgObject.KdeAlgUnique(myBandit, myAgent, gammaVal);
+                            Algorithms.KdeAlgUnique(myBandit, myAgent, gammaVal);
                             break;
                         default:
-                            AlgObject.FractKdeAlg(myBandit, myAgent, gammaVal, true);
+                            Algorithms.FractKdeAlg(myBandit, myAgent, gammaVal, true);
                     }//end switch
                     //Error-catch line
                     if (myAgent.getBudget() < 0)
-                        System.out.println("Warning! Algorithm " + whichAlg + " ended over budget (unfair advantage).");
+                        System.out.println("Warning! Algorithms " + whichAlg + " ended over budget (unfair advantage).");
 
                     //Store this trial's data.
                     revenueData[whichAlg][stepNumber][whichTrial] = myAgent.getRevenue() / myAgent.getTotalPulls();  //stores profit/pull

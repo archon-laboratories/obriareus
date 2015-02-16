@@ -1,10 +1,8 @@
 import java.io.IOException;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Implementation {
     final static Random rnd = new Random();
@@ -247,79 +245,79 @@ public class Implementation {
 
                         switch (whichAlg) {
                             case 0:
-                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = AlgObject
+                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .eFirstAlg(myBandit, myAgent, epsilonValue,
                                                 true);
-                                // AlgObject.lSplitAlg(myBandit, myAgent, 0.2,
+                                // Algorithms.lSplitAlg(myBandit, myAgent, 0.2,
                                 // false, true);
-                                // AlgObject.soaavAlg(myBandit, myAgent, 0, true);
+                                // Algorithms.soaavAlg(myBandit, myAgent, 0, true);
                                 break;
                             case 1:
-                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = AlgObject
+                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .eFirstAlg(myBandit, myAgent, epsilonValue,
                                                 true);
-                                // AlgObject.lSplitAlg(myBandit, myAgent, 0.3,
+                                // Algorithms.lSplitAlg(myBandit, myAgent, 0.3,
                                 // false, true);
-                                // AlgObject.lSplitAlg(myBandit, myAgent, 0.5,
+                                // Algorithms.lSplitAlg(myBandit, myAgent, 0.5,
                                 // false, true);
                                 break;
                             case 2:
-                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = AlgObject
+                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .eFirstAlg(myBandit, myAgent, epsilonValue,
                                                 true);
-                                // AlgObject.lSplitAlg(myBandit, myAgent, 0.4,
+                                // Algorithms.lSplitAlg(myBandit, myAgent, 0.4,
                                 // false, true);
-                                // AlgObject.eFirstAlg(myBandit, myAgent,
+                                // Algorithms.eFirstAlg(myBandit, myAgent,
                                 // epsilonValue, true);
                                 break;
                             case 3:
-                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = AlgObject
+                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .FractKubeAlgRandom(myBandit, myAgent,
                                                 true, true);
-                                // AlgObject.lSplitAlg(myBandit, myAgent, 0.5,
+                                // Algorithms.lSplitAlg(myBandit, myAgent, 0.5,
                                 // false, true);
-                                // AlgObject.peefAlg(myBandit, myAgent, 0.1);
+                                // Algorithms.peefAlg(myBandit, myAgent, 0.1);
                                 break;
                             case 4:
-                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = AlgObject
+                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .FractKdeAlg(myBandit, myAgent, gammaVal,
                                                 true);
-                                // AlgObject.lSplitAlg(myBandit, myAgent, 0.6,
+                                // Algorithms.lSplitAlg(myBandit, myAgent, 0.6,
                                 // false, true);
                                 break;
                             case 5:
-                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = AlgObject
+                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .UCBBVAlg(myBandit, myAgent, 0, true);
-                                // AlgObject.lSplitAlg(myBandit, myAgent, 0.7,
+                                // Algorithms.lSplitAlg(myBandit, myAgent, 0.7,
                                 // false, true);
                                 break;
                             case 6:
-                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = AlgObject
+                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .lSplitAlg(myBandit, myAgent, 0.5, false,
                                                 true);
-                                // AlgObject.lSplitAlg(myBandit, myAgent, 0.8,
+                                // Algorithms.lSplitAlg(myBandit, myAgent, 0.8,
                                 // false, true);
                                 break;
                             case 7:
-                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = AlgObject
+                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .peefAlg(myBandit, myAgent, 0.1);
-                                // AlgObject.lSplitAlg(myBandit, myAgent, 0.9,
+                                // Algorithms.lSplitAlg(myBandit, myAgent, 0.9,
                                 // false, true);
                                 break;
                             case 8:
-                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = AlgObject
+                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .peefAlg(myBandit, myAgent, 0.2);
-                                // AlgObject.eFirstAlg(myBandit, myAgent,
+                                // Algorithms.eFirstAlg(myBandit, myAgent,
                                 // epsilonValue, true);
                             default:
-                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = AlgObject
+                                myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .soaavAlg(myBandit, myAgent, 0, true);
-                                // AlgObject.soaavAlg(myBandit, myAgent, 0, true);
+                                // Algorithms.soaavAlg(myBandit, myAgent, 0, true);
                         }// end switch
 
                         // Error-catch line
                         if (myAgent.getBudget() < 0)
-                            System.out.println("Warning! Algorithm " + whichAlg
+                            System.out.println("Warning! Algorithms " + whichAlg
                                     + " ended over budget (unfair advantage).");
                         if (printRun)
                             System.out.println("Utility: "
@@ -598,7 +596,7 @@ public class Implementation {
 				 * out.close(); }
 				 * 
 				 * //====================================== //Run-Time v.
-				 * Algorithm PrintWriter tOut = new PrintWriter(new
+				 * Algorithms PrintWriter tOut = new PrintWriter(new
 				 * FileWriter("data/timeData_"+dataNum+".txt")); String[]
 				 * algNames = {
 				 * "\"e-First Static\"","\"e-First Dynamic\"","\"Optimistic KUBE\""
@@ -610,7 +608,7 @@ public class Implementation {
 				 * tOut.close();
 				 * 
 				 * //====================================== //Arm Usage v.
-				 * Algorithm
+				 * Algorithms
 				 * 
 				 * PrintWriter aOut = new PrintWriter(new FileWriter()); for(int
 				 * i = 0; i < numAlgorithms; i++) { for(int j = 0; j < numArms;

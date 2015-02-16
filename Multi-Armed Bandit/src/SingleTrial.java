@@ -79,7 +79,7 @@ public class SingleTrial {
             myAgent.storeArm(armCosts[whichArm]);
         }
 
-        AlgObject.HypothesisTestingAlg(myBandit, myAgent, armStdDeviations[0], 1.65);
+        Algorithms.HypothesisTestingAlg(myBandit, myAgent, armStdDeviations[0], 1.65);
     }
 }
 

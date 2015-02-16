@@ -69,7 +69,7 @@ public class Bandit {
     private ArrayList<Integer> regretDOG(double budget, ArrayList<Arm> arms) {
         ArrayList<Integer> pullIndices = new ArrayList<Integer>();
         double tempBudget = budget;
-        double minCost = AlgObject.minCost(arms);
+        double minCost = Algorithms.minCost(arms);
         int bestArm;
 
         //add the best remaining arms that we can fit (greedy) into M*
