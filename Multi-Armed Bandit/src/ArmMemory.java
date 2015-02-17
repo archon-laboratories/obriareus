@@ -69,15 +69,4 @@ public class ArmMemory {
     public double getCost() {
         return cost;
     }
-
-    public int compareTo(ArmMemory other)
-    {
-        int value = 0;
-        if (getRatio() > other.getRatio())
-            return 1;
-        else if (getRatio() < other.getRatio())
-            return -1;
-        else
-            return 0;
-    }
 }

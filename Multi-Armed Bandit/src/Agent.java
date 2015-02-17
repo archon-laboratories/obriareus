@@ -59,47 +59,31 @@ public class Agent {
         }
     }
 
-    private int partition(ArmMemory[] theArray, int first, int last) {
-        // tempItem is used to swap elements in the array
-        ArmMemory tempItem;
-        ArmMemory pivot = theArray[first]; // reference pivot
-        // initially, everything but pivot is in unknown
-        int lastS1 = first; // index of last item in S1
-        // move one item at a time until unknown region is empty
-        for (int firstUnknown = first + 1; firstUnknown <= last; ++firstUnknown) {
-            // Invariant: theArray[first+1..lastS1] < pivot
-            // theArray[lastS1+1..firstUnknown-1] >= pivot
-            // move item from unknown to proper region
-            if (theArray[firstUnknown].compareTo(pivot) > 0) {
-                // item from unknown belongs in S1
-                ++lastS1;
-                tempItem = theArray[firstUnknown];
-                theArray[firstUnknown] = theArray[lastS1];
-                theArray[lastS1] = tempItem;
-            } // end if
-            // else item from unknown belongs in S2
-        } // end for
-        // place pivot in proper position and mark its location
-        tempItem = theArray[first];
-        theArray[first] = theArray[lastS1];
-        theArray[lastS1] = tempItem;
-        return lastS1;
-    } // end partition
+    public int getFirstOrSecondBest(boolean firstIfTrue) {
+        int best = 0;
+        int secondBest = 1;
 
-    private int getKLarge(int k, ArmMemory[] array, int first, int last) {
-        int pI = partition(array, first, last);
-        if (pI - first + 1 == k)
-            return pI;
-        else if (pI - first + 1 > k)
-            return getKLarge(k, array, first, pI - 1);
-        else
-            return getKLarge(k - (pI - first + 1), array, pI + 1, last);
+        for (int j = 2; j < memories.length; j++)
+        {
+            if (memories[best].getCost() > budget && memories[j].getCost() <= budget) // Is it comparably usable?
+                best = j;
+            else if (memories[secondBest].getCost() > budget && memories[j].getCost() <= budget) // How about this one?
+                secondBest = j;
+
+            if ((memories[j].getRatio() > memories[best].getRatio() && memories[j].getCost() <= budget))
+            {
+                secondBest = best;
+                best = j;
+            } else if (memories[j].getRatio() > memories[secondBest].getRatio() && memories[j].getCost() <= budget)
+            {
+                secondBest = j;
+            }
+        }
+        if (firstIfTrue)
+            return best;
+
+        return secondBest;
     }
-
-    public int getKLarge(int k) {
-        return getKLarge(k, memories, 0, arms.length - 1);
-    }
-
 
     /**
      * The constructor for the agent. Pass a budget and the arms array.
@@ -118,7 +102,9 @@ public class Agent {
         }
     }
 
+
     public void pull(int toPull) {
+        // TODO: Constant rewards, data tracking, etc.
         Arm current = arms[toPull];
         if (budget >= current.getCost())
         {
@@ -149,5 +135,9 @@ public class Agent {
 
     public double getTotalCost() {
         return totalCost;
+    }
+
+    public ArmMemory[] getMemories() {
+        return memories;
     }
 }

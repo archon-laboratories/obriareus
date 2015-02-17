@@ -69,10 +69,11 @@ public class Algorithms {
      * @param epsilon
      *              The epsilon value for the exploration budget (exploration budget = epsilon * budget).
      */
-    private static void eFirst(Agent curAgent, double epsilon) {
+    private static void eFirst(Agent curAgent, double epsilon) { // TODO epsilon
 
         // Initialize variables
         Arm [] arms = curAgent.getArms();
+        ArmMemory [] memories = curAgent.getMemories();
         double budget = curAgent.getBudget();
 
         double eBudget = budget * epsilon; // Exploration budget for the algorithm
@@ -100,10 +101,26 @@ public class Algorithms {
         }
         // eBudget has run out. Time to begin the real work.
 
-        int bestArm = curAgent.getKLarge(1);
-        int secondBestArm;
-        while (budget >= curAgent.getMinCost()) {
+        int bestArm = curAgent.getFirstOrSecondBest(true); // Get the index of the first largest element
+        int secondBestArm = curAgent.getFirstOrSecondBest(false); // Get the index of the second largest element
 
+
+        while (budget >= curAgent.getMinCost()) {
+            curAgent.pull(bestArm);
+
+            if (arms[bestArm].getCost() > budget) // Does the best arm cost too much?
+            {
+                // Reassign the arms.
+                bestArm = curAgent.getFirstOrSecondBest(true);
+                secondBestArm = curAgent.getFirstOrSecondBest(false);
+            }
+
+            if (memories[bestArm].getRatio() < memories[secondBestArm].getRatio()) // Did the best arm fall behind?
+            {
+                // Promote the second best, and find the new second best.
+                bestArm = secondBestArm;
+                secondBestArm = curAgent.getFirstOrSecondBest(false);
+            }
         }
     } // End eFirst algorithm
 
