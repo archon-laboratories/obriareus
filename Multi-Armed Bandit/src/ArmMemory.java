@@ -1,12 +1,37 @@
-
+import java.util.Comparator;
 
 public class ArmMemory {
+
+    /**
+     * The total reward received from the arm
+     */
     private double totalReward;
+
+    /**
+     * The number of pulls on the arm.
+     */
     private int pulls;
+
+    /**
+     * The mean reward from all pulls.
+     */
     private double meanReward;
+
+    /**
+     * The cost to pull the arm
+     */
     private double cost;
+
+    /**
+     * The reward:cost ratio.
+     */
     private double rewardCostRatio;
 
+    /**
+     * Constructor that initializes the arm memory.
+     * @param cost
+     *          the cost to pull the arm
+     */
     public ArmMemory(double cost) {
         totalReward = 0;
         pulls = 0;
@@ -15,19 +40,18 @@ public class ArmMemory {
         rewardCostRatio = 0;
     }
 
-    public void addPullNoUpdate() {
-        pulls++;
-    }
-
-    public void addPull(double r) //updates everything
+    /**
+     * Adds a pull to the arm, recalculating values as necessary.
+     * @param reward
+     *          The reward from the pull
+     */
+    public void addPull(double reward) //updates everything
     {
         pulls++;
-        totalReward += r;
-        //System.out.println("\tTotal reward of arm is now " + totalReward);
+        totalReward += reward;
         meanReward = totalReward / pulls;
-        //System.out.println("\tAverage reward of arm is now " + avgReward);
+
         rewardCostRatio = meanReward / cost;
-        //System.out.println("\tReward Density is now " + rewardCostRatio);
     }
 
     public double getMeanReward() {
@@ -46,4 +70,14 @@ public class ArmMemory {
         return cost;
     }
 
+    public int compareTo(ArmMemory other)
+    {
+        int value = 0;
+        if (getRatio() > other.getRatio())
+            return 1;
+        else if (getRatio() < other.getRatio())
+            return -1;
+        else
+            return 0;
+    }
 }
