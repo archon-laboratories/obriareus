@@ -67,7 +67,7 @@ public class Algorithms {
      * @param curAgent
      *              The current agent employing this algorithm.
      * @param epsilon
-     *              The epsilon value for the exploration budget (exploration budget = epsilon * budget).
+     *              The epsilon value <= 1 for the exploration budget (exploration budget = epsilon * budget).
      */
     private static void eFirst(Agent curAgent, double epsilon) { // TODO epsilon
 
@@ -99,10 +99,10 @@ public class Algorithms {
                 remainingIndices.remove(armIndex); // Costs too much. Ensure it's not explored again.
 
         }
-        // eBudget has run out. Time to begin the real work.
+        // eBudget has run out. Begin exploitation phase.
 
-        int bestArm = curAgent.getFirstOrSecondBest(true); // Get the index of the first largest element
-        int secondBestArm = curAgent.getFirstOrSecondBest(false); // Get the index of the second largest element
+        int bestArm = curAgent.getBestArm(); // Get the index of the first largest element
+        int secondBestArm = curAgent.getSecondBest(); // Get the index of the second largest element
 
 
         while (budget >= curAgent.getMinCost()) {
@@ -110,16 +110,16 @@ public class Algorithms {
 
             if (arms[bestArm].getCost() > budget) // Does the best arm cost too much?
             {
-                // Reassign the arms.
-                bestArm = curAgent.getFirstOrSecondBest(true);
-                secondBestArm = curAgent.getFirstOrSecondBest(false);
+                // Reassign the arms, taking into account budget constraints.
+                bestArm = curAgent.getBestArm();
+                secondBestArm = curAgent.getSecondBest();
             }
 
             if (memories[bestArm].getRatio() < memories[secondBestArm].getRatio()) // Did the best arm fall behind?
             {
                 // Promote the second best, and find the new second best.
                 bestArm = secondBestArm;
-                secondBestArm = curAgent.getFirstOrSecondBest(false);
+                secondBestArm = curAgent.getSecondBest();
             }
         }
     } // End eFirst algorithm

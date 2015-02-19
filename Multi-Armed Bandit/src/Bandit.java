@@ -3,19 +3,60 @@ import java.util.Random;
 
 public class Bandit {
 
-    private int startingArm;
-    private int numberArms;
-    private int bestArmIndex;
-    private ArrayList<Arm> arms = new ArrayList<Arm>();
-    private ArrayList<Integer> optimalPulls;
+    //private int startingArm;
+    //private int numberArms;
+    //private int bestArmIndex;
+    //private ArrayList<Arm> arms = new ArrayList<Arm>();
+    //private ArrayList<Integer> optimalPulls;
 
-    public Bandit(int numArms) {
-        numberArms = numArms;
-        bestArmIndex = -1;
-        arms = new ArrayList<Arm>(numberArms);
-        startingArm = new Random().nextInt(numberArms);
+    /**
+     * The arms that the bandit may pull.
+     */
+    private static Arm [] arms;
+
+    /**
+     * The rewards for each arm after n pulls, to ensure consistent rewards across algorithms (removing the
+     * chance one algorithm outperforms another based purely on luck).
+     */
+    private static ArrayList<Double> [] rewards;
+
+    /**
+     * Returns the precalculated reward for an arm if one exists. If one does not exist, creates one to be used across
+     * all algorithms for the nth pull.
+     * @param armIndex
+     *          index of the arm to be pulled
+     * @param pullingAgent
+     *          the agent attempting to pull the arm
+     * @return
+     *          the reward of the arm
+     */
+    public static double pullArm(int armIndex, Agent pullingAgent) {
+        // The number of times the arm has been pulled
+        int count = pullingAgent.getMemories()[armIndex].getPulls();
+
+        if (count == (rewards[armIndex].size() + 1)) // Calculate the new reward
+            rewards[armIndex].add(arms[armIndex].getReward());
+
+        return rewards[armIndex].get(count);
     }
 
+    /**
+     * Generates bandit given arms for each trial.
+     *
+     * @param newArms
+     *          The arms of the bandit (with associated means, standard deviations, and costs).
+     */
+
+    public static void regenerateBandit(Arm[] newArms) {
+        arms = newArms;
+        int numArms = arms.length;
+
+        // Java throws either a generic array exception or an unchecked exception warning if instantiated another way.
+        for (int i = 0; i < numArms; i++)
+            rewards[i] = new ArrayList<Double>();
+    }
+
+    /*
     public void createArm(double cost, double mean, double variance) {
         arms.add(new Arm(cost, mean, variance));
         if (bestArmIndex == -1 || arms.get(bestArmIndex).getMean() < mean) bestArmIndex = arms.size() - 1;
@@ -58,6 +99,7 @@ public class Bandit {
         return arms;
     }
 
+
     public int getNumArms() {
         return arms.size();
     }
@@ -85,5 +127,6 @@ public class Bandit {
         }
         return pullIndices;
     }
+    */
 
 }

@@ -58,8 +58,34 @@ public class Agent {
             totalCost += curCost;
         }
     }
+    /**
+     * Gets the best arm Agent knows of, in terms of mean reward/cost ratio.
+     *
+     * @return
+     *              the best arm
+     */
+    public int getBestArm() {
+        int best = 0; // Index of the best arm in terms of mean reward/cost ratio.
 
-    public int getFirstOrSecondBest(boolean firstIfTrue) {
+        for (int j = 1; j < memories.length; j++)
+        {
+            if (memories[best].getCost() > budget && memories[j].getCost() <= budget) // Is it comparably usable?
+                best = j;
+
+            if ((memories[j].getRatio() > memories[best].getRatio() && memories[j].getCost() <= budget))
+                best = j;
+        }
+        return best;
+
+    }
+
+    /**
+     * Gets the second best arm Agent knows of, in terms of mean reward/cost ratio.
+     *
+     * @return
+     *              the second best arm
+     */
+    public int getSecondBest() {
         int best = 0;
         int secondBest = 1;
 
@@ -79,9 +105,6 @@ public class Agent {
                 secondBest = j;
             }
         }
-        if (firstIfTrue)
-            return best;
-
         return secondBest;
     }
 
@@ -103,13 +126,19 @@ public class Agent {
     }
 
 
+    /**
+     * Pulls the arm at index toPull
+     *
+     * @param toPull
+     *              the index of the arm to pull
+     */
     public void pull(int toPull) {
-        // TODO: Constant rewards, data tracking, etc.
-        Arm current = arms[toPull];
+        ArmMemory current = memories[toPull];
+
         if (budget >= current.getCost())
         {
             budget -= current.getCost();
-            memories[toPull].addPull(current.getReward());
+            memories[toPull].addPull(Bandit.pullArm(toPull, this));
         }
     }
 
@@ -129,14 +158,29 @@ public class Agent {
         return arms;
     }
 
+    /**
+     *
+     * @return
+     *      the minimum cost to pull an arm
+     */
     public double getMinCost() {
         return minCost;
     }
 
+    /**
+     *
+     * @return
+     *      total cost to pull all arms
+     */
     public double getTotalCost() {
         return totalCost;
     }
 
+    /**
+     *
+     * @return
+     *      the memories of all of the arms
+     */
     public ArmMemory[] getMemories() {
         return memories;
     }

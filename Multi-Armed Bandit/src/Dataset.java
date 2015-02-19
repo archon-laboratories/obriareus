@@ -230,6 +230,6 @@ public class Dataset
             }
         }
 
-    } // end getData
+    } // end constructor
 
 } // end Dataset
