@@ -20,7 +20,7 @@ Poisson
 
 # Mean Rewards
 *
-linear
+sublinear
 
 # Standard Deviations
 *

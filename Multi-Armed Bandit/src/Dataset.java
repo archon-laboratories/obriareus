@@ -73,8 +73,6 @@ public class Dataset
 
         reader.readLine(); // # Budgets to Run
 
-
-
         String budget = reader.readLine();
         if (budget.equalsIgnoreCase("*"))
         {
@@ -92,6 +90,7 @@ public class Dataset
                 }
                 if (printRun) System.out.println("Added Budget: " +  i);
             }
+            reader.readLine();
         } else
         {
             do
@@ -151,6 +150,7 @@ public class Dataset
                 armCosts[i] = flatCost;
                 if (printRun) System.out.println("Arm  " + i + "'s cost set to: " + flatCost);
             }
+            reader.readLine();
         } else
         {
             double cost;
@@ -178,7 +178,24 @@ public class Dataset
         String stringReward = reader.readLine();
         if (stringReward.equalsIgnoreCase("*"))
         {
-            // TODO
+            stringReward = reader.readLine();
+            if (stringReward.equalsIgnoreCase("linear"))
+                meanRewards = Utilities.getLinear(numArms);
+            else if (stringReward.equalsIgnoreCase("sublinear"))
+                meanRewards = Utilities.getSublinear(numArms);
+            else if (stringReward.equalsIgnoreCase("superlinear"))
+                meanRewards = Utilities.getSuperlinear(numArms);
+            else
+            {
+                System.out.println("ERROR: " + stringReward + " is not a recognized distribution!");
+                System.exit(9);
+            }
+            if (printRun)
+            {
+                for (int i = 0; i < meanRewards.length; i++)
+                    System.out.println("Arm" + i + "'s mean set to: " + meanRewards[i]);
+            }
+            reader.readLine();
         } else
         {
             double meanReward;
