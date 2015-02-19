@@ -1,6 +1,7 @@
 import java.util.Comparator;
 
-public class ArmMemory {
+public class ArmMemory
+{
 
     /**
      * The total reward received from the arm
@@ -29,10 +30,11 @@ public class ArmMemory {
 
     /**
      * Constructor that initializes the arm memory.
-     * @param cost
-     *          the cost to pull the arm
+     *
+     * @param cost the cost to pull the arm
      */
-    public ArmMemory(double cost) {
+    public ArmMemory(double cost)
+    {
         totalReward = 0;
         pulls = 0;
         meanReward = 0;
@@ -42,8 +44,8 @@ public class ArmMemory {
 
     /**
      * Adds a pull to the arm, recalculating values as necessary.
-     * @param reward
-     *          The reward from the pull
+     *
+     * @param reward The reward from the pull
      */
     public void addPull(double reward) //updates everything
     {
@@ -54,19 +56,35 @@ public class ArmMemory {
         rewardCostRatio = meanReward / cost;
     }
 
-    public double getMeanReward() {
+    /**
+     * @return the mean reward for this arm
+     */
+    public double getMeanReward()
+    {
         return meanReward;
     }
 
-    public int getPulls() {
+    /**
+     * @return the number of times this arm has been pulled
+     */
+    public int getPulls()
+    {
         return pulls;
     }
 
-    public double getRatio() {
+    /**
+     * @return the ratio of mean reward to cost
+     */
+    public double getRatio()
+    {
         return rewardCostRatio;
     }
 
-    public double getCost() {
+    /**
+     * @return the cost to pull the arm
+     */
+    public double getCost()
+    {
         return cost;
     }
 }
