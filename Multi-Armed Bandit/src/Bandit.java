@@ -46,8 +46,7 @@ public class Bandit {
      * @param newArms
      *          The arms of the bandit (with associated means, standard deviations, and costs).
      */
-
-    public static void regenerateBandit(Arm[] newArms) {
+    public static void generateBandit(Arm[] newArms) {
         arms = newArms;
         int numArms = arms.length;
 

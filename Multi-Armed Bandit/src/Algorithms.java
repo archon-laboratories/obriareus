@@ -36,7 +36,7 @@ public class Algorithms
     }
 
     /**
-     * Generates a random armIndex given an ArrayList of remaining armIndices.
+     * Generates a random armIndex given an ArrayList of remaining armIndices. Then removes the
      *
      * @param remainingIndices The ArrayList of indices that have yet to be used in the algorithm's random selection.
      * @return the index of the arm to be checked
@@ -130,7 +130,6 @@ public class Algorithms
 
 
     // fKUBE
-
     /**
      * Estimates the confidence bound:cost ratio of the arm (item density).
      * @param thisArm
