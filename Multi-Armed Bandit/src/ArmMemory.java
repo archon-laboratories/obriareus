@@ -1,6 +1,6 @@
-import java.util.Comparator;
+import com.sun.istack.internal.NotNull;
 
-public class ArmMemory
+public class ArmMemory implements Comparable<ArmMemory>
 {
 
     /**
@@ -86,5 +86,16 @@ public class ArmMemory
     public double getCost()
     {
         return cost;
+    }
+
+    @Override
+    public int compareTo(ArmMemory memory)
+    {
+        if (memory.getRatio() < getRatio())
+            return -1;
+        else if (memory.getRatio() == getRatio())
+            return 0;
+        else
+            return 1;
     }
 }

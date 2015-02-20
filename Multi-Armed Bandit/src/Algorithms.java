@@ -9,6 +9,11 @@ public class Algorithms
     private static Random rnd;
 
     /**
+     * If true, prints debug statements for the l-split algorithm.
+     */
+    static boolean debugLSplit = true;
+
+    /**
      * A list of the algorithms involved.
      */
     public static enum AlgorithmNames
@@ -213,10 +218,60 @@ public class Algorithms
         //TODO
     }
 
-    private static void lSplit(Agent curAgent)
-    {
-        //TODO
-    }
+    private static void lSplit(Agent curAgent, double lValue)
+    { //TODO: l-value
+
+        // Initialize variables
+        Arm [] arms = curAgent.getArms();
+        ArmMemory [] memories = curAgent.getMemories();
+        ArrayList<Integer> remainingArms = new ArrayList<Integer>();
+
+        double budget = curAgent.getBudget();
+        int numToPull = arms.length;
+        int iterations = 0;
+
+        // Add all the arms to the list to be pulled in the first iteration
+        for (int i = 0; i < curAgent.getArms().length; i++)
+            remainingArms.add(i);
+
+        // Loop the runs throughout the algorithm
+        while(remainingArms.size() > 0 && budget >= curAgent.getMinCost())
+        {
+            for (int i = 0; i < remainingArms.size(); i++)
+            {
+                if (arms[i].getCost() <= budget)
+                {
+                    curAgent.pull(i);
+                    if (debugLSplit) System.out.println("[l-split] Pulled arm " + i +
+                            "(mean = [" + memories[i].getMeanReward() +
+                            "], sd = [" + arms[i].getStdDev() +
+                            "], est. ratio = [" + memories[i].getRatio() +
+                            "]); Got Reward " + "WHERE DO WE STORE REWARDS?");
+                }
+
+            }
+
+            iterations++;
+
+            // Clears the current list of arms, to be repopulated for the next trial
+            remainingArms.clear();
+
+            // Updates the number of arms to be pulled in the next iteration.
+            if (numToPull > 1)
+            {
+                numToPull = (int) (arms.length * (Math.pow(1 - lValue, iterations)));
+                if (numToPull < 1)
+                    numToPull = 1;
+                if (debugLSplit) System.out.println("[l-split] Number of Arms to pull on next iteration: " + numToPull);
+            }
+
+            // Picks the best arms, which will be pulled on the next iteration
+            for (int i = 0; i < numToPull; i++)
+            {
+                remainingArms.add(curAgent.getKthBest(i+1));
+            }
+        }
+    } // End l-split
 
     private static void eProgressive(Agent curAgent)
     {
@@ -249,7 +304,7 @@ public class Algorithms
                 break;
 
             case LPSPLIT:
-                lSplit(curAgent);
+                lSplit(curAgent, .5);
                 break;
 
             case EPROGRESSIVE:

@@ -91,6 +91,11 @@ public class Arm {
         }
     }
 
+    public double getStdDev()
+    {
+        return stdDev;
+    }
+
     /**
      *
      * @return the cost to pull the arm

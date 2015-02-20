@@ -17,7 +17,7 @@ public class Implementation2
 
         ArrayList<Dataset> datasets = new ArrayList<Dataset>();
 
-        System.out.print("Enter Dataset(s) to run, separated by comma: "); // TODO: Support multiple datasets
+        System.out.print("Enter Dataset(s) to run, separated by comma: ");
         String input = console.nextLine();
 
         Scanner scanInput = new Scanner(input);
