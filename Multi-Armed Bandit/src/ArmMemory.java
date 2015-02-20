@@ -1,5 +1,3 @@
-import com.sun.istack.internal.NotNull;
-
 public class ArmMemory implements Comparable<ArmMemory>
 {
 
@@ -29,6 +27,11 @@ public class ArmMemory implements Comparable<ArmMemory>
     private double rewardCostRatio;
 
     /**
+     * The most recent reward when this arm was pulled
+     */
+    private double recentReward;
+
+    /**
      * Constructor that initializes the arm memory.
      *
      * @param cost the cost to pull the arm
@@ -51,6 +54,8 @@ public class ArmMemory implements Comparable<ArmMemory>
     {
         pulls++;
         totalReward += reward;
+        recentReward = reward;
+
         meanReward = totalReward / pulls;
 
         rewardCostRatio = meanReward / cost;
@@ -86,6 +91,11 @@ public class ArmMemory implements Comparable<ArmMemory>
     public double getCost()
     {
         return cost;
+    }
+
+    public double getRecentReward()
+    {
+        return recentReward;
     }
 
     @Override

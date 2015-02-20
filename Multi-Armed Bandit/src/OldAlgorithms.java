@@ -3,6 +3,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
+/**
+ * @deprecated
+ */
 public class OldAlgorithms
 {
     static final Random rnd = new Random();

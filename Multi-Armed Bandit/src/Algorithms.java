@@ -9,9 +9,14 @@ public class Algorithms
     private static Random rnd;
 
     /**
-     * If true, prints debug statements for the l-split algorithm.
+     * Prints debug statements for the l-split algorithm.
      */
-    static boolean debugLSplit = true;
+    static boolean debugLSplit = false;
+
+    /**
+     * Prints debug statements for the SOAAv algorithm.
+     */
+    static boolean debugSOAAv = false;
 
     /**
      * A list of the algorithms involved.
@@ -246,7 +251,7 @@ public class Algorithms
                             "(mean = [" + memories[i].getMeanReward() +
                             "], sd = [" + arms[i].getStdDev() +
                             "], est. ratio = [" + memories[i].getRatio() +
-                            "]); Got Reward " + "WHERE DO WE STORE REWARDS?");
+                            "]); Got Reward " + memories[i].getRecentReward());
                 }
 
             }
@@ -273,10 +278,72 @@ public class Algorithms
         }
     } // End l-split
 
-    private static void eProgressive(Agent curAgent)
-    {
-        //TODO
+    private static void eProgressive(Agent curAgent, double epsilon)
+    {   //TODO: epsilon
+
+        double lValue;
+        double eBudget = epsilon * curAgent.getBudget();
+
+        if (eBudget / curAgent.getArms().length <=1)
+            lValue = (curAgent.getArms().length - 1) / curAgent.getArms().length;
+        else
+            lValue = (eBudget - 1) / (eBudget - curAgent.getArms().length);
+
+        lSplit(curAgent, lValue);
     }
+
+    private static void sOAAv(Agent curAgent, double xValue)
+    { // TODO: xValue
+        // Initialize variables
+        Arm [] arms = curAgent.getArms();
+        ArmMemory [] memories = curAgent.getMemories();
+        ArrayList<Integer> activeArms = new ArrayList<Integer>();
+
+        int numPullsInPass;
+        int passAverageRatio;
+
+        // Add all arms to list to be pulled for first iteration
+        for(int i = 0; i < arms.length; i++)
+            activeArms.add(i);
+
+        // Loop until budget exhausted
+        while (curAgent.getBudget() >= curAgent.getMinCost())
+        {
+            numPullsInPass = 0;
+            passAverageRatio = 0;
+
+            for (int i : activeArms)
+            {
+                if (arms[i].getCost() <= curAgent.getBudget())
+                {
+                    curAgent.pull(i);
+                    numPullsInPass++;
+                    passAverageRatio += memories[i].getRecentReward();
+                    if (debugSOAAv) System.out.println("[SOAAv] Pulled arm " + i +
+                            "(mean = [" + memories[i].getMeanReward() +
+                            "], sd = [" + arms[i].getStdDev() +
+                            "], est. ratio = [" + memories[i].getRatio() +
+                            "]); Got Reward " + memories[i].getRecentReward());
+                }
+            }
+
+            if (numPullsInPass > 0)
+            {
+                passAverageRatio = passAverageRatio / numPullsInPass;
+                activeArms.clear();
+
+                // Update activeArms for next iteration
+                for (int i = 0; i < arms.length; i++)
+                {
+                    if (arms[i].getCost() <= curAgent.getBudget()
+                            && memories[i].getRatio() >= (1 + xValue) * passAverageRatio)
+                    {
+                        activeArms.add(i);
+                    }
+                }
+            }
+        } // TODO: Make random choice of arms though activeArms, to ensure no bias when budget is exhausted. Minor.
+    } // end sOAAv
 
 
     public static void run(AlgorithmNames algorithm, Agent curAgent)
@@ -304,12 +371,16 @@ public class Algorithms
                 break;
 
             case LPSPLIT:
-                lSplit(curAgent, .5);
+                lSplit(curAgent, .5); // TODO
                 break;
 
             case EPROGRESSIVE:
-                eProgressive(curAgent);
+                eProgressive(curAgent, .1); // TODO
                 break;
+
+            case SOAAV:
+                sOAAv(curAgent, 0); // TODO
+
 
             default:
                 System.err.println("Algorithm " + algorithm.toString() + " not found!");
