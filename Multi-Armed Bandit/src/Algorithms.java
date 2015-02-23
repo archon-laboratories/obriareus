@@ -19,6 +19,11 @@ public class Algorithms
     static boolean debugSOAAv = false;
 
     /**
+     * Prints debug statements for the UCB-BV algorithm
+     */
+    static boolean debugUCBBV = false;
+
+    /**
      * A list of the algorithms involved.
      */
     public static enum AlgorithmNames
@@ -156,8 +161,7 @@ public class Algorithms
 
     /**
      * The fKUBE algorithm. Pulls the arm with the estimated highest confidence bound:cost ratio (item density).
-     * @param curAgent
-     *              The agent currently employing this algorithm.
+     * @param curAgent The agent currently employing this algorithm.
      */
     private static void fKUBE(Agent curAgent)
     {
@@ -218,11 +222,91 @@ public class Algorithms
         //TODO
     }
 
-    private static void uCBBv(Agent curAgent)
+    /**
+     * THE UCB-BV algorithm. (Specifically UCB-BV 1) Iterates through all the arms once, then dulls the arm with
+     * the greatest D-value.
+     *
+     * @param curAgent The agent currently employing this algorithm.
+     */
+    private static void UCBBV(Agent curAgent)
     {
-        //TODO
+        // Initialize variables
+        Arm arms [] = curAgent.getArms();
+        ArmMemory [] memories = curAgent.getMemories();
+        double [] dValues = new double[arms.length];
+
+        double lambda = curAgent.getMinCost();
+        int currentBest = -1;
+        int totalPulls = 0;
+
+        // Initial phase: Pull each arm once.
+        ArrayList<Integer> indices = new ArrayList<Integer>();
+        generateIndices(indices, arms.length);
+
+        while(!indices.isEmpty())
+        {
+            int i = randomIndex(indices);
+            curAgent.pull(i);
+            totalPulls++;
+            if (debugUCBBV) System.out.println("[UCB-BV] Pulled arm " + i +
+                                                "(mean = [" + memories[i].getMeanReward() +
+                                                "], sd = [" + arms[i].getStdDev() +
+                                                "], est. ratio = [" + memories[i].getRatio() +
+                                                "]); Got Reward " + memories[i].getRecentReward());
+        }
+
+        // Exploitation phase
+        while (curAgent.getBudget() >= curAgent.getMinCost())
+        {
+            totalPulls++;
+            for (int i = 0; i < arms.length; i++)
+            {
+                dValues[i] = getDValue(memories[i], lambda, totalPulls);
+                if (debugUCBBV) System.out.println("[UCB-BV] D for arm " + i + " set to: " + dValues[i]);
+            }
+
+            generateIndices(indices, arms.length);
+            while(!indices.isEmpty())
+            {
+                int testArm = randomIndex(indices);
+                if (arms[testArm].getCost() <= curAgent.getBudget()
+                        && (currentBest < 0 || dValues[testArm] > dValues[currentBest]))
+                {
+                    currentBest = testArm;
+                }
+            }
+
+            curAgent.pull(currentBest);
+
+            if (debugUCBBV) System.out.println("[UCB-BV] Pulled arm " + currentBest +
+                    "(mean = [" + memories[currentBest].getMeanReward() +
+                    "], sd = [" + arms[currentBest].getStdDev() +
+                    "], est. ratio = [" + memories[currentBest].getRatio() +
+                    "]); Got Reward " + memories[currentBest].getRecentReward());
+        }
     }
 
+    /**
+     * Returns the dValue for a given arm. Used for UCB-BV algorithms.
+     *
+     * @param thisArm Arm that D will be caclulated for.
+     * @param lambda Minimum arm cost. (Or best guess)
+     * @param totalpulls Total number of arms that have been pulled so far.
+     * @return The dValue for the given arm, with the given boundType.
+     */
+    private static double getDValue(ArmMemory thisArm, double lambda, int totalpulls)
+    {
+        double root = Math.sqrt(Math.log(totalpulls - 1) / thisArm.getPulls());
+        return thisArm.getRatio() + (1 + (1 / lambda)) * root / (lambda - root);
+    }
+
+    /**
+     * The l-split algorithm retains <code>lValue^(iteration)</code> arms after each iteration.
+     *
+     * @param curAgent The agent currently employing this algorithm.
+     * @param lValue Value that determines how quickly arms are dropped. <code>lValue * 100%</code>
+     *               will be dropped in the first iteration.
+     */
     private static void lSplit(Agent curAgent, double lValue)
     { //TODO: l-value
 
@@ -278,6 +362,13 @@ public class Algorithms
         }
     } // End l-split
 
+    /**
+     * e-Progressive algorithm. Special case of the l-split algorithm, designed to have an l-values
+     * that gives an exploration phase of epsilon, before the number of arms is reduced to one.
+     *
+     * @param curAgent The agent currently employing this algorithm.
+     * @param epsilon <code>epsilon * 100%</code> is the percent of budget used on exploration.
+     */
     private static void eProgressive(Agent curAgent, double epsilon)
     {   //TODO: epsilon
 
@@ -292,6 +383,13 @@ public class Algorithms
         lSplit(curAgent, lValue);
     }
 
+    /**
+     * Survival of the Above Average algorithm. For each iteration, only pulls arms greater than
+     * x distance from the average. At <code>x = 0</code>, arms better than the average result are pulled.
+     *
+     * @param curAgent The agent currently employing this algorithm.
+     * @param xValue the distance from the average that determines the drop point.
+     */
     private static void sOAAv(Agent curAgent, double xValue)
     { // TODO: xValue
         // Initialize variables
@@ -367,7 +465,7 @@ public class Algorithms
                 break;
 
             case UCBBV:
-                uCBBv(curAgent);
+                UCBBV(curAgent);
                 break;
 
             case LPSPLIT:
