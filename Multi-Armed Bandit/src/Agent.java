@@ -18,6 +18,11 @@ public class Agent
     private static double minCost;
 
     /**
+     * The total reward from pulling arms so far.
+     */
+    private double totalReward = 0;
+
+    /**
      * The total cost to pull all of the arms.
      */
     private static double totalCost = 0;
@@ -208,6 +213,7 @@ public class Agent
             budget -= current.getCost();
             memories[toPull].addPull(Bandit.pullArm(toPull, this));
             totalPulls++;
+            totalReward += memories[toPull].getRecentReward();
         }
     }
 
