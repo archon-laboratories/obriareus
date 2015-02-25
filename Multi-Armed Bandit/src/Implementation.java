@@ -26,8 +26,13 @@ public class Implementation
         {
             String set = scanInput.next();
             File inputFile = new File("datasets/dataset" + set + ".txt");
-            Dataset dataset = new Dataset(inputFile);
+            Dataset dataset = new Dataset(inputFile, set);
             datasets.add(dataset);
+        }
+
+        for (Dataset dataset : datasets)
+        {
+            dataset.runSet();
         }
 
     }

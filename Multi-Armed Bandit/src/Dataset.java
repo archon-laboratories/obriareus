@@ -1,8 +1,7 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
 
 /**
  * Contains all the information for one dataset
@@ -27,12 +26,17 @@ public class Dataset
     private ArrayList<Integer> budgets = new ArrayList<Integer>();
 
     /**
+     * Contains the algorithms to run (Does not check if algorithms exist)
+     */
+    private ArrayList<AlgObject> algorithms = new ArrayList<AlgObject>();
+
+    /**
      * Number of trials to be performed
      */
     private int numTrials;
 
     /**
-     * Number of arms (consistant across trials
+     * Number of arms (consistent across trials)
      */
     private int numArms;
 
@@ -52,14 +56,21 @@ public class Dataset
     private double [] stdDevs;
 
     /**
+     * Name of the file that this Dataset is tied to
+     */
+    private String fileName;
+
+    /**
      * Constructs the data for a dataset from a given file.
      *
      * @param file Formatted File to construct the dataset from.
      * @throws java.io.IOException If the file is not formatted correctly.
      */
-    public Dataset(File file) throws IOException
+    public Dataset(File file, String name) throws IOException
     {
         BufferedReader reader = new BufferedReader(new FileReader(file));
+
+        fileName = name;
 
         reader.readLine(); // # Distributions to Run
 
@@ -230,6 +241,7 @@ public class Dataset
                 stdDevs[i] = flatDeviation;
                 if (printRun) System.out.println("Arm  " + i + "'s standard deviation set to: " + flatDeviation);
             }
+            reader.readLine();
         } else
         {
             double stdDev;
@@ -247,6 +259,154 @@ public class Dataset
             }
         }
 
+        reader.readLine(); // # Algorithms
+
+        String alg = reader.readLine();
+
+        double parameter;
+        while (alg != null)
+        {
+
+            Scanner scanInput = new Scanner(alg);
+            scanInput.useDelimiter(", *");
+            String algorithm = scanInput.next();
+
+            boolean flag = false;
+
+            for (Algorithms.AlgorithmNames a : Algorithms.AlgorithmNames.values())
+            {
+                if (a.name().equalsIgnoreCase(algorithm))
+                {
+                    flag = true;
+                    if (scanInput.hasNext())
+                    {
+                        parameter = Double.parseDouble(scanInput.next());
+                        algorithms.add(new AlgObject(algorithm.toUpperCase(), parameter));
+                    } else
+                        algorithms.add(new AlgObject(algorithm.toUpperCase()));
+
+                    if (printRun) System.out.println("Algorithm added: " + alg);
+                }
+            }
+
+            if (!flag)
+                System.out.println("ERROR: Algorithm \"" + algorithm + "\" not found, excluding from dataset.");
+
+            alg = reader.readLine();
+        }
+
+        if (printRun) System.out.println();
+
     } // end constructor
+
+    public void runSet()
+    {
+        for (String distribution : distributions)
+        {
+            System.out.println("Distribution: " + distribution + "\n");
+
+            for (int budget : budgets)
+            {
+                System.out.println("Budget: " + budget + "\n");
+
+                double[][] totalRewards = new double[algorithms.size()][numTrials];
+
+                Bandit bandit = new Bandit(numArms);
+
+                for (int trial = 0; trial < numTrials; trial++)
+                {
+                    Arm[] trialArms = new Arm[numArms];
+                    ArrayList<Integer> indices = new ArrayList<Integer>();
+                    Utilities.generateIndices(indices, numArms);
+
+                    int count = 0;
+                    while (!indices.isEmpty())
+                    {
+                        int index = Utilities.randomIndex(indices, new Random());
+                        trialArms[count] = new Arm(armCosts[index], stdDevs[index], meanRewards[index]);
+                        count++;
+                    }
+
+                    int algIndex = 0;
+
+                    for (AlgObject algObject : algorithms)
+                    {
+
+                        Arm[] agentArms = new Arm[numArms];
+                        System.arraycopy(trialArms, 0, agentArms, 0, trialArms.length);
+
+                        Agent agent = new Agent(budget, agentArms, bandit);
+
+                        Algorithms.run(algObject, agent);
+                        totalRewards[algIndex][trial] = agent.getTotalReward();
+                        algIndex++;
+                    }
+                }
+
+                double[] meanRewards = new double[algorithms.size()];
+
+                double totalAverage = 0;
+
+                for (int alg = 0; alg < meanRewards.length; alg++)
+                {
+                    double average = 0;
+                    for (int place = 0; place < numTrials; place++)
+                    {
+                        average += totalRewards[alg][place];
+                    }
+                    average /= numTrials;
+                    meanRewards[alg] = average;
+                    totalAverage += average;
+                }
+
+                totalAverage /= algorithms.size();
+
+                double[] normalizedRewards = new double[algorithms.size()];
+
+                for (int alg = 0; alg < normalizedRewards.length; alg++)
+                {
+                    normalizedRewards[alg] = meanRewards[alg] - totalAverage;
+                }
+
+                displayMeans(normalizedRewards);
+                outputFile(normalizedRewards, distribution, budget);
+            }
+        }
+    }
+    
+    public void outputFile(double [] means, String distribution, int budget)
+    {
+        try
+        {
+            File output = new File("output/" + fileName + "_" + distribution + ".txt");
+            FileWriter writer = new FileWriter(output);
+            
+            writer.append(((String.valueOf(budget))));
+            for (double mean : means)
+            {
+                writer.append("\t");
+                writer.append(String.valueOf(mean));
+            }
+            writer.append("\n");
+
+            writer.close();
+            
+        } catch (IOException e)
+        {
+            System.err.print("IO Exception! " + e);
+        }
+    }
+
+    public void displayMeans(double [] means)
+    {
+        int counter = 0;
+        for (AlgObject alg : algorithms)
+        {
+            System.out.println(alg.getAlgorithm() + ", " + alg.getInputParameter() + ": " + means[counter]);
+        }
+
+        System.out.println();
+    }
+
 
 } // end Dataset

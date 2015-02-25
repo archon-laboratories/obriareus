@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
 
@@ -6,7 +7,7 @@ public class Algorithms
     /**
      * The random generator for Algorithms.
      */
-    private static Random rnd;
+    private static Random rnd = new Random();
 
     /**
      * Prints debug statements for the l-split algorithm.
@@ -33,39 +34,9 @@ public class Algorithms
         FKUBE,
         FKDE,
         UCBBV,
-        LPSPLIT,
+        LSPLIT,
         EPROGRESSIVE,
         SOAAV
-    }
-
-    /**
-     * Restores the given ArrayList of indices to contain all indices.
-     *
-     * @param indices The ArrayList of indices to generate
-     * @param bound   The bound of indices to be used should remainingIndices need to be regenerated.
-     */
-    private static void generateIndices(ArrayList<Integer> indices, int bound)
-    {
-        for (int i = 0; i < bound; i++)
-            indices.set(i, i);
-    }
-
-    /**
-     * Generates a random armIndex given an ArrayList of remaining armIndices. Then removes the
-     *
-     * @param remainingIndices The ArrayList of indices that have yet to be used in the algorithm's random selection.
-     * @return the index of the arm to be checked
-     */
-    private static int randomIndex(ArrayList<Integer> remainingIndices)
-    {
-        if (remainingIndices.size() == 0)
-            return -1;
-
-        int indexLocation = rnd.nextInt(remainingIndices.size()); // The location in remainingIndices of the arm's index
-        int index = remainingIndices.get(indexLocation); // Location in arms of the arm.
-        remainingIndices.remove(indexLocation);
-        return index;
-
     }
 
     /**
@@ -87,28 +58,26 @@ public class Algorithms
      * @param epsilon  The epsilon value <= 1 for the exploration budget (exploration budget = epsilon * budget).
      */
     private static void eFirst(Agent curAgent, double epsilon)
-    { // TODO epsilon
-
+    {
         // Initialize variables
         Arm[] arms = curAgent.getArms();
         ArmMemory[] memories = curAgent.getMemories();
-        double budget = curAgent.getBudget();
 
-        double eBudget = budget * epsilon; // Exploration budget for the algorithm
-        budget -= eBudget;
+        double eBudget = curAgent.getBudget() * epsilon; // Exploration budget for the algorithm
+        curAgent.setBudget(curAgent.getBudget() - eBudget);
 
         // Declare the arraylist of remaining indices
         ArrayList<Integer> remainingIndices = new ArrayList<Integer>(arms.length); // Stores the location of arms
         // that have yet to be pulled
 
-        generateIndices(remainingIndices, arms.length);
+        Utilities.generateIndices(remainingIndices, arms.length);
         // Exploration
         while (eBudget >= curAgent.getMinCost())
         {
             if (remainingIndices.size() == 0)
-                generateIndices(remainingIndices, arms.length);
+                Utilities.generateIndices(remainingIndices, arms.length);
 
-            int armIndex = randomIndex(remainingIndices); // Get a random remaining index
+            int armIndex = Utilities.randomIndex(remainingIndices, rnd); // Get a random remaining index
             if (arms[armIndex].getCost() <= eBudget)
             {
                 // Pull it!
@@ -123,11 +92,11 @@ public class Algorithms
         int secondBestArm = curAgent.getSecondBest(); // Get the index of the second largest element
 
 
-        while (budget >= curAgent.getMinCost())
+        while (curAgent.getBudget() >= curAgent.getMinCost())
         {
             curAgent.pull(bestArm);
 
-            if (arms[bestArm].getCost() > budget) // Does the best arm cost too much?
+            if (arms[bestArm].getCost() > curAgent.getBudget()) // Does the best arm cost too much?
             {
                 // Reassign the arms, taking into account budget constraints.
                 bestArm = curAgent.getBestArm();
@@ -170,36 +139,36 @@ public class Algorithms
         Arm[] arms = curAgent.getArms();
         int numArms = arms.length;
         double minCost = curAgent.getMinCost();
-        double budget = curAgent.getBudget();
         ArmMemory [] memories = curAgent.getMemories();
 
         // Prepare algorithm
         int bestArm = -1;
         ArrayList<Integer> temp = new ArrayList<Integer>();
-        generateIndices(temp, numArms);
+        Utilities.generateIndices(temp, numArms);
 
         int lastBestArm = bestArm;
         int time = 0;
 
         //Main Fractional KUBE loop
-        while (budget >= minCost)
+        while (curAgent.getBudget() >= minCost)
         {
             if (temp.size() > 0) // initial phase
             {
                 //Make sure we can't go over budget here.
-                int x = randomIndex(temp);
-                if (arms[x].getCost() <= budget)
+                int x = Utilities.randomIndex(temp, rnd);
+                if (arms[x].getCost() <= curAgent.getBudget())
                 {
                     curAgent.pull(x);
                     time++;
                 }
-            } else { // combined exploration/exploitation phase
+            } else
+            { // combined exploration/exploitation phase
 
                 //Find the current best arm, pull it, and re-estimate its value by the result
                 bestArm = -1;
                 for (int i = 0; i < numArms; i++)
                 {
-                    if (curAgent.getMemories()[i].getCost() <= budget &&
+                    if (curAgent.getMemories()[i].getCost() <= curAgent.getBudget() &&
                             (bestArm < 0 || fKubeEst(memories[i], time) >
                                     fKubeEst(memories[curAgent.getBestArm()], time)))
                         bestArm = i;
@@ -207,11 +176,10 @@ public class Algorithms
 
                 if (lastBestArm != bestArm || lastBestArm == -1)
                     lastBestArm = bestArm;
-            }
 
-            // TODO: Should these two lines be down here or in the else?
-            curAgent.pull(bestArm);
-            time++;
+                curAgent.pull(bestArm);
+                time++;
+            }
         }//end else (which phase are we in)
     }
     // End fKUBE
@@ -241,11 +209,11 @@ public class Algorithms
 
         // Initial phase: Pull each arm once.
         ArrayList<Integer> indices = new ArrayList<Integer>();
-        generateIndices(indices, arms.length);
+        Utilities.generateIndices(indices, arms.length);
 
         while(!indices.isEmpty())
         {
-            int i = randomIndex(indices);
+            int i = Utilities.randomIndex(indices, rnd);
             curAgent.pull(i);
             totalPulls++;
             if (debugUCBBV) System.out.println("[UCB-BV] Pulled arm " + i +
@@ -265,10 +233,10 @@ public class Algorithms
                 if (debugUCBBV) System.out.println("[UCB-BV] D for arm " + i + " set to: " + dValues[i]);
             }
 
-            generateIndices(indices, arms.length);
+            Utilities.generateIndices(indices, arms.length);
             while(!indices.isEmpty())
             {
-                int testArm = randomIndex(indices);
+                int testArm = Utilities.randomIndex(indices, rnd);
                 if (arms[testArm].getCost() <= curAgent.getBudget()
                         && (currentBest < 0 || dValues[testArm] > dValues[currentBest]))
                 {
@@ -308,7 +276,7 @@ public class Algorithms
      *               will be dropped in the first iteration.
      */
     private static void lSplit(Agent curAgent, double lValue)
-    { //TODO: l-value
+    {
 
         // Initialize variables
         Arm [] arms = curAgent.getArms();
@@ -355,9 +323,22 @@ public class Algorithms
             }
 
             // Picks the best arms, which will be pulled on the next iteration
+            List<Integer> feasibles = new ArrayList<Integer>(arms.length);
+            Utilities.generateIndices(feasibles, arms.length);
             for (int i = 0; i < numToPull; i++)
             {
-                remainingArms.add(curAgent.getKthBest(i+1));
+                if (!feasibles.isEmpty())
+                {
+                    int currentBest = curAgent.getBestFromFeasibles(feasibles);
+                    if (arms[currentBest].getCost() <= curAgent.getBudget())
+                    {
+                        remainingArms.add(currentBest);
+                    } else
+                    {
+                        i--;
+                    }
+                    feasibles.remove(new Integer(currentBest));
+                }
             }
         }
     } // End l-split
@@ -370,7 +351,7 @@ public class Algorithms
      * @param epsilon <code>epsilon * 100%</code> is the percent of budget used on exploration.
      */
     private static void eProgressive(Agent curAgent, double epsilon)
-    {   //TODO: epsilon
+    {
 
         double lValue;
         double eBudget = epsilon * curAgent.getBudget();
@@ -391,7 +372,7 @@ public class Algorithms
      * @param xValue the distance from the average that determines the drop point.
      */
     private static void sOAAv(Agent curAgent, double xValue)
-    { // TODO: xValue
+    {
         // Initialize variables
         Arm [] arms = curAgent.getArms();
         ArmMemory [] memories = curAgent.getMemories();
@@ -444,16 +425,16 @@ public class Algorithms
     } // end sOAAv
 
 
-    public static void run(AlgorithmNames algorithm, Agent curAgent)
+    public static void run(AlgObject algorithm, Agent curAgent)
     {
-        switch (algorithm)
+        switch (algorithm.getAlgorithm())
         {
             case GREEDY:
                 greedy(curAgent);
                 break;
 
             case EFIRST:
-                eFirst(curAgent, .1); // TODO
+                eFirst(curAgent, algorithm.getInputParameter());
                 break;
 
             case FKUBE:
@@ -468,20 +449,21 @@ public class Algorithms
                 UCBBV(curAgent);
                 break;
 
-            case LPSPLIT:
-                lSplit(curAgent, .5); // TODO
+            case LSPLIT:
+                lSplit(curAgent, algorithm.getInputParameter());
                 break;
 
             case EPROGRESSIVE:
-                eProgressive(curAgent, .1); // TODO
+                eProgressive(curAgent, algorithm.getInputParameter());
                 break;
 
             case SOAAV:
-                sOAAv(curAgent, 0); // TODO
+                sOAAv(curAgent, algorithm.getInputParameter());
+                break;
 
 
             default:
-                System.err.println("Algorithm " + algorithm.toString() + " not found!");
+                System.err.println("Algorithm " + algorithm.getAlgorithm().toString() + " not found!");
                 break;
         }
     }

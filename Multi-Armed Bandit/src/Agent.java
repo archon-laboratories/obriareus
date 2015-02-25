@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Random;
 
 public class Agent
@@ -11,6 +12,11 @@ public class Agent
      * The arms that the agent pulls.
      */
     private static Arm arms[];
+
+    /**
+     * Bandit for this trial, contains all the rewards for this trial.
+     */
+    private Bandit bandit;
 
     /**
      * The minimum cost to pull an arm.
@@ -50,7 +56,7 @@ public class Agent
     /**
      * The total current budget of the agent.
      */
-    private int budget;
+    private double budget;
 
     /**
      * The total number of pulls.
@@ -122,74 +128,98 @@ public class Agent
         return secondBest;
     }
 
-    /**
-     * Returns the kth smallest value in the given array between the first and last indexes.
-     *
-     * @param k the element used as the pivot point
-     * @param array array to find the element in
-     * @param first first index to be considered
-     * @param last last index to be considered
-     * @return the kth smallest element in the array
-     */
-    public static <E extends Comparable<? super E>> E kSmall(int k, E[] array, int first, int last)
+//    /**
+//     * Returns the kth smallest value in the given array between the first and last indexes.
+//     *
+//     * @param k the element used as the pivot point
+//     * @param array array to find the element in
+//     * @param first first index to be considered
+//     * @param last last index to be considered
+//     * @return the kth smallest element in the array
+//     */
+//    public static <E extends Comparable<? super E>> E kSmall(int k, E[] array, int first, int last)
+//    {
+//        int pI = Utilities.partition(array, first, last);
+//        if (pI - first + 1 == k)
+//        {
+//            return array[pI];
+//        } else if (pI - first + 1 > k)
+//        {
+//            return kSmall(k, array, first, pI-1);
+//        } else
+//        {
+//            return kSmall(k-(pI-first+1), array, pI+1, last);
+//        }
+//    }
+
+//    /**
+//     * Returns the index of the kth best arm Agent knows of, in terms of mean reward/cost ratio.
+//     *
+//     * @param k the element used as the pivot point
+//     * @return the index of the kth best arm
+//     */
+//    public int getKthBest(int k)
+//    {
+//
+//
+//        return getKthBest(k, 0, memories.length - 1);
+//    }
+
+    public int getBestFromFeasibles(List<Integer> feasibles)
     {
-        int pI = Utilities.partition(array, first, last);
-        if (pI - first + 1 == k)
+        int best = -1; // Index of the best arm in terms of mean reward/cost ratio.
+
+        for (int j : feasibles)
         {
-            return array[pI];
-        } else if (pI - first + 1 > k)
-        {
-            return kSmall(k, array, first, pI-1);
-        } else
-        {
-            return kSmall(k-(pI-first+1), array, pI+1, last);
+            if (best == -1)
+                best = j;
+            if (memories[j].getRatio() > memories[best].getRatio()&& memories[j].getCost() <= budget)
+                best = j;
         }
+        return best;
     }
 
-    /**
-     * Returns the index of the kth best arm Agent knows of, in terms of mean reward/cost ratio.
-     *
-     * @param k the element used as the pivot point
-     * @return the index of the kth best arm
-     */
-    public int getKthBest(int k)
-    {
-        return getKthBest(k, 0, memories.length - 1);
-    }
-
-    /**
-     * Returns the kth best arm Agent knows of, in terms of mean reward/cost ratio.
-     *
-     * @param k the element used as the pivot point
-     * @param first  first index to be considered
-     * @param last last index to be considered
-     * @return the index of the kth best arm
-     */
-    public int getKthBest(int k, int first, int last)
-    {
-        int pI = Utilities.partition(memories, first, last);
-        if (pI - first + 1 == k)
-        {
-            return pI;
-        } else if (pI - first + 1 < k)
-        {
-            return getKthBest(k, first, pI-1);
-        } else
-        {
-            return getKthBest(k - (pI - first + 1), pI + 1, last);
-        }
-    }
+//    /**
+//     * Returns the kth best arm Agent knows of, in terms of mean reward/cost ratio.
+//     *
+//     * @param k the element used as the pivot point
+//     * @param first  first index to be considered
+//     * @param last last index to be considered
+//     * @return the index of the kth best arm
+//     */
+//    public int getKthBest(int k, int first, int last)
+//    {
+//        int pI = Utilities.partition(memories, first, last);
+//        if (pI - first + 1 == k)
+//        {
+//            return pI;
+//        } else if (pI - first + 1 < k)
+//        {
+//            return getKthBest(k, first, pI-1);
+//        } else
+//        {
+//            return getKthBest(k - (pI - first + 1), pI + 1, last);
+//        }
+//    }
 
     /**
      * The constructor for the agent. Pass a budget and the arms array.
      */
-    public Agent(int initBudget, Arm armRefs[])
+    public Agent(int initBudget, Arm armRefs[], Bandit trialBandit)
     {
         budget = initBudget;
         arms = armRefs;
+        bandit = trialBandit;
+        double currMin = Double.MAX_VALUE;
         int count = 0;
+        memories = new ArmMemory[armRefs.length];
         for (Arm current : armRefs)
+        {
             memories[count++] = new ArmMemory(current.getCost());
+            currMin = Math.min(currMin, current.getCost());
+        }
+
+        minCost = currMin;
 
         if (!initialized)
         {
@@ -211,7 +241,7 @@ public class Agent
         if (budget >= current.getCost())
         {
             budget -= current.getCost();
-            memories[toPull].addPull(Bandit.pullArm(toPull, this));
+            memories[toPull].addPull(bandit.pullArm(toPull, this));
             totalPulls++;
             totalReward += memories[toPull].getRecentReward();
         }
@@ -220,7 +250,7 @@ public class Agent
     /**
      * @return the budget remaining for the agent
      */
-    public int getBudget() { return budget; }
+    public double getBudget() { return budget; }
 
     /**
      * @return the array of arms of the agent
@@ -257,5 +287,18 @@ public class Agent
     public ArmMemory[] getMemories()
     {
         return memories;
+    }
+
+    /**
+     * @return the total reward of the agent.
+     */
+    public double getTotalReward()
+    {
+        return totalReward;
+    }
+
+    public void setBudget(double budget)
+    {
+        this.budget = budget;
     }
 }

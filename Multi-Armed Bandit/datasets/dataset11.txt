@@ -20,8 +20,20 @@ Poisson
 
 # Mean Rewards
 *
-sublinear
+linear
 
 # Standard Deviations
 *
 .3
+
+# Algorithms
+greedy
+eFirst, .1
+eFirst, .2
+fKUBE
+fKDE
+UCBBV
+eProgressive, .1
+eProgressive, .2
+lSplit, .5
+SOAAv, 0

@@ -3,6 +3,7 @@ import java.util.*;
 
 /**
  * @author sap471
+ * @deprecated
  */
 public class SingleTrial {
 

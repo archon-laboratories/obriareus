@@ -1,6 +1,5 @@
 # Distributions to Run
 Gaussian
-Poisson
 
 # Budgets to Run
 50
@@ -55,3 +54,14 @@ Poisson
 .3
 .3
 .3
+
+# Algorithms
+greedy
+eFirst, .1
+eFirst, .2
+fKUBE
+UCBBV
+eProgressive, .1
+eProgressive, .2
+lSplit, .5
+SOAAv, 0

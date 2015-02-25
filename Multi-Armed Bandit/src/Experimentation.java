@@ -4,6 +4,7 @@ import java.util.Random;
 
 /**
  * @author sap471
+ * @deprecated
  */
 public class Experimentation {
 

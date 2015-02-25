@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/**
+ * @deprecated
+ */
 public class TrialData {
     private ArrayList<Integer> timeVals;
     private ArrayList<Double> rewardVals;
