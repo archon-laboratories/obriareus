@@ -74,6 +74,8 @@ public class Dataset
 
         fileName = name;
 
+        if(printRun) System.out.println("Adding Dataset: " + fileName);
+
         getDistributions(reader);
 
         getBudgets(reader);
@@ -458,19 +460,22 @@ public class Dataset
      */
     public void runSet()
     {
+        System.out.println("Dataset: " + fileName + "\n");
 
+        // run for each dataset
         for (Utilities.Distribution distribution : distributions)
         {
-            System.out.println("Distribution: " + distribution + "\n");
+            System.out.println("Distribution: " + distribution.toString() + "\n");
 
-            try
+            try // delete the old output if it exists
             {
-                Files.delete(Paths.get("output/" + fileName + "_" + distribution + ".txt"));
+                Files.delete(Paths.get("output/" + fileName + "_" + distribution.toString().toLowerCase() + ".txt"));
             } catch (IOException x)
             {
                 // NOOP
             }
 
+            // run for each budget
             for (int budget : budgets)
             {
                 System.out.println("Budget: " + budget + "\n");
@@ -479,6 +484,7 @@ public class Dataset
 
                 Bandit bandit = new Bandit(numArms);
 
+                // run the number of trials specified in the dataset
                 for (int trial = 0; trial < numTrials; trial++)
                 {
                     Arm[] trialArms = new Arm[numArms];
@@ -489,7 +495,7 @@ public class Dataset
                     while (!indices.isEmpty())
                     {
                         int index = Utilities.randomIndex(indices, new Random());
-                        trialArms[count] = new Arm(armCosts[index], stdDevs[index], meanRewards[index]);
+                        trialArms[count] = new Arm(armCosts[index], stdDevs[index], meanRewards[index], distribution);
                         count++;
                     }
 
@@ -557,7 +563,7 @@ public class Dataset
             writer.write(((String.valueOf(budget))));
             for (double mean : means)
             {
-                writer.write("\t");
+                writer.write(",");
                 writer.write(String.valueOf(mean));
             }
             writer.write("\n");
@@ -570,12 +576,19 @@ public class Dataset
         }
     } // end outputFile
 
+    /**
+     * Outputs the normalized mean rewards of the algorithm to console.
+     *
+     * @param means double array of the normalized mean rewards.
+     */
     public void displayMeans(double[] means)
     {
         int counter = 0;
         for (AlgObject alg : algorithms)
         {
-            System.out.println(alg.getAlgorithm() + ", " + alg.getInputParameter() + ": " + means[counter]);
+            System.out.printf("%-20s %, 10.3f\n",
+                              alg.getAlgorithm() + ", " + alg.getInputParameter() + ": ",
+                              means[counter]);
             counter++;
         }
 

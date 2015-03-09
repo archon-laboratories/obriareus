@@ -39,11 +39,12 @@ public class Arm
      * @param dev   Standard deviation of the reward of the arm.
      * @param avg   Mean reward for the arm.
      */
-    public Arm(double price, double dev, double avg)
+    public Arm(double price, double dev, double avg, Utilities.Distribution distribution)
     {
         cost = price;
         stdDev = dev;
         mean = avg;
+        currentDistribution = distribution;
     }
 
     /**
@@ -99,16 +100,16 @@ public class Arm
         return cost;
     }
 
-    /**
-     * Sets the reward distribution of the arm
-     *
-     * @param distName the name of the distribution (does not need to be capitalized)
-     * @return the ordinal value of the distribution in the enum
-     */
-    public int setDistribution(String distName)
-    {
-        currentDistribution = Utilities.Distribution.valueOf(distName.toUpperCase());
-        return currentDistribution.ordinal();
-    }
+//    /**
+//     * Sets the reward distribution of the arm
+//     *
+//     * @param distName the name of the distribution (does not need to be capitalized)
+//     * @return the ordinal value of the distribution in the enum
+//     */
+//    public int setDistribution(String distName)
+//    {
+//        currentDistribution = Utilities.Distribution.valueOf(distName.toUpperCase());
+//        return currentDistribution.ordinal();
+//    }
 
 }

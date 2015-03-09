@@ -25,9 +25,15 @@ public class Implementation
         while (scanInput.hasNext())
         {
             String set = scanInput.next();
-            File inputFile = new File("datasets/dataset" + set + ".txt");
-            Dataset dataset = new Dataset(inputFile, set);
-            datasets.add(dataset);
+            try
+            {
+                File inputFile = new File("datasets/dataset" + set + ".txt");
+                Dataset dataset = new Dataset(inputFile, set);
+                datasets.add(dataset);
+            } catch(IOException e)
+            {
+                System.err.println("Error trying to read dataset \"" + set + "\": " + e);
+            }
         }
 
         for (Dataset dataset : datasets)
