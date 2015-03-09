@@ -535,7 +535,7 @@ public class Dataset
                 }
 
                 displayMeans(normalizedRewards);
-                outputFile(normalizedRewards, distribution.toString(), budget);
+                outputFile(normalizedRewards, distribution.toString().toLowerCase(), budget);
             }
         }
     } // end runSet
@@ -576,6 +576,7 @@ public class Dataset
         for (AlgObject alg : algorithms)
         {
             System.out.println(alg.getAlgorithm() + ", " + alg.getInputParameter() + ": " + means[counter]);
+            counter++;
         }
 
         System.out.println();
