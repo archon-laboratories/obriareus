@@ -134,4 +134,20 @@ public final class Utilities
         return index;
 
     }
+
+    /**
+     * The possible reward distributions.
+     */
+    public static enum Distribution
+    {
+        /**
+         * The Gaussian-based reward distribution.
+         */
+        GAUSSIAN,
+
+        /**
+         * The Poisson-based reward distribution.
+         */
+        POISSON
+    }
 }

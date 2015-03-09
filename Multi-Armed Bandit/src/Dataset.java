@@ -20,7 +20,7 @@ public class Dataset
     /**
      * Contains the distributions to be run (Does not check if they are applicable)
      */
-    private ArrayList<String> distributions = new ArrayList<String>();
+    private ArrayList<Utilities.Distribution> distributions = new ArrayList<Utilities.Distribution>();
 
     /**
      * Contains the budgets to run
@@ -96,7 +96,6 @@ public class Dataset
 
     /**
      * Adds the distributions to the dataset.
-     * TODO: Put distributions in Enum to make them actually do something
      *
      * @param reader BufferedReader that contains the input file.
      */
@@ -109,8 +108,14 @@ public class Dataset
             String distribution = reader.readLine();
             do
             {
-                distributions.add(distribution);
-                if (printRun) System.out.println("Added Distribution: " + distribution);
+                try
+                {
+                    distributions.add(Utilities.Distribution.valueOf(distribution.toUpperCase()));
+                    if (printRun) System.out.println("Added Distribution: " + distribution);
+                } catch (Exception e)
+                {
+                    System.err.println("Could not add distribution \"" + distribution + "\": " + e);
+                }
                 distribution = reader.readLine();
 
             } while (!distribution.isEmpty());
@@ -454,7 +459,7 @@ public class Dataset
     public void runSet()
     {
 
-        for (String distribution : distributions)
+        for (Utilities.Distribution distribution : distributions)
         {
             System.out.println("Distribution: " + distribution + "\n");
 
@@ -530,7 +535,7 @@ public class Dataset
                 }
 
                 displayMeans(normalizedRewards);
-                outputFile(normalizedRewards, distribution, budget);
+                outputFile(normalizedRewards, distribution.toString(), budget);
             }
         }
     } // end runSet
