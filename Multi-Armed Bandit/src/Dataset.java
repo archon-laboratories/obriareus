@@ -1,4 +1,7 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -301,9 +304,18 @@ public class Dataset
 
     public void runSet()
     {
+
         for (String distribution : distributions)
         {
             System.out.println("Distribution: " + distribution + "\n");
+
+            try
+            {
+                Files.delete(Paths.get("output/" + fileName + "_" + distribution + ".txt"));
+            }catch (IOException x)
+            {
+                // NOOP
+            }
 
             for (int budget : budgets)
             {
@@ -379,15 +391,15 @@ public class Dataset
         try
         {
             File output = new File("output/" + fileName + "_" + distribution + ".txt");
-            FileWriter writer = new FileWriter(output);
+            PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)));
             
-            writer.append(((String.valueOf(budget))));
+            writer.write(((String.valueOf(budget))));
             for (double mean : means)
             {
-                writer.append("\t");
-                writer.append(String.valueOf(mean));
+                writer.write("\t");
+                writer.write(String.valueOf(mean));
             }
-            writer.append("\n");
+            writer.write("\n");
 
             writer.close();
             
