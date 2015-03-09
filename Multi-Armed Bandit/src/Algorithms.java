@@ -129,7 +129,8 @@ public class Algorithms
     }
 
     /**
-     * The fKUBE algorithm. Pulls the arm with the estimated highest confidence bound:cost ratio (item density).
+     * The Fractional Knapsack-based Upper Confidence Bound Exploration and Exploitation (fKUBE) algorithm.
+     * Pulls the arm with the estimated highest confidence bound:cost ratio (item density).
      * @param curAgent The agent currently employing this algorithm.
      */
     private static void fKUBE(Agent curAgent)
@@ -185,13 +186,77 @@ public class Algorithms
     // End fKUBE
 
 
-    private static void fKDE(Agent curAgent)
+    /** Fractional Knapsack Based Decreasing ε–greedy (fKDE)
+     *
+     * @param curAgent The agent currently employing the algorithm
+     * @param gamma The tuning factor > 0 associated with fKDE
+     */
+    private static void fKDE(Agent curAgent, double gamma)
     {
-        //TODO
-    }
+        if (gamma <= 0) {
+            System.out.println("Non-positive gamma value; KDE cannot function.");
+            return;
+        }
+
+        int t = 0;
+        Arm[] arms = curAgent.getArms();
+        int numArms = arms.length;
+
+        int bestArm; //The best arm to pull: I+
+        int numFeasibleArms = 0; // The number of feasible terms
+
+        while (curAgent.getBudget() >= curAgent.getMinCost())
+        {
+            bestArm = curAgent.getBestArm();
+            double epsT = Math.min(1, gamma / (t + 1));
+
+            double[] armProb = new double[numArms]; // Probability of pulling the corresponding arms
+            for (int z = 0; z < numArms; z++)
+            {
+                if (arms[z].getCost() <= curAgent.getBudget())
+                {
+                    armProb[z] = epsT; // Set it up
+                    numFeasibleArms++;
+                }
+                else
+                    armProb[z] = 0;
+            }
+
+            // Assign probabilities
+            // ε/K, where K is the number of arms that can be pulled minus one (to account for the separate probability
+            // of 1 - ε for the best arm)
+            for (int z = 0; z < numArms; z++)
+                if (armProb[z] > 0)
+                    armProb[z] /= numFeasibleArms - 1;
+
+            // Assign the best arm the probability of 1 - ε
+            armProb[bestArm] = 1 - epsT;
+
+            // Calculate cumulative probabilities; the last arm should have a cumulative probability of 1
+            double[] cmlProb = new double[numArms];
+            cmlProb[0] = armProb[0];
+
+            for (int z = 1; z < numArms; z++)
+                cmlProb[z] = cmlProb[z - 1] + armProb[z];
+
+            double randomVal = rnd.nextDouble();
+
+            int pullIndex = -1; // The index of the arm to pull
+
+            for (int z = 0; z < numArms && pullIndex < 0; z++)
+            {
+                // Randomly select an arm from amongst the arms that can be pulled
+                if (randomVal < cmlProb[z] && armProb[z] > 0)
+                    pullIndex = z;
+            }
+
+            curAgent.pull(pullIndex);
+            t++;
+        }
+    } // End fKDE algorithm
 
     /**
-     * THE UCB-BV algorithm. (Specifically UCB-BV 1) Iterates through all the arms once, then dulls the arm with
+     * THE UCB-BV (specifically, UCB-BV 1) algorithm. Iterates through all the arms once, then dulls the arm with
      * the greatest D-value.
      *
      * @param curAgent The agent currently employing this algorithm.
@@ -211,7 +276,7 @@ public class Algorithms
         ArrayList<Integer> indices = new ArrayList<Integer>();
         Utilities.generateIndices(indices, arms.length);
 
-        while(!indices.isEmpty())
+        while (!indices.isEmpty())
         {
             int i = Utilities.randomIndex(indices, rnd);
             curAgent.pull(i);
@@ -355,14 +420,15 @@ public class Algorithms
 
         double lValue;
         double eBudget = epsilon * curAgent.getBudget();
+        int numArms = curAgent.getArms().length;
 
-        if (eBudget / curAgent.getArms().length <=1)
-            lValue = (curAgent.getArms().length - 1) / curAgent.getArms().length;
+        if (eBudget / numArms <=1)
+            lValue = (numArms - 1) / numArms;
         else
-            lValue = (eBudget - 1) / (eBudget - curAgent.getArms().length);
+            lValue = (eBudget - 1) / (eBudget - numArms);
 
         lSplit(curAgent, lValue);
-    }
+    } // End eProgressive
 
     /**
      * Survival of the Above Average algorithm. For each iteration, only pulls arms greater than
@@ -442,7 +508,7 @@ public class Algorithms
                 break;
 
             case FKDE:
-                fKDE(curAgent);
+                fKDE(curAgent, algorithm.getInputParameter());
                 break;
 
             case UCBBV:

@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 
 public class RandomNums {
 
