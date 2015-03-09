@@ -1,6 +1,5 @@
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
@@ -46,17 +45,17 @@ public class Dataset
     /**
      * Array containing the cost to pull each arm
      */
-    private double [] armCosts;
+    private double[] armCosts;
 
     /**
      * Array containing the mean reward of each arm
      */
-    private double [] meanRewards;
+    private double[] meanRewards;
 
     /**
      * Array containing the standard deviation of each arm
      */
-    private double [] stdDevs;
+    private double[] stdDevs;
 
     /**
      * Name of the file that this Dataset is tied to
@@ -75,233 +74,383 @@ public class Dataset
 
         fileName = name;
 
-        reader.readLine(); // # Distributions to Run
+        getDistributions(reader);
 
-        String distro = reader.readLine();
-        do
-        {
-            distributions.add(distro);
-            if (printRun) System.out.println("Added Distribution: " + distro);
-            distro = reader.readLine();
-        } while (!distro.isEmpty());
+        getBudgets(reader);
 
-        reader.readLine(); // # Budgets to Run
+        getNumTrials(reader);
 
-        String budget = reader.readLine();
-        if (budget.equalsIgnoreCase("*"))
-        {
-            int start = Integer.parseInt(reader.readLine());
-            int end = Integer.parseInt(reader.readLine());
-            int increment = Integer.parseInt(reader.readLine());
-            for (int i = start; i <= end; i += increment)
-            {
-                if (i >= 0)
-                    budgets.add(i);
-                else
-                {
-                    System.out.println("ERROR: Attempted to add budget " + i + ", which is less than zero.");
-                    System.exit(3);
-                }
-                if (printRun) System.out.println("Added Budget: " +  i);
-            }
-            reader.readLine();
-        } else
-        {
-            do
-            {
-                int toAdd = Integer.parseInt(budget);
-                if (toAdd >= 0)
-                    budgets.add(toAdd);
-                else
-                {
-                    System.out.println("ERROR: Attempted to add budget " + toAdd + ", which is less than zero.");
-                    System.exit(3);
-                }
-                if (printRun) System.out.println("Added Budget: " +  budget);
-                budget = reader.readLine();
-            } while (!budget.isEmpty());
-        }
+        getNumArms(reader);
 
-        reader.readLine(); // # Number of Trials
+        getArmCosts(reader);
 
-        numTrials = Integer.parseInt(reader.readLine());
-        if (numTrials < 0)
-        {
-            System.out.println("ERROR: Number of trials, " + numTrials + ", is less than zero.");
-            System.exit(4);
-        }
-        if (printRun) System.out.println("Number of Trials: " + numTrials);
+        getMeanRewards(reader);
 
-        reader.readLine();
-        reader.readLine(); // # Number of Arms
+        getStandardDeviations(reader);
 
-        numArms = Integer.parseInt(reader.readLine());
-        if (numArms <= 0)
-        {
-            System.out.println("ERROR: Number of trials, " + numTrials + ", is less than or equal to zero.");
-            System.exit(5);
-        }
-        if (printRun) System.out.println("Number of Arms: " + numArms);
-
-        armCosts = new double[numArms];
-        meanRewards = new double[numArms];
-        stdDevs = new double[numArms];
-
-        reader.readLine();
-        reader.readLine(); // # Arm Costs
-
-        String stringCost = reader.readLine();
-        if (stringCost.equalsIgnoreCase("*"))
-        {
-            double flatCost = Double.parseDouble(reader.readLine());
-            if (flatCost <= 0)
-            {
-                System.out.println("ERROR: Cost of arm set to " + flatCost + ", less than or equal to zero.");
-                System.exit(6);
-            }
-            for (int i = 0; i < numArms; i++)
-            {
-                armCosts[i] = flatCost;
-                if (printRun) System.out.println("Arm  " + i + "'s cost set to: " + flatCost);
-            }
-            reader.readLine();
-        } else
-        {
-            double cost;
-            for (int i = 0; i < numArms; i++)
-            {
-                cost = Double.parseDouble(stringCost);
-                if (cost <= 0)
-                {
-                    System.out.println("ERROR: Cost of arm set to " + cost + ", less than or equal to zero.");
-                    System.exit(6);
-                }
-                armCosts[i] = cost;
-                if (printRun) System.out.println("Arm " + i + "'s cost set to: " + cost);
-                stringCost = reader.readLine();
-            }
-            if (!stringCost.isEmpty())
-            {
-                System.out.println("ERROR: Incorrect data for number of arms");
-                System.exit(7);
-            }
-        }
-
-        reader.readLine(); // # Mean Rewards
-
-        String stringReward = reader.readLine();
-        if (stringReward.equalsIgnoreCase("*"))
-        {
-            stringReward = reader.readLine();
-            if (stringReward.equalsIgnoreCase("linear"))
-                meanRewards = Utilities.getLinear(numArms);
-            else if (stringReward.equalsIgnoreCase("sublinear"))
-                meanRewards = Utilities.getSublinear(numArms);
-            else if (stringReward.equalsIgnoreCase("superlinear"))
-                meanRewards = Utilities.getSuperlinear(numArms);
-            else
-            {
-                System.out.println("ERROR: " + stringReward + " is not a recognized distribution!");
-                System.exit(9);
-            }
-            if (printRun)
-            {
-                for (int i = 0; i < meanRewards.length; i++)
-                    System.out.println("Arm" + i + "'s mean set to: " + meanRewards[i]);
-            }
-            reader.readLine();
-        } else
-        {
-            double meanReward;
-            for (int i = 0; i < numArms; i++)
-            {
-                meanReward = Double.parseDouble(stringReward);
-                meanRewards[i] = meanReward;
-                if (printRun) System.out.println("Arm " + i + "'s mean reward set to: " + meanReward);
-                stringReward = reader.readLine();
-            }
-            if (!stringReward.isEmpty())
-            {
-                System.out.println("ERROR: Incorrect data for number of arms");
-                System.exit(7);
-            }
-        }
-
-        reader.readLine(); // # Standard Deviations
-
-        String stringDeviation = reader.readLine();
-        if (stringDeviation.equalsIgnoreCase("*"))
-        {
-            double flatDeviation = Double.parseDouble(reader.readLine());
-            if (flatDeviation < 0)
-            {
-                System.out.println("ERROR: Standard deviation of an arm set to " + flatDeviation
-                        + ", less than zero.");
-                System.exit(8);
-            }
-            for (int i = 0; i < numArms; i++)
-            {
-                stdDevs[i] = flatDeviation;
-                if (printRun) System.out.println("Arm  " + i + "'s standard deviation set to: " + flatDeviation);
-            }
-            reader.readLine();
-        } else
-        {
-            double stdDev;
-            for (int i = 0; i < numArms; i++)
-            {
-                stdDev = Double.parseDouble(stringDeviation);
-                if (stdDev < 0)
-                {
-                    System.out.println("ERROR: Standard deviation of an arm set to " + stdDev +", less than zero.");
-                    System.exit(8);
-                }
-                stdDevs[i] = stdDev;
-                if (printRun) System.out.println("Arm " + i + "'s standard deviation set to: " + stdDev);
-                stringDeviation = reader.readLine();
-            }
-        }
-
-        reader.readLine(); // # Algorithms
-
-        String alg = reader.readLine();
-
-        double parameter;
-        while (alg != null)
-        {
-
-            Scanner scanInput = new Scanner(alg);
-            scanInput.useDelimiter(", *");
-            String algorithm = scanInput.next();
-
-            boolean flag = false;
-
-            for (Algorithms.AlgorithmNames a : Algorithms.AlgorithmNames.values())
-            {
-                if (a.name().equalsIgnoreCase(algorithm))
-                {
-                    flag = true;
-                    if (scanInput.hasNext())
-                    {
-                        parameter = Double.parseDouble(scanInput.next());
-                        algorithms.add(new AlgObject(algorithm.toUpperCase(), parameter));
-                    } else
-                        algorithms.add(new AlgObject(algorithm.toUpperCase()));
-
-                    if (printRun) System.out.println("Algorithm added: " + alg);
-                }
-            }
-
-            if (!flag)
-                System.out.println("ERROR: Algorithm \"" + algorithm + "\" not found, excluding from dataset.");
-
-            alg = reader.readLine();
-        }
+        getAlgorithms(reader);
 
         if (printRun) System.out.println();
 
     } // end constructor
 
+    /**
+     * Adds the distributions to the dataset.
+     * TODO: Put distributions in Enum to make them actually do something
+     *
+     * @param reader BufferedReader that contains the input file.
+     */
+    private void getDistributions(BufferedReader reader)
+    {
+        try
+        {
+            reader.readLine(); // # Distributions to Run
+
+            String distribution = reader.readLine();
+            do
+            {
+                distributions.add(distribution);
+                if (printRun) System.out.println("Added Distribution: " + distribution);
+                distribution = reader.readLine();
+
+            } while (!distribution.isEmpty());
+
+        } catch (IOException e)
+        {
+            System.err.println("Error in getting distributions for dataset \"" + fileName + "\": " + e);
+        }
+    } // end getDistributions
+
+    /**
+     * Adds the budget to the dataset.
+     *
+     * @param reader BufferedReader that contains the input file.
+     */
+    private void getBudgets(BufferedReader reader)
+    {
+        try
+        {
+            reader.readLine(); // # Budgets to Run
+
+            String budget = reader.readLine();
+            if (budget.equalsIgnoreCase("*")) // Simplified notation
+            {
+                int start = Integer.parseInt(reader.readLine());
+                int end = Integer.parseInt(reader.readLine());
+                int increment = Integer.parseInt(reader.readLine());
+                for (int i = start; i <= end; i += increment)
+                {
+                    if (i >= 0)
+                        budgets.add(i);
+                    else
+                    {
+                        System.out.println("ERROR: Attempted to add budget " + i + ", which is less than zero.");
+                        System.exit(3);
+                    }
+                    if (printRun) System.out.println("Added Budget: " + i);
+                }
+
+                reader.readLine(); // Skip blank line
+
+            } else // Full notation
+            {
+                do
+                {
+                    int toAdd = Integer.parseInt(budget);
+                    if (toAdd >= 0)
+                        budgets.add(toAdd);
+                    else
+                    {
+                        System.out.println("ERROR: Attempted to add budget " + toAdd + ", which is less than zero.");
+                        System.exit(3);
+                    }
+                    if (printRun) System.out.println("Added Budget: " + budget);
+
+                    budget = reader.readLine();
+
+                } while (!budget.isEmpty());
+            }
+
+        } catch (IOException e)
+        {
+            System.err.println("Error in getting budgets for dataset \"" + fileName + "\": " + e);
+        }
+    } // end getBudgets
+
+    /**
+     * Adds the number of trials to the dataset.
+     *
+     * @param reader BufferedReader that contains the input file.
+     */
+    private void getNumTrials(BufferedReader reader)
+    {
+        try
+        {
+            reader.readLine(); // # Number of Trials
+
+            numTrials = Integer.parseInt(reader.readLine());
+            if (numTrials < 0)
+            {
+                System.out.println("ERROR: Number of trials, " + numTrials + ", is less than zero.");
+                System.exit(4);
+            }
+            if (printRun) System.out.println("Number of Trials: " + numTrials);
+
+            reader.readLine();
+
+        } catch (IOException e)
+        {
+            System.err.println("Error in getting number of trials for dataset \"" + fileName + "\": " + e);
+        }
+    } // end getNumTrials
+
+    /**
+     * Adds the number of arms to the dataset.
+     *
+     * @param reader BufferedReader that contains the input file.
+     */
+    private void getNumArms(BufferedReader reader)
+    {
+        try
+        {
+            reader.readLine(); // # Number of Arms
+
+            numArms = Integer.parseInt(reader.readLine());
+            if (numArms <= 0)
+            {
+                System.out.println("ERROR: Number of trials, " + numTrials + ", is less than or equal to zero.");
+                System.exit(5);
+            }
+            if (printRun) System.out.println("Number of Arms: " + numArms);
+
+            armCosts = new double[numArms];
+            meanRewards = new double[numArms];
+            stdDevs = new double[numArms];
+
+            reader.readLine(); // Skip blank line
+
+        } catch (IOException e)
+        {
+            System.err.println("Error in getting number of arms for dataset \"" + fileName + "\": " + e);
+        }
+    } // end getNumArms
+
+    /**
+     * Adds the costs to pull each arm to the dataset.
+     *
+     * @param reader BufferedReader that contains the input file.
+     */
+    private void getArmCosts(BufferedReader reader)
+    {
+        try
+        {
+            reader.readLine(); // # Arm Costs
+
+            String stringCost = reader.readLine();
+            if (stringCost.equalsIgnoreCase("*")) // special notation
+            {
+                double flatCost = Double.parseDouble(reader.readLine());
+                if (flatCost <= 0)
+                {
+                    System.out.println("ERROR: Cost of arm set to " + flatCost + ", less than or equal to zero.");
+                    System.exit(6);
+                }
+                for (int i = 0; i < numArms; i++)
+                {
+                    armCosts[i] = flatCost;
+                    if (printRun) System.out.println("Arm  " + i + "'s cost set to: " + flatCost);
+                }
+                reader.readLine();
+            } else // full notation
+            {
+                double cost;
+                for (int i = 0; i < numArms; i++)
+                {
+                    cost = Double.parseDouble(stringCost);
+                    if (cost <= 0)
+                    {
+                        System.out.println("ERROR: Cost of arm set to " + cost + ", less than or equal to zero.");
+                        System.exit(6);
+                    }
+                    armCosts[i] = cost;
+                    if (printRun) System.out.println("Arm " + i + "'s cost set to: " + cost);
+                    stringCost = reader.readLine();
+                }
+                if (!stringCost.isEmpty())
+                {
+                    System.out.println("ERROR: Incorrect data for number of arms");
+                    System.exit(7);
+                }
+            }
+
+        } catch (IOException e)
+        {
+            System.err.println("Error in getting arm costs for dataset \"" + fileName + "\": " + e);
+        }
+    } // end getArmCosts
+
+    /**
+     * Add the mean rewards for the arms to the dataset.
+     *
+     * @param reader BufferedReader that contains the input file.
+     */
+    private void getMeanRewards(BufferedReader reader)
+    {
+        try
+        {
+            reader.readLine(); // # Mean Rewards
+
+            String stringReward = reader.readLine();
+            if (stringReward.equalsIgnoreCase("*")) // simplified notation
+            {
+                stringReward = reader.readLine();
+                if (stringReward.equalsIgnoreCase("linear"))
+                    meanRewards = Utilities.getLinear(numArms);
+                else if (stringReward.equalsIgnoreCase("sublinear"))
+                    meanRewards = Utilities.getSublinear(numArms);
+                else if (stringReward.equalsIgnoreCase("superlinear"))
+                    meanRewards = Utilities.getSuperlinear(numArms);
+                else
+                {
+                    System.out.println("ERROR: " + stringReward + " is not a recognized distribution!");
+                    System.exit(9);
+                }
+                if (printRun)
+                {
+                    for (int i = 0; i < meanRewards.length; i++)
+                        System.out.println("Arm" + i + "'s mean set to: " + meanRewards[i]);
+                }
+                reader.readLine();
+            } else // full notation
+            {
+                double meanReward;
+                for (int i = 0; i < numArms; i++)
+                {
+                    meanReward = Double.parseDouble(stringReward);
+                    meanRewards[i] = meanReward;
+                    if (printRun) System.out.println("Arm " + i + "'s mean reward set to: " + meanReward);
+                    stringReward = reader.readLine();
+                }
+                if (!stringReward.isEmpty())
+                {
+                    System.out.println("ERROR: Incorrect data for number of arms");
+                    System.exit(7);
+                }
+            }
+
+        } catch (IOException e)
+        {
+            System.err.println("Error in getting mean arm rewards for dataset \"" + fileName + "\": " + e);
+        }
+    } // end getMeanRewards
+
+    /**
+     * Adds the arm standard deviations to the dataset.
+     *
+     * @param reader BufferedReader that contains the input file.
+     */
+    private void getStandardDeviations(BufferedReader reader)
+    {
+        try
+        {
+            reader.readLine(); // # Standard Deviations
+
+            String stringDeviation = reader.readLine();
+            if (stringDeviation.equalsIgnoreCase("*")) // simplified notation
+            {
+                double flatDeviation = Double.parseDouble(reader.readLine());
+                if (flatDeviation < 0)
+                {
+                    System.out.println("ERROR: Standard deviation of an arm set to " + flatDeviation
+                            + ", less than zero.");
+                    System.exit(8);
+                }
+                for (int i = 0; i < numArms; i++)
+                {
+                    stdDevs[i] = flatDeviation;
+                    if (printRun) System.out.println("Arm  " + i + "'s standard deviation set to: " + flatDeviation);
+                }
+                reader.readLine(); // skip blank line
+
+            } else // standard notation
+            {
+                double stdDev;
+                for (int i = 0; i < numArms; i++)
+                {
+                    stdDev = Double.parseDouble(stringDeviation);
+                    if (stdDev < 0)
+                    {
+                        System.out.println("ERROR: Standard deviation of an arm set to " + stdDev + ", less than zero.");
+                        System.exit(8);
+                    }
+                    stdDevs[i] = stdDev;
+                    if (printRun) System.out.println("Arm " + i + "'s standard deviation set to: " + stdDev);
+                    stringDeviation = reader.readLine();
+                }
+            }
+
+        } catch (IOException e)
+        {
+            System.err.println("Error in getting arm standard deviations for dataset \"" + fileName + "\": " + e);
+        }
+    } // end getStandardDeviations
+
+    /**
+     * Adds the active algorithms to the dataset.
+     *
+     * @param reader BufferedReader that contains the input file.
+     */
+    private void getAlgorithms(BufferedReader reader)
+    {
+        try
+        {
+            reader.readLine(); // # Algorithms
+
+            String alg = reader.readLine();
+
+            double parameter;
+            while (alg != null)
+            {
+
+                Scanner scanInput = new Scanner(alg);
+                scanInput.useDelimiter(", *");
+                String algorithm = scanInput.next();
+
+                boolean flag = false;
+
+                for (Algorithms.AlgorithmNames a : Algorithms.AlgorithmNames.values())
+                {
+                    if (a.name().equalsIgnoreCase(algorithm))
+                    {
+                        flag = true;
+                        if (scanInput.hasNext())
+                        {
+                            parameter = Double.parseDouble(scanInput.next());
+                            algorithms.add(new AlgObject(algorithm.toUpperCase(), parameter));
+                        } else
+                            algorithms.add(new AlgObject(algorithm.toUpperCase()));
+
+                        if (printRun) System.out.println("Algorithm added: " + alg);
+                    }
+                }
+
+                if (!flag)
+                    System.out.println("ERROR: Algorithm \"" + algorithm + "\" not found, excluding from dataset.");
+
+                alg = reader.readLine();
+            }
+
+        } catch (IOException e)
+        {
+            System.err.println("Error in getting algorithms for dataset \"" + fileName + "\": " + e);
+        }
+    } // end getAlgorithms
+
+
+    /**
+     * Runs a given dataset, outputting the results to both the console
+     * and a file in the <code>output/</code>.
+     */
     public void runSet()
     {
 
@@ -312,7 +461,7 @@ public class Dataset
             try
             {
                 Files.delete(Paths.get("output/" + fileName + "_" + distribution + ".txt"));
-            }catch (IOException x)
+            } catch (IOException x)
             {
                 // NOOP
             }
@@ -384,15 +533,22 @@ public class Dataset
                 outputFile(normalizedRewards, distribution, budget);
             }
         }
-    }
-    
-    public void outputFile(double [] means, String distribution, int budget)
+    } // end runSet
+
+    /**
+     * Writes the output for one budget to a file. Appends the file for each consecutive budget.
+     *
+     * @param means        An array of the mean rewards for each algorithm.
+     * @param distribution The current distribution being used.
+     * @param budget       The budget that this data is being outputted to.
+     */
+    public void outputFile(double[] means, String distribution, int budget)
     {
         try
         {
             File output = new File("output/" + fileName + "_" + distribution + ".txt");
             PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)));
-            
+
             writer.write(((String.valueOf(budget))));
             for (double mean : means)
             {
@@ -402,14 +558,14 @@ public class Dataset
             writer.write("\n");
 
             writer.close();
-            
+
         } catch (IOException e)
         {
-            System.err.print("IO Exception! " + e);
+            System.err.print("IO Exception! You might not have an output folder." + e + "\n");
         }
-    }
+    } // end outputFile
 
-    public void displayMeans(double [] means)
+    public void displayMeans(double[] means)
     {
         int counter = 0;
         for (AlgObject alg : algorithms)
@@ -418,7 +574,6 @@ public class Dataset
         }
 
         System.out.println();
-    }
-
+    } // end displayMeans
 
 } // end Dataset
