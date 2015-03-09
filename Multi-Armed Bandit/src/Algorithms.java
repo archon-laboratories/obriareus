@@ -64,6 +64,9 @@ public class Algorithms
         ArmMemory[] memories = curAgent.getMemories();
 
         double eBudget = curAgent.getBudget() * epsilon; // Exploration budget for the algorithm
+        if (eBudget <= curAgent.getTotalCost())
+            eBudget = curAgent.getTotalCost();
+
         curAgent.setBudget(curAgent.getBudget() - eBudget);
 
         // Declare the arraylist of remaining indices
@@ -241,6 +244,7 @@ public class Algorithms
 
             double randomVal = rnd.nextDouble();
 
+            // TODO BROKEN
             int pullIndex = -1; // The index of the arm to pull
 
             for (int z = 0; z < numArms && pullIndex < 0; z++)
