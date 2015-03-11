@@ -64,6 +64,9 @@ public class Algorithms
         ArmMemory[] memories = curAgent.getMemories();
 
         double eBudget = curAgent.getBudget() * epsilon; // Exploration budget for the algorithm
+        if (eBudget <= curAgent.getTotalCost())
+            eBudget = curAgent.getTotalCost();
+
         curAgent.setBudget(curAgent.getBudget() - eBudget);
 
         // Declare the arraylist of remaining indices
@@ -241,6 +244,7 @@ public class Algorithms
 
             double randomVal = rnd.nextDouble();
 
+            // TODO BROKEN
             int pullIndex = -1; // The index of the arm to pull
 
             for (int z = 0; z < numArms && pullIndex < 0; z++)
@@ -445,7 +449,7 @@ public class Algorithms
         ArrayList<Integer> activeArms = new ArrayList<Integer>();
 
         int numPullsInPass;
-        int passAverageRatio;
+        double passAverageRatio;
 
         // Add all arms to list to be pulled for first iteration
         for(int i = 0; i < arms.length; i++)
@@ -463,7 +467,7 @@ public class Algorithms
                 {
                     curAgent.pull(i);
                     numPullsInPass++;
-                    passAverageRatio += memories[i].getRecentReward();
+                    passAverageRatio += memories[i].getRecentReward() / arms[i].getCost();
                     if (debugSOAAv) System.out.println("[SOAAv] Pulled arm " + i +
                             "(mean = [" + memories[i].getMeanReward() +
                             "], sd = [" + arms[i].getStdDev() +
@@ -485,6 +489,10 @@ public class Algorithms
                     {
                         activeArms.add(i);
                     }
+                }
+                if (activeArms.size() == 0)
+                {
+                    activeArms.add(curAgent.getBestArm());
                 }
             }
         } // TODO: Make random choice of arms though activeArms, to ensure no bias when budget is exhausted. Minor.

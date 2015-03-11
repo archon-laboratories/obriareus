@@ -44,16 +44,6 @@ public class Agent
     private ArmMemory memories[];
 
     /**
-     * The index of the current best arm in terms of benefit/cost ratio.
-     */
-    private int bestArm;
-
-    /**
-     * The index of the next best arm in terms of benefit/cost ratio, in case the current base drops behind.
-     */
-    private int nextBestArm;
-
-    /**
      * The total current budget of the agent.
      */
     private double budget;
@@ -299,6 +289,8 @@ public class Agent
 
     public void setBudget(double budget)
     {
+        if (budget < 0)
+            System.out.println("Attempting to set the budget less than 0 for agent " + this.toString());
         this.budget = budget;
     }
 }
