@@ -20,7 +20,7 @@ public class Algorithms
     static boolean debugSOAAv = false;
 
     /**
-     * Prints debug statements for the UCB-BV algorithm
+     * Prints debug statements for the UCB-BV algorithm.
      */
     static boolean debugUCBBV = false;
 
