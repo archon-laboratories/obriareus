@@ -542,7 +542,7 @@ public class Algorithms
 
 
             default:
-                System.err.println("Algorithm " + algorithm.getAlgorithm().toString() + " not found!");
+                System.err.println("core.Algorithm " + algorithm.getAlgorithm().toString() + " not found!");
                 break;
         }
     }

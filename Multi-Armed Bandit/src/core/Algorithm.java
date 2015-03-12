@@ -1,15 +1,15 @@
+package core;
+
 import java.util.List;
 
 /**
  * @author Nate Beckemeyer and Sam Beckmann
  */
-public interface Algorithm <E>
+public interface Algorithm
 {
     /**
      * @return the name of the algorithm
      */
-    public Algorithm getAlgorithm();
-
     public String getName();
 
     /**
@@ -18,5 +18,5 @@ public interface Algorithm <E>
      *                 memories of the arm pulls,
      * @param inputParameters The input parameter necessary for the algorithm. Can be empty if unused.
      */
-    public void run(Agent curAgent, List<E> inputParameters);
+    public void run(Agent curAgent, List<Double> inputParameters);
 }

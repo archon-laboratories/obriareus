@@ -221,7 +221,7 @@
 	}
 
 	/**
-	* Fractional KUBE Algorithm
+	* Fractional KUBE core.Algorithm
 	* Can be optimistic (in the paper) or pessimistic
 	*/
 	public static TrialData FractKubeAlg(core.Bandit b, core.Agent a, boolean optimistic)

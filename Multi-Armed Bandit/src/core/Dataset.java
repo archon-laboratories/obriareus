@@ -103,7 +103,6 @@ public class Dataset
 
     /**
      * Adds the distributions to the dataset.
-     *
      * @param reader BufferedReader that contains the input file.
      */
     private void getDistributions(BufferedReader reader)
@@ -117,8 +116,10 @@ public class Dataset
             {
                 try
                 {
-                    distributions.add(Utilities.Distribution.valueOf(distribution.toUpperCase()));
-                    if (printRun) System.out.println("Added Distribution: " + distribution);
+
+                    distributions.add((DistributionInterface) Class.forName(distribution + ".java").newInstance());
+                    if (printRun)
+                        System.out.println("Added Distribution: " + distribution);
                 } catch (Exception e)
                 {
                     System.err.println("Could not add distribution \"" + distribution + "\": " + e);
@@ -417,60 +418,45 @@ public class Dataset
             reader.readLine(); // # Algorithms
 
             String alg = reader.readLine();
-
-            double parameter;
             while (alg != null)
             {
 
                 Scanner scanInput = new Scanner(alg);
                 scanInput.useDelimiter(", *");
-                // TODO Use the Class.forName magic here to get an actual algorithm
 
                 String algorithmName = scanInput.next();
-                Algorithm algorithm = new Algorithm();
+                Algorithm algorithm = null;
+                ArrayList <Double> algorithmParameters = new ArrayList<Double>();
+
+                while (scanInput.hasNextDouble())
+                    algorithmParameters.add(scanInput.nextDouble());
+
+                boolean found = false;
 
                 // Get the algorithm
                 try
                 {
-                    algorithm = (Algorithm) Class.forName(algorithmName).newInstance();
+                    algorithm = (Algorithm) Class.forName(algorithmName + ".java").newInstance();
+                    found = true;
                 } catch (ClassNotFoundException e)
                 {
-                    System.out.println("Error! Algorithm " + algorithmName + ".");
+                    System.out.println("Error! core.Algorithm " + algorithmName + " not found. Excluding.");
                     e.printStackTrace();
-                    return;
                 } catch (InstantiationException e)
                 {
-                    System.out.println("Error! Algorithm " + algorithmName + ".");
+                    System.out.println("Error! core.Algorithm "
+                            + algorithmName + " could not be instantiated. Excluding");
                     e.printStackTrace();
-                    return;
                 } catch (IllegalAccessException e)
                 {
-                    System.out.println("Error! Algorithm " + algorithmName + ".");
+                    System.out.println("Error! core.Algorithm " + algorithmName + " could not be accessed. Excluding");
                     e.printStackTrace();
-                    return;
-                }
-                boolean flag = false;
-
-                for (Algorithms.AlgorithmNames a : Algorithms.AlgorithmNames.values())
-                {
-                    if (a.name().equalsIgnoreCase(algorithm))
-                    {
-                        flag = true;
-                        if (scanInput.hasNext())
-                        {
-                            // TODO Scan for input parameters
-                            parameter = Double.parseDouble(scanInput.next());
-                            algorithms.add(new AlgObject(algorithm.toUpperCase(), parameter));
-                        } else
-                            algorithms.add(new AlgObject(algorithm.toUpperCase()));
-
-                        if (printRun) System.out.println("Algorithm added: " + alg);
-                    }
                 }
 
-                if (!flag)
-                    System.out.println("ERROR: Algorithm \"" + algorithm + "\" not found, excluding from dataset.");
-
+                if (found)
+                    if (printRun)
+                        System.out.println("core.Algorithm added: " + alg);
+                    algorithms.add(new AlgObject(algorithm, algorithmParameters));
                 alg = reader.readLine();
             }
 
@@ -490,13 +476,13 @@ public class Dataset
         System.out.println("Dataset: " + fileName + "\n");
 
         // run for each dataset
-        for (Utilities.Distribution distribution : distributions)
+        for (DistributionInterface distribution : distributions)
         {
-            System.out.println("Distribution: " + distribution.toString() + "\n");
+            System.out.println("Distribution: " + distribution.getName() + "\n");
 
             try // delete the old output if it exists
             {
-                Files.delete(Paths.get("output/" + fileName + "_" + distribution.toString().toLowerCase() + ".txt"));
+                Files.delete(Paths.get("output/" + fileName + "_" + distribution.getName().toLowerCase() + ".txt"));
             } catch (IOException x)
             {
                 // NOOP
@@ -568,7 +554,7 @@ public class Dataset
                 }
 
                 displayMeans(normalizedRewards);
-                outputFile(normalizedRewards, distribution.toString().toLowerCase(), budget);
+                outputFile(normalizedRewards, distribution.getName().toLowerCase(), budget);
             }
         }
     } // end runSet
