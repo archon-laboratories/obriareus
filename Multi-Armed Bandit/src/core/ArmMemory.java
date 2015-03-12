@@ -100,7 +100,6 @@ public class ArmMemory implements Comparable<ArmMemory>
         return recentReward;
     }
 
-    @Override
     public int compareTo(ArmMemory memory)
     {
         if (memory.getRatio() < getRatio())

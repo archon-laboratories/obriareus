@@ -1,7 +1,5 @@
 package core;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,10 +20,10 @@ public class AlgObject
      */
     List <Double> inputParameters;
 
-    public AlgObject(IAlgorithm algorithm_)
-    {
-        this(algorithm_, new ArrayList<Double>());
-    }
+//    public AlgObject(IAlgorithm algorithm_)
+//    {
+//        this(algorithm_, new ArrayList<Double>());
+//    }
 
     public AlgObject(IAlgorithm algorithm_, List<Double> inputParameters_)
     {
