@@ -117,7 +117,7 @@ public class Dataset
             {
                 try
                 {
-                    distributions.add((IDistribution) Class.forName(distribution + ".java").newInstance());
+                    distributions.add((IDistribution) Class.forName(distribution).newInstance());
                     if (printRun) System.out.println("Added Distribution: " + distribution);
                 } catch (Exception e)
                 {
@@ -424,11 +424,10 @@ public class Dataset
 
                 Scanner scanInput = new Scanner(alg);
                 scanInput.useDelimiter(", *");
-                // TODO Use the Class.forName magic here to get an actual algorithm
 
                 String algorithmName = scanInput.next();
                 boolean found = false;
-                Algorithm algorithm = null;
+                IAlgorithm algorithm = null;
 
                 while (scanInput.hasNextDouble()) {
                     parameters.add(scanInput.nextDouble());
@@ -437,23 +436,20 @@ public class Dataset
                 // Get the algorithm
                 try
                 {
+                    algorithm = (IAlgorithm) Class.forName(algorithmName).newInstance();
                     found = true;
-                    algorithm = (Algorithm) Class.forName(algorithmName).newInstance();
                 } catch (ClassNotFoundException e)
                 {
                     System.out.println("Error! Algorithm " + algorithmName + " not found. Excluding!");
                     e.printStackTrace();
-                    return;
                 } catch (InstantiationException e)
                 {
                     System.out.println("Error! Algorithm " + algorithmName + " not instantiated. Excluding!.");
                     e.printStackTrace();
-                    return;
                 } catch (IllegalAccessException e)
                 {
                     System.out.println("Error! Algorithm " + algorithmName + " not accessed. Excluding!");
                     e.printStackTrace();
-                    return;
                 }
                 if (found)
                     if (printRun)

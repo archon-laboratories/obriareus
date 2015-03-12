@@ -10,24 +10,24 @@ import java.util.List;
  *
  * @author Sam Beckmann, Nate Beckemeyer
  */
-public class AlgObject <E>
+public class AlgObject
 {
     /**
      * The algorithm itself
      */
-    private Algorithm<E> algorithm;
+    private IAlgorithm algorithm;
 
     /**
      * Special parameter for the algorithm (e, l, x, etc.)
      */
-    List <E> inputParameters;
+    List <Double> inputParameters;
 
-    public AlgObject(Algorithm<E> algorithm_)
+    public AlgObject(IAlgorithm algorithm_)
     {
-        this(algorithm_, new ArrayList<E>());
+        this(algorithm_, new ArrayList<Double>());
     }
 
-    public AlgObject(Algorithm<E> algorithm_, List <E> inputParameters_)
+    public AlgObject(IAlgorithm algorithm_, List<Double> inputParameters_)
     {
         algorithm = algorithm_;
         inputParameters = inputParameters_;
