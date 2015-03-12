@@ -65,3 +65,4 @@ eProgressive, .1
 eProgressive, .2
 lSplit, .5
 SOAAv, 0
+Simple

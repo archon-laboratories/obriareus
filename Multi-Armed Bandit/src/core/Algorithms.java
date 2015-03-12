@@ -71,7 +71,8 @@ public class Algorithms
         if (eBudget <= curAgent.getTotalCost())
             eBudget = curAgent.getTotalCost();
 
-        curAgent.setBudget(curAgent.getBudget() - eBudget);
+        if ((curAgent.getBudget() - eBudget) < 0)
+            System.out.println("Budget too low.");
 
         // Declare the arraylist of remaining indices
         ArrayList<Integer> remainingIndices = new ArrayList<Integer>(arms.length); // Stores the location of arms
@@ -512,7 +513,7 @@ public class Algorithms
                 break;
 
             case EFIRST:
-                eFirst(curAgent, algorithm.getInputParameter());
+                eFirst(curAgent, algorithm.getInputParameters());
                 break;
 
             case FKUBE:
@@ -520,7 +521,7 @@ public class Algorithms
                 break;
 
             case FKDE:
-                fKDE(curAgent, algorithm.getInputParameter());
+                fKDE(curAgent, algorithm.getInputParameters());
                 break;
 
             case UCBBV:
@@ -528,15 +529,15 @@ public class Algorithms
                 break;
 
             case LSPLIT:
-                lSplit(curAgent, algorithm.getInputParameter());
+                lSplit(curAgent, algorithm.getInputParameters());
                 break;
 
             case EPROGRESSIVE:
-                eProgressive(curAgent, algorithm.getInputParameter());
+                eProgressive(curAgent, algorithm.getInputParameters());
                 break;
 
             case SOAAV:
-                sOAAv(curAgent, algorithm.getInputParameter());
+                sOAAv(curAgent, algorithm.getInputParameters());
                 break;
 
 

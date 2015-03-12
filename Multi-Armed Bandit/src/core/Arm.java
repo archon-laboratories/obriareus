@@ -76,5 +76,4 @@ public class Arm
 //        currentDistribution = utilities.Utilities.Distribution.valueOf(distName.toUpperCase());
 //        return currentDistribution.ordinal();
 //    }
-
 }

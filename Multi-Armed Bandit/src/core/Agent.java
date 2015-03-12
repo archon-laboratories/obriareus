@@ -6,9 +6,9 @@ import java.util.Random;
 public class Agent
 {
     /**
-     * The random generator for core.Agent.
+     * The random generator for Agent.
      */
-    private Random rnd;
+    private AlgObject algorithm;
 
     /**
      * The arms that the agent pulls.
@@ -16,7 +16,7 @@ public class Agent
     private static Arm arms[];
 
     /**
-     * core.Bandit for this trial, contains all the rewards for this trial.
+     * Bandit for this trial, contains all the rewards for this trial.
      */
     private Bandit bandit;
 
@@ -36,12 +36,12 @@ public class Agent
     private static double totalCost = 0;
 
     /**
-     * Has minCost been initialized yet? It only needs to happen once. Optimization variable.
+     * Has minCost been initialized yet? It only needs to happen once. Control flag.
      */
     private static boolean initialized = false;
 
     /**
-     * The memories that the core.Agent has of the arm pulls.
+     * The memories that the Agent has of the arm pulls.
      */
     private ArmMemory memories[];
 
@@ -71,7 +71,7 @@ public class Agent
     }
 
     /**
-     * Gets the best arm core.Agent knows of, in terms of mean reward/cost ratio.
+     * Gets the best arm Agent knows of, in terms of mean reward/cost ratio.
      *
      * @return the index of the best arm
      */
@@ -92,7 +92,7 @@ public class Agent
     }
 
     /**
-     * Gets the second best arm core.Agent knows of, in terms of mean reward/cost ratio.
+     * Gets the second best arm Agent knows of, in terms of mean reward/cost ratio.
      *
      * @return the index of the second best arm
      */
@@ -131,7 +131,7 @@ public class Agent
 //     */
 //    public static <E extends Comparable<? super E>> E kSmall(int k, E[] array, int first, int last)
 //    {
-//        int pI = utilities.Utilities.partition(array, first, last);
+//        int pI = Utilities.partition(array, first, last);
 //        if (pI - first + 1 == k)
 //        {
 //            return array[pI];
@@ -145,7 +145,7 @@ public class Agent
 //    }
 
 //    /**
-//     * Returns the index of the kth best arm core.Agent knows of, in terms of mean reward/cost ratio.
+//     * Returns the index of the kth best arm Agent knows of, in terms of mean reward/cost ratio.
 //     *
 //     * @param k the element used as the pivot point
 //     * @return the index of the kth best arm
@@ -172,7 +172,7 @@ public class Agent
     }
 
 //    /**
-//     * Returns the kth best arm core.Agent knows of, in terms of mean reward/cost ratio.
+//     * Returns the kth best arm Agent knows of, in terms of mean reward/cost ratio.
 //     *
 //     * @param k the element used as the pivot point
 //     * @param first  first index to be considered
@@ -181,7 +181,7 @@ public class Agent
 //     */
 //    public int getKthBest(int k, int first, int last)
 //    {
-//        int pI = utilities.Utilities.partition(memories, first, last);
+//        int pI = Utilities.partition(memories, first, last);
 //        if (pI - first + 1 == k)
 //        {
 //            return pI;
@@ -197,23 +197,21 @@ public class Agent
     /**
      * The constructor for the agent. Pass a budget and the arms array.
      */
-    public Agent(int initBudget, Arm armRefs[], Bandit trialBandit)
+    public Agent(int initBudget, Arm armRefs[], AlgObject algorithm_, Bandit trialBandit)
     {
         budget = initBudget;
         arms = armRefs;
         bandit = trialBandit;
-        double currMin = Double.MAX_VALUE;
+        algorithm = algorithm_;
+
         int count = 0;
         memories = new ArmMemory[armRefs.length];
         for (Arm current : armRefs)
         {
             memories[count++] = new ArmMemory(current.getCost());
-            currMin = Math.min(currMin, current.getCost());
         }
 
-        minCost = currMin;
-
-        if (!initialized)
+        if (!initialized) // You only need to find the minimum cost arm once; cost is constant
         {
             findCosts();
             initialized = true;
@@ -289,10 +287,14 @@ public class Agent
         return totalReward;
     }
 
-    public void setBudget(double budget)
+    private void setBudget(double budget)
     {
         if (budget < 0)
             System.out.println("Attempting to set the budget less than 0 for agent " + this.toString());
         this.budget = budget;
+    }
+
+    public void run() {
+        algorithm.runAlgorithm(this);
     }
 }

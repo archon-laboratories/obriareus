@@ -63,7 +63,7 @@ public class Dataset
     private double[] stdDevs;
 
     /**
-     * Name of the file that this core.Dataset is tied to
+     * Name of the file that this Dataset is tied to
      */
     private String fileName;
 
@@ -79,7 +79,7 @@ public class Dataset
 
         fileName = name;
 
-        if(printRun) System.out.println("Adding core.Dataset: " + fileName);
+        if(printRun) System.out.println("Adding Dataset: " + fileName);
 
         getDistributions(reader);
 
@@ -102,7 +102,7 @@ public class Dataset
     } // end constructor
 
     /**
-     * Adds the defaultDistributions to the dataset.
+     * Adds the distributions to the dataset.
      *
      * @param reader BufferedReader that contains the input file.
      */
@@ -129,7 +129,7 @@ public class Dataset
 
         } catch (IOException e)
         {
-            System.err.println("Error in getting defaultDistributions for dataset \"" + fileName + "\": " + e);
+            System.err.println("Error in getting distributions for dataset \"" + fileName + "\": " + e);
         }
     } // end getDistributions
 
@@ -254,7 +254,7 @@ public class Dataset
     {
         try
         {
-            reader.readLine(); // # core.Arm Costs
+            reader.readLine(); // # Arm Costs
 
             String stringCost = reader.readLine();
             if (stringCost.equalsIgnoreCase("*")) // special notation
@@ -268,7 +268,7 @@ public class Dataset
                 for (int i = 0; i < numArms; i++)
                 {
                     armCosts[i] = flatCost;
-                    if (printRun) System.out.println("core.Arm  " + i + "'s cost set to: " + flatCost);
+                    if (printRun) System.out.println("Arm  " + i + "'s cost set to: " + flatCost);
                 }
                 reader.readLine();
             } else // full notation
@@ -283,7 +283,7 @@ public class Dataset
                         System.exit(6);
                     }
                     armCosts[i] = cost;
-                    if (printRun) System.out.println("core.Arm " + i + "'s cost set to: " + cost);
+                    if (printRun) System.out.println("Arm " + i + "'s cost set to: " + cost);
                     stringCost = reader.readLine();
                 }
                 if (!stringCost.isEmpty())
@@ -328,7 +328,7 @@ public class Dataset
                 if (printRun)
                 {
                     for (int i = 0; i < meanRewards.length; i++)
-                        System.out.println("core.Arm" + i + "'s mean set to: " + meanRewards[i]);
+                        System.out.println("Arm" + i + "'s mean set to: " + meanRewards[i]);
                 }
                 reader.readLine();
             } else // full notation
@@ -338,7 +338,7 @@ public class Dataset
                 {
                     meanReward = Double.parseDouble(stringReward);
                     meanRewards[i] = meanReward;
-                    if (printRun) System.out.println("core.Arm " + i + "'s mean reward set to: " + meanReward);
+                    if (printRun) System.out.println("Arm " + i + "'s mean reward set to: " + meanReward);
                     stringReward = reader.readLine();
                 }
                 if (!stringReward.isEmpty())
@@ -378,7 +378,7 @@ public class Dataset
                 for (int i = 0; i < numArms; i++)
                 {
                     stdDevs[i] = flatDeviation;
-                    if (printRun) System.out.println("core.Arm  " + i + "'s standard deviation set to: " + flatDeviation);
+                    if (printRun) System.out.println("Arm  " + i + "'s standard deviation set to: " + flatDeviation);
                 }
                 reader.readLine(); // skip blank line
 
@@ -394,7 +394,7 @@ public class Dataset
                         System.exit(8);
                     }
                     stdDevs[i] = stdDev;
-                    if (printRun) System.out.println("core.Arm " + i + "'s standard deviation set to: " + stdDev);
+                    if (printRun) System.out.println("Arm " + i + "'s standard deviation set to: " + stdDev);
                     stringDeviation = reader.readLine();
                 }
             }
@@ -414,7 +414,7 @@ public class Dataset
     {
         try
         {
-            reader.readLine(); // # core.Algorithms
+            reader.readLine(); // # Algorithms
 
             String alg = reader.readLine();
 
@@ -424,8 +424,31 @@ public class Dataset
 
                 Scanner scanInput = new Scanner(alg);
                 scanInput.useDelimiter(", *");
-                String algorithm = scanInput.next();
+                // TODO Use the Class.forName magic here to get an actual algorithm
 
+                String algorithmName = scanInput.next();
+                Algorithm algorithm = new Algorithm();
+
+                // Get the algorithm
+                try
+                {
+                    algorithm = (Algorithm) Class.forName(algorithmName).newInstance();
+                } catch (ClassNotFoundException e)
+                {
+                    System.out.println("Error! Algorithm " + algorithmName + ".");
+                    e.printStackTrace();
+                    return;
+                } catch (InstantiationException e)
+                {
+                    System.out.println("Error! Algorithm " + algorithmName + ".");
+                    e.printStackTrace();
+                    return;
+                } catch (IllegalAccessException e)
+                {
+                    System.out.println("Error! Algorithm " + algorithmName + ".");
+                    e.printStackTrace();
+                    return;
+                }
                 boolean flag = false;
 
                 for (Algorithms.AlgorithmNames a : Algorithms.AlgorithmNames.values())
@@ -435,6 +458,7 @@ public class Dataset
                         flag = true;
                         if (scanInput.hasNext())
                         {
+                            // TODO Scan for input parameters
                             parameter = Double.parseDouble(scanInput.next());
                             algorithms.add(new AlgObject(algorithm.toUpperCase(), parameter));
                         } else
@@ -463,7 +487,7 @@ public class Dataset
      */
     public void runSet()
     {
-        System.out.println("core.Dataset: " + fileName + "\n");
+        System.out.println("Dataset: " + fileName + "\n");
 
         // run for each dataset
         for (Utilities.Distribution distribution : distributions)
@@ -507,10 +531,10 @@ public class Dataset
                     for (AlgObject algObject : algorithms)
                     {
 
-                        Arm[] agentArms = new Arm[numArms];
-                        System.arraycopy(trialArms, 0, agentArms, 0, trialArms.length);
+                        //Arm[] agentArms = new Arm[numArms];
+                        //System.arraycopy(trialArms, 0, agentArms, 0, trialArms.length);
 
-                        Agent agent = new Agent(budget, agentArms, bandit);
+                        Agent agent = new Agent(budget, trialArms, algObject, bandit);
 
                         Algorithms.run(algObject, agent);
                         totalRewards[algIndex][trial] = agent.getTotalReward();
@@ -590,12 +614,12 @@ public class Dataset
         for (AlgObject alg : algorithms)
         {
             System.out.printf("%-20s %, 10.3f\n",
-                              alg.getAlgorithm() + ", " + alg.getInputParameter() + ": ",
-                              means[counter]);
+                    alg.getAlgorithm() + ", " + alg.getInputParameters() + ": ",
+                    means[counter]);
             counter++;
         }
 
         System.out.println();
     } // end displayMeans
 
-} // end core.Dataset
+} // end Dataset
