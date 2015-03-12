@@ -99,7 +99,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Greedy core.Algorithms
+//Greedy defaultAlgorithms.Algorithms
 
     public static TrialData greedyAlg(Bandit b, Agent a, boolean online) {
         TrialData myTrial = new TrialData();
@@ -139,7 +139,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// e-First core.Algorithms
+// e-First defaultAlgorithms.Algorithms
 
     public static TrialData eFirstAlg(Bandit b, Agent a, double epsilon, boolean dynamic) {
         TrialData myTrial = new TrialData();
@@ -207,7 +207,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// KUBE core.Algorithms
+// KUBE defaultAlgorithms.Algorithms
 
     public static TrialData KubeAlgRandom(Bandit b, Agent a, boolean optimistic) {
         //----------------------------------------
@@ -415,10 +415,10 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// KDE core.Algorithms
+// KDE defaultAlgorithms.Algorithms
 
     /**
-     * KDE Unique core.Algorithms: ensures that arms are not pulled more than once during "exploration" phase
+     * KDE Unique defaultAlgorithms.Algorithms: ensures that arms are not pulled more than once during "exploration" phase
      */
     public static TrialData KdeAlgUnique(Bandit b, Agent a, double gamma) {
         if (gamma <= 0) {
@@ -636,7 +636,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//UCB-BV core.Algorithms
+//UCB-BV defaultAlgorithms.Algorithms
 
     /**
      * performs the UCB-BV algorithm
@@ -719,7 +719,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// z-Test core.Algorithms
+// z-Test defaultAlgorithms.Algorithms
 
     public static TrialData HypothesisTestingAlg(Bandit b, Agent a, double deviation, double zValue) {
         TrialData myTrial = new TrialData();
@@ -1224,5 +1224,5 @@ public class OldAlgorithms
             return findS(mGoal, midS, rSB, tolerance, numArms);
     }
 
-}//end core.Algorithms
+}//end defaultAlgorithms.Algorithms
 

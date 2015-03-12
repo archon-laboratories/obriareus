@@ -5,7 +5,7 @@ package core;
  *
  * @author Sam Beckmann, Nate Beckemeyer
  */
-public interface DistributionInterface
+public interface IDistribution
 {
     /**
      * Gets the reward from this distribution, given a mean and standard deviation.
@@ -15,4 +15,11 @@ public interface DistributionInterface
      * @return A returned reward from the distribution.
      */
     public double getReward(double mean, double stdDev);
+
+    /**
+     * To print the name of the distribution.
+     *
+     * @return Name of the distribution.
+     */
+    public String getName();
 }

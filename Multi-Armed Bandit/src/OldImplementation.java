@@ -1,5 +1,5 @@
 import core.Agent;
-import core.Algorithms;
+import defaultAlgorithms.Algorithms;
 import core.Bandit;
 
 import java.io.IOException;
@@ -280,76 +280,76 @@ public class OldImplementation
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .eFirstAlg(myBandit, myAgent, epsilonValue,
                                                 true);
-                                // core.Algorithms.lSplitAlg(myBandit, myAgent, 0.2,
+                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.2,
                                 // false, true);
-                                // core.Algorithms.soaavAlg(myBandit, myAgent, 0, true);
+                                // defaultAlgorithms.Algorithms.soaavAlg(myBandit, myAgent, 0, true);
                                 break;
                             case 1:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .eFirstAlg(myBandit, myAgent, epsilonValue,
                                                 true);
-                                // core.Algorithms.lSplitAlg(myBandit, myAgent, 0.3,
+                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.3,
                                 // false, true);
-                                // core.Algorithms.lSplitAlg(myBandit, myAgent, 0.5,
+                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.5,
                                 // false, true);
                                 break;
                             case 2:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .eFirstAlg(myBandit, myAgent, epsilonValue,
                                                 true);
-                                // core.Algorithms.lSplitAlg(myBandit, myAgent, 0.4,
+                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.4,
                                 // false, true);
-                                // core.Algorithms.eFirstAlg(myBandit, myAgent,
+                                // defaultAlgorithms.Algorithms.eFirstAlg(myBandit, myAgent,
                                 // epsilonValue, true);
                                 break;
                             case 3:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .FractKubeAlgRandom(myBandit, myAgent,
                                                 true, true);
-                                // core.Algorithms.lSplitAlg(myBandit, myAgent, 0.5,
+                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.5,
                                 // false, true);
-                                // core.Algorithms.peefAlg(myBandit, myAgent, 0.1);
+                                // defaultAlgorithms.Algorithms.peefAlg(myBandit, myAgent, 0.1);
                                 break;
                             case 4:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .FractKdeAlg(myBandit, myAgent, gammaVal,
                                                 true);
-                                // core.Algorithms.lSplitAlg(myBandit, myAgent, 0.6,
+                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.6,
                                 // false, true);
                                 break;
                             case 5:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .UCBBVAlg(myBandit, myAgent, 0, true);
-                                // core.Algorithms.lSplitAlg(myBandit, myAgent, 0.7,
+                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.7,
                                 // false, true);
                                 break;
                             case 6:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .lSplitAlg(myBandit, myAgent, 0.5, false,
                                                 true);
-                                // core.Algorithms.lSplitAlg(myBandit, myAgent, 0.8,
+                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.8,
                                 // false, true);
                                 break;
                             case 7:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .peefAlg(myBandit, myAgent, 0.1);
-                                // core.Algorithms.lSplitAlg(myBandit, myAgent, 0.9,
+                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.9,
                                 // false, true);
                                 break;
                             case 8:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .peefAlg(myBandit, myAgent, 0.2);
-                                // core.Algorithms.eFirstAlg(myBandit, myAgent,
+                                // defaultAlgorithms.Algorithms.eFirstAlg(myBandit, myAgent,
                                 // epsilonValue, true);
                             default:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .soaavAlg(myBandit, myAgent, 0, true);
-                                // core.Algorithms.soaavAlg(myBandit, myAgent, 0, true);
+                                // defaultAlgorithms.Algorithms.soaavAlg(myBandit, myAgent, 0, true);
                         }// end switch
 
                         // Error-catch line
                         if (myAgent.getBudget() < 0)
-                            System.out.println("Warning! core.Algorithms " + whichAlg
+                            System.out.println("Warning! defaultAlgorithms.Algorithms " + whichAlg
                                     + " ended over budget (unfair advantage).");
                         if (printRun)
                             System.out.println("Utility: "
@@ -635,7 +635,7 @@ public class OldImplementation
 				 * out.close(); }
 				 * 
 				 * //====================================== //Run-Time v.
-				 * core.Algorithms PrintWriter tOut = new PrintWriter(new
+				 * defaultAlgorithms.Algorithms PrintWriter tOut = new PrintWriter(new
 				 * FileWriter("data/timeData_"+dataNum+".txt")); String[]
 				 * algNames = {
 				 * "\"e-First Static\"","\"e-First Dynamic\"","\"Optimistic KUBE\""
@@ -647,7 +647,7 @@ public class OldImplementation
 				 * tOut.close();
 				 * 
 				 * //====================================== //core.Arm Usage v.
-				 * core.Algorithms
+				 * defaultAlgorithms.Algorithms
 				 * 
 				 * PrintWriter aOut = new PrintWriter(new FileWriter()); for(int
 				 * i = 0; i < numAlgorithms; i++) { for(int j = 0; j < numArms;

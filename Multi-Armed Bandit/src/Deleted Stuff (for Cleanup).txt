@@ -507,7 +507,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
-public class core.Algorithms
+public class defaultAlgorithms.Algorithms
 {
     static final Random rnd = new Random();
     static boolean debug = false;
@@ -597,7 +597,7 @@ public class core.Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Greedy core.Algorithms
+//Greedy defaultAlgorithms.Algorithms
 
     public static TrialData greedyAlg(core.Bandit b, core.Agent a, boolean online) {
         TrialData myTrial = new TrialData();
@@ -637,7 +637,7 @@ public class core.Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// e-First core.Algorithms
+// e-First defaultAlgorithms.Algorithms
 
     public static TrialData eFirstAlg(core.Bandit b, core.Agent a, double epsilon, boolean dynamic) {
         TrialData myTrial = new TrialData();
@@ -705,7 +705,7 @@ public class core.Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// KUBE core.Algorithms
+// KUBE defaultAlgorithms.Algorithms
 
     public static TrialData KubeAlgRandom(core.Bandit b, core.Agent a, boolean optimistic) {
         //----------------------------------------
@@ -913,10 +913,10 @@ public class core.Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// KDE core.Algorithms
+// KDE defaultAlgorithms.Algorithms
 
     /**
-     * KDE Unique core.Algorithms: ensures that arms are not pulled more than once during "exploration" phase
+     * KDE Unique defaultAlgorithms.Algorithms: ensures that arms are not pulled more than once during "exploration" phase
      */
     public static TrialData KdeAlgUnique(core.Bandit b, core.Agent a, double gamma) {
         if (gamma <= 0) {
@@ -1134,7 +1134,7 @@ public class core.Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//UCB-BV core.Algorithms
+//UCB-BV defaultAlgorithms.Algorithms
 
     /**
      * performs the UCB-BV algorithm
@@ -1217,7 +1217,7 @@ public class core.Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// z-Test core.Algorithms
+// z-Test defaultAlgorithms.Algorithms
 
     public static TrialData HypothesisTestingAlg(core.Bandit b, core.Agent a, double deviation, double zValue) {
         TrialData myTrial = new TrialData();
@@ -1722,5 +1722,5 @@ public class core.Algorithms
             return findS(mGoal, midS, rSB, tolerance, numArms);
     }
 
-}//end core.Algorithms
+}//end defaultAlgorithms.Algorithms
 

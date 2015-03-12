@@ -1,5 +1,9 @@
-package core;
+package defaultAlgorithms;
 
+import core.Agent;
+import core.AlgObject;
+import core.Arm;
+import core.ArmMemory;
 import utilities.Utilities;
 
 import java.util.List;
@@ -9,7 +13,7 @@ import java.util.ArrayList;
 public class Algorithms
 {
     /**
-     * The random generator for core.Algorithms.
+     * The random generator for defaultAlgorithms.Algorithms.
      */
     private static Random rnd = new Random();
 

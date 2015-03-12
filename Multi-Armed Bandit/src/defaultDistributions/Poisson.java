@@ -1,5 +1,7 @@
 package defaultDistributions;
 
+import core.IDistribution;
+
 import java.util.Random;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Random;
  *
  * @author Sam Beckmann, Nate Beckemeyer
  */
-public class Poisson implements core.DistributionInterface
+public class Poisson implements IDistribution
 {
     /**
      * Random generator for the distribution.
@@ -24,5 +26,11 @@ public class Poisson implements core.DistributionInterface
     public double getReward(double mean, double stdDev)
     {
         return 0;
+    }
+
+    @Override
+    public String getName()
+    {
+        return "Poisson";
     }
 }
