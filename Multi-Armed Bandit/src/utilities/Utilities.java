@@ -134,6 +134,7 @@ public final class Utilities
 
         int indexLocation = rnd.nextInt(remainingIndices.size()); // The location in remainingIndices of the arm's index
         int index = remainingIndices.get(indexLocation); // Location in arms of the arm.
+
         remainingIndices.remove(indexLocation);
         return index;
 

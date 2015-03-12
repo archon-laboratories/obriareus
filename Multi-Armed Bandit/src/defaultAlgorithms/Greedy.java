@@ -2,6 +2,7 @@ package defaultAlgorithms;
 
 import core.Agent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +29,8 @@ public class Greedy implements core.IAlgorithm
     public void run(Agent curAgent, List<Double> inputParameters)
     {
         EFirst eFirst = new EFirst();
-        inputParameters.add(curAgent.getTotalCost() / curAgent.getBudget()); // add correct epsilon for Greedy.
+        inputParameters = new ArrayList<Double>(); // add correct epsilon for Greedy.
+        inputParameters.add(curAgent.getTotalCost() / curAgent.getBudget());
         eFirst.run(curAgent, inputParameters);
     }
 }

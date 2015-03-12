@@ -55,14 +55,13 @@ Gaussian
 .3
 .3
 
-# deprecated.Algorithms
-greedy
-eFirst, .1
-eFirst, .2
-fKUBE
+# Algorithms
+Greedy
+EFirst, .1
+EFirst, .2
+Fkube
 UCBBV
-eProgressive, .1
-eProgressive, .2
-lSplit, .5
+EProgressive, .1
+EProgressive, .2
+LSplit, .5
 SOAAv, 0
-Simple

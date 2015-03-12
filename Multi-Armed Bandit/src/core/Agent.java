@@ -1,7 +1,6 @@
 package core;
 
 import java.util.List;
-import java.util.Random;
 
 public class Agent
 {
@@ -68,6 +67,7 @@ public class Agent
                 min = curCost;
             totalCost += curCost;
         }
+        minCost = min;
     }
 
     /**

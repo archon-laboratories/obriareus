@@ -49,6 +49,7 @@ public class EFirst implements core.IAlgorithm
         // that have yet to be pulled
 
         Utilities.generateIndices(remainingIndices, arms.length);
+
         // Exploration
         while (eBudget >= curAgent.getMinCost())
         {
@@ -62,13 +63,11 @@ public class EFirst implements core.IAlgorithm
                 curAgent.pull(armIndex);
                 eBudget -= arms[armIndex].getCost();
             }
-
         }
         // eBudget has run out. Begin exploitation phase.
 
         int bestArm = curAgent.getBestArm(); // Get the index of the first largest element
         int secondBestArm = curAgent.getSecondBest(); // Get the index of the second largest element
-
 
         while (curAgent.getBudget() >= curAgent.getMinCost())
         {

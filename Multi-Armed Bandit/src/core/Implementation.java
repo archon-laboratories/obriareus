@@ -19,7 +19,7 @@ public class Implementation
 
         ArrayList<Dataset> datasets = new ArrayList<Dataset>();
 
-        System.out.print("Enter core.Dataset(s) to run, separated by comma: ");
+        System.out.print("Enter dataset(s) to run, separated by comma: ");
         String input = console.nextLine();
 
         Scanner scanInput = new Scanner(input);
@@ -29,7 +29,7 @@ public class Implementation
             String set = scanInput.next();
             try
             {
-                File inputFile = new File("datasets/dataset" + set + ".txt");
+                File inputFile = new File("Multi-Armed Bandit/datasets/dataset" + set + ".txt");
                 Dataset dataset = new Dataset(inputFile, set);
                 datasets.add(dataset);
             } catch(IOException e)

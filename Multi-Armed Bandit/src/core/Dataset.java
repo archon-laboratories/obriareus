@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -117,7 +116,7 @@ public class Dataset
             {
                 try
                 {
-                    distributions.add((IDistribution) Class.forName(distribution).newInstance());
+                    distributions.add((IDistribution) Class.forName("defaultDistributions." + distribution).newInstance());
                     if (printRun) System.out.println("Added Distribution: " + distribution);
                 } catch (Exception e)
                 {
@@ -418,25 +417,27 @@ public class Dataset
 
             String alg = reader.readLine();
 
-            List<Double> parameters = new ArrayList<Double>();
             while (alg != null)
             {
 
+                List<Double> parameters = new ArrayList<Double>();
                 Scanner scanInput = new Scanner(alg);
                 scanInput.useDelimiter(", *");
 
                 String algorithmName = scanInput.next();
+                algorithmName = algorithmName.substring(0, 1).toUpperCase() + algorithmName.substring(1);
                 boolean found = false;
                 IAlgorithm algorithm = null;
+                int count = 0;
 
                 while (scanInput.hasNextDouble()) {
-                    parameters.add(scanInput.nextDouble());
+                    parameters.add(count++, scanInput.nextDouble());
                 }
 
                 // Get the algorithm
                 try
                 {
-                    algorithm = (IAlgorithm) Class.forName(algorithmName).newInstance();
+                    algorithm = (IAlgorithm) Class.forName("defaultAlgorithms." + algorithmName).newInstance();
                     found = true;
                 } catch (ClassNotFoundException e)
                 {
@@ -553,7 +554,6 @@ public class Dataset
                 }
 
                 displayMeans(normalizedRewards);
-                outputFile(normalizedRewards, distribution.getName().toLowerCase(), budget);
             }
         }
     } // end runSet
@@ -598,8 +598,8 @@ public class Dataset
         int counter = 0;
         for (AlgObject alg : algorithms)
         {
-            System.out.printf("%-20s %, 10.3f\n",
-                    alg.getAlgorithm() + ", " + alg.getInputParameters() + ": ",
+            System.out.printf("%-20s %15s: %10.3f\n",
+                    alg.getAlgorithm() + ",", alg.getInputParameters(),
                     means[counter]);
             counter++;
         }
