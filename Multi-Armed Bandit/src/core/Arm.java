@@ -10,7 +10,7 @@ public class Arm
     /**
      * The distribution that this arm is currently using. Gaussian by default.
      */
-    DistributionInterface currentDistribution;
+    IDistribution currentDistribution;
 
     /**
      * Cost to pull the arm.
@@ -34,7 +34,7 @@ public class Arm
      * @param stdDev_   Standard deviation of the reward of the arm.
      * @param mean_   Mean reward for the arm.
      */
-    public Arm(double cost_, double stdDev_, double mean_, DistributionInterface distribution)
+    public Arm(double cost_, double stdDev_, double mean_, IDistribution distribution)
     {
         cost = cost_;
         stdDev = stdDev_;

@@ -1,5 +1,6 @@
 package core;
 
+import defaultAlgorithms.Algorithms;
 import utilities.Utilities;
 
 import java.io.*;
@@ -20,12 +21,12 @@ public class Dataset
     /**
      * If {@code true} prints out the program's interpretation of the file
      */
-    static boolean printRun = true;
+    static final boolean printRun = true;
 
     /**
      * Contains the distributions to run.
      */
-    private List<DistributionInterface> distributions = new ArrayList<DistributionInterface>();
+    private List<IDistribution> distributions = new ArrayList<IDistribution>();
 
     /**
      * Contains the budgets to run
@@ -427,25 +428,25 @@ public class Dataset
                 // TODO Use the Class.forName magic here to get an actual algorithm
 
                 String algorithmName = scanInput.next();
-                Algorithm algorithm = new Algorithm();
+                IAlgorithm algorithm = new IAlgorithm();
 
                 // Get the algorithm
                 try
                 {
-                    algorithm = (Algorithm) Class.forName(algorithmName).newInstance();
+                    algorithm = (IAlgorithm) Class.forName(algorithmName).newInstance();
                 } catch (ClassNotFoundException e)
                 {
-                    System.out.println("Error! Algorithm " + algorithmName + ".");
+                    System.out.println("Error! core.Algorithm " + algorithmName + ".");
                     e.printStackTrace();
                     return;
                 } catch (InstantiationException e)
                 {
-                    System.out.println("Error! Algorithm " + algorithmName + ".");
+                    System.out.println("Error! core.Algorithm " + algorithmName + ".");
                     e.printStackTrace();
                     return;
                 } catch (IllegalAccessException e)
                 {
-                    System.out.println("Error! Algorithm " + algorithmName + ".");
+                    System.out.println("Error! core.Algorithm " + algorithmName + ".");
                     e.printStackTrace();
                     return;
                 }
@@ -464,12 +465,12 @@ public class Dataset
                         } else
                             algorithms.add(new AlgObject(algorithm.toUpperCase()));
 
-                        if (printRun) System.out.println("Algorithm added: " + alg);
+                        if (printRun) System.out.println("core.Algorithm added: " + alg);
                     }
                 }
 
                 if (!flag)
-                    System.out.println("ERROR: Algorithm \"" + algorithm + "\" not found, excluding from dataset.");
+                    System.out.println("ERROR: core.Algorithm \"" + algorithm + "\" not found, excluding from dataset.");
 
                 alg = reader.readLine();
             }
@@ -490,13 +491,13 @@ public class Dataset
         System.out.println("Dataset: " + fileName + "\n");
 
         // run for each dataset
-        for (Utilities.Distribution distribution : distributions)
+        for (IDistribution distribution : distributions)
         {
-            System.out.println("Distribution: " + distribution.toString() + "\n");
+            System.out.println("Distribution: " + distribution.getName() + "\n");
 
             try // delete the old output if it exists
             {
-                Files.delete(Paths.get("output/" + fileName + "_" + distribution.toString().toLowerCase() + ".txt"));
+                Files.delete(Paths.get("output/" + fileName + "_" + distribution.getName() + ".txt"));
             } catch (IOException x)
             {
                 // NOOP
@@ -568,7 +569,7 @@ public class Dataset
                 }
 
                 displayMeans(normalizedRewards);
-                outputFile(normalizedRewards, distribution.toString().toLowerCase(), budget);
+                outputFile(normalizedRewards, distribution.getName(), budget);
             }
         }
     } // end runSet

@@ -91,7 +91,7 @@ Poisson
 .3
 .3
 
-# core.Algorithms
+# defaultAlgorithms.Algorithms
 greedy
 eFirst, .1
 eFirst, .2
@@ -132,7 +132,7 @@ linear
 *
 .3
 
-# core.Algorithms
+# defaultAlgorithms.Algorithms
 greedy
 eFirst, .1
 eFirst, .2

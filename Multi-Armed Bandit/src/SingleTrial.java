@@ -1,5 +1,5 @@
 import core.Agent;
-import core.Algorithms;
+import defaultAlgorithms.Algorithms;
 import core.Bandit;
 
 import java.io.*;

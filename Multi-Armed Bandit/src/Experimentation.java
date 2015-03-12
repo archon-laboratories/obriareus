@@ -1,5 +1,5 @@
 import core.Agent;
-import core.Algorithms;
+import defaultAlgorithms.Algorithms;
 import core.Bandit;
 
 import java.io.*;
@@ -105,7 +105,7 @@ public class Experimentation {
                     }//end switch
                     //Error-catch line
                     if (myAgent.getBudget() < 0)
-                        System.out.println("Warning! core.Algorithms " + whichAlg + " ended over budget (unfair advantage).");
+                        System.out.println("Warning! defaultAlgorithms.Algorithms " + whichAlg + " ended over budget (unfair advantage).");
 
                     //Store this trial's data.
                     revenueData[whichAlg][stepNumber][whichTrial] = myAgent.getRevenue() / myAgent.getTotalPulls();  //stores profit/pull

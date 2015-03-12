@@ -1,5 +1,7 @@
 package defaultDistributions;
 
+import core.IDistribution;
+
 import java.util.Random;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Random;
  *
  * @author Sam Beckmann, Nate Beckemeyer
  */
-public class Gaussian implements core.DistributionInterface
+public class Gaussian implements IDistribution
 {
     /**
      * Random generator for the Distribution.
@@ -24,5 +26,11 @@ public class Gaussian implements core.DistributionInterface
     public double getReward(double mean, double stdDev)
     {
         return rnd.nextGaussian() * stdDev + mean;
+    }
+
+    @Override
+    public String getName()
+    {
+        return "Gaussian";
     }
 }

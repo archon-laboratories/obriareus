@@ -1,6 +1,5 @@
 package core;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,19 +14,19 @@ public class AlgObject <E>
     /**
      * The algorithm itself
      */
-    private Algorithm<E> algorithm;
+    private IAlgorithm<E> algorithm;
 
     /**
      * Special parameter for the algorithm (e, l, x, etc.)
      */
     List <E> inputParameters;
 
-    public AlgObject(Algorithm<E> algorithm_)
+    public AlgObject(IAlgorithm<E> algorithm_)
     {
         this(algorithm_, new ArrayList<E>());
     }
 
-    public AlgObject(Algorithm<E> algorithm_, List <E> inputParameters_)
+    public AlgObject(IAlgorithm<E> algorithm_, List <E> inputParameters_)
     {
         algorithm = algorithm_;
         inputParameters = inputParameters_;
