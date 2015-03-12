@@ -10,8 +10,6 @@ public interface IAlgorithm
     /**
      * @return the name of the algorithm
      */
-    public IAlgorithm getAlgorithm();
-
     public String getName();
 
     /**
