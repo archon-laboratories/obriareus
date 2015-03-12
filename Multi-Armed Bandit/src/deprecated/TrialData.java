@@ -1,3 +1,5 @@
+package deprecated;
+
 import java.util.ArrayList;
 
 /**

@@ -1,5 +1,6 @@
+package deprecated;
+
 import core.Agent;
-import defaultAlgorithms.Algorithms;
 import core.Bandit;
 
 import java.io.*;
@@ -43,7 +44,7 @@ public class Experimentation {
         double[][][] regretData = new double[numAlgorithms][numSteps][numTrials];
 //		double[][][] timeData = new double[numAlgorithms][numSteps][numTrials];
 //		double[][][][] armUsage = new double[numArms][numAlgorithms][numSteps][numTrials];
-//		TrialData[][][] myTrialData = new TrialData[numAlgorithms][numSteps][numTrials];
+//		deprecated.TrialData[][][] myTrialData = new deprecated.TrialData[numAlgorithms][numSteps][numTrials];
 
         for (stepNumber = startingArms; stepNumber < numSteps; stepNumber++) {
             int armsAdded = stepNumber * 10; //adds ten more arms each time
@@ -105,7 +106,7 @@ public class Experimentation {
                     }//end switch
                     //Error-catch line
                     if (myAgent.getBudget() < 0)
-                        System.out.println("Warning! defaultAlgorithms.Algorithms " + whichAlg + " ended over budget (unfair advantage).");
+                        System.out.println("Warning! deprecated.Algorithms " + whichAlg + " ended over budget (unfair advantage).");
 
                     //Store this trial's data.
                     revenueData[whichAlg][stepNumber][whichTrial] = myAgent.getRevenue() / myAgent.getTotalPulls();  //stores profit/pull

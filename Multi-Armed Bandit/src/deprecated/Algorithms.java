@@ -1,4 +1,4 @@
-package defaultAlgorithms;
+package deprecated;
 
 import core.Agent;
 import core.AlgObject;
@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
 
+/**
+ * @deprecated
+ */
 public class Algorithms
 {
     /**
-     * The random generator for defaultAlgorithms.Algorithms.
+     * The random generator for deprecated.Algorithms.
      */
     private static Random rnd = new Random();
 
@@ -314,7 +317,7 @@ public class Algorithms
             Utilities.generateIndices(indices, arms.length);
             while(!indices.isEmpty())
             {
-                int testArm = Utilities.randomIndex(indices, rnd);
+                int testArm = Utilities.randomIndex(indices);
                 if (arms[testArm].getCost() <= curAgent.getBudget()
                         && (currentBest < 0 || dValues[testArm] > dValues[currentBest]))
                 {

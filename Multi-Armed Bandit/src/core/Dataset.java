@@ -506,7 +506,7 @@ public class Dataset
                     int count = 0;
                     while (!indices.isEmpty())
                     {
-                        int index = Utilities.randomIndex(indices, new Random());
+                        int index = Utilities.randomIndex(indices);
                         trialArms[count] = new Arm(armCosts[index], stdDevs[index], meanRewards[index], distribution);
                         count++;
                     }

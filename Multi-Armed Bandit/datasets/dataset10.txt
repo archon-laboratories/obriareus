@@ -55,7 +55,7 @@ Gaussian
 .3
 .3
 
-# defaultAlgorithms.Algorithms
+# deprecated.Algorithms
 greedy
 eFirst, .1
 eFirst, .2

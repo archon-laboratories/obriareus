@@ -1,5 +1,6 @@
+package deprecated;
+
 import core.Agent;
-import defaultAlgorithms.Algorithms;
 import core.Bandit;
 
 import java.io.IOException;
@@ -166,8 +167,8 @@ public class OldImplementation
 			 * armUsage = new
 			 * double[numArms][numAlgorithms][numSteps][numTrials];
 			 */
-            // TrialData[][][] myTrialData = new
-            // TrialData[numAlgorithms][numSteps][numTrials];
+            // deprecated.TrialData[][][] myTrialData = new
+            // deprecated.TrialData[numAlgorithms][numSteps][numTrials];
             TrialData[] myTrialData = new TrialData[numAlgorithms];
 
             for (int whichStep = 0; whichStep < numSteps; whichStep++)
@@ -280,76 +281,76 @@ public class OldImplementation
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .eFirstAlg(myBandit, myAgent, epsilonValue,
                                                 true);
-                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.2,
+                                // deprecated.Algorithms.lSplitAlg(myBandit, myAgent, 0.2,
                                 // false, true);
-                                // defaultAlgorithms.Algorithms.soaavAlg(myBandit, myAgent, 0, true);
+                                // deprecated.Algorithms.soaavAlg(myBandit, myAgent, 0, true);
                                 break;
                             case 1:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .eFirstAlg(myBandit, myAgent, epsilonValue,
                                                 true);
-                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.3,
+                                // deprecated.Algorithms.lSplitAlg(myBandit, myAgent, 0.3,
                                 // false, true);
-                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.5,
+                                // deprecated.Algorithms.lSplitAlg(myBandit, myAgent, 0.5,
                                 // false, true);
                                 break;
                             case 2:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .eFirstAlg(myBandit, myAgent, epsilonValue,
                                                 true);
-                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.4,
+                                // deprecated.Algorithms.lSplitAlg(myBandit, myAgent, 0.4,
                                 // false, true);
-                                // defaultAlgorithms.Algorithms.eFirstAlg(myBandit, myAgent,
+                                // deprecated.Algorithms.eFirstAlg(myBandit, myAgent,
                                 // epsilonValue, true);
                                 break;
                             case 3:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .FractKubeAlgRandom(myBandit, myAgent,
                                                 true, true);
-                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.5,
+                                // deprecated.Algorithms.lSplitAlg(myBandit, myAgent, 0.5,
                                 // false, true);
-                                // defaultAlgorithms.Algorithms.peefAlg(myBandit, myAgent, 0.1);
+                                // deprecated.Algorithms.peefAlg(myBandit, myAgent, 0.1);
                                 break;
                             case 4:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .FractKdeAlg(myBandit, myAgent, gammaVal,
                                                 true);
-                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.6,
+                                // deprecated.Algorithms.lSplitAlg(myBandit, myAgent, 0.6,
                                 // false, true);
                                 break;
                             case 5:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .UCBBVAlg(myBandit, myAgent, 0, true);
-                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.7,
+                                // deprecated.Algorithms.lSplitAlg(myBandit, myAgent, 0.7,
                                 // false, true);
                                 break;
                             case 6:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .lSplitAlg(myBandit, myAgent, 0.5, false,
                                                 true);
-                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.8,
+                                // deprecated.Algorithms.lSplitAlg(myBandit, myAgent, 0.8,
                                 // false, true);
                                 break;
                             case 7:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .peefAlg(myBandit, myAgent, 0.1);
-                                // defaultAlgorithms.Algorithms.lSplitAlg(myBandit, myAgent, 0.9,
+                                // deprecated.Algorithms.lSplitAlg(myBandit, myAgent, 0.9,
                                 // false, true);
                                 break;
                             case 8:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .peefAlg(myBandit, myAgent, 0.2);
-                                // defaultAlgorithms.Algorithms.eFirstAlg(myBandit, myAgent,
+                                // deprecated.Algorithms.eFirstAlg(myBandit, myAgent,
                                 // epsilonValue, true);
                             default:
                                 myTrialData[whichAlg]/* [whichStep][whichTrial] */ = Algorithms
                                         .soaavAlg(myBandit, myAgent, 0, true);
-                                // defaultAlgorithms.Algorithms.soaavAlg(myBandit, myAgent, 0, true);
+                                // deprecated.Algorithms.soaavAlg(myBandit, myAgent, 0, true);
                         }// end switch
 
                         // Error-catch line
                         if (myAgent.getBudget() < 0)
-                            System.out.println("Warning! defaultAlgorithms.Algorithms " + whichAlg
+                            System.out.println("Warning! deprecated.Algorithms " + whichAlg
                                     + " ended over budget (unfair advantage).");
                         if (printRun)
                             System.out.println("Utility: "
@@ -469,9 +470,9 @@ public class OldImplementation
 			 * for(int j = 0; j < numAlgorithms; j++) { if(myTrialData[j].size()
 			 * < maxSize && myTrialData[j].getSwitchedBest(i)==true) {
 			 * System.out.print("1\t"); } else { System.out.print("0\t"); } }
-			 * System.out.println(); } //Average TrialData /* TrialData[]
-			 * avgTrialData = new TrialData[numAlgorithms]; for(int i = 0; i <
-			 * numAlgorithms; i++) { avgTrialData[i] = new TrialData(); int
+			 * System.out.println(); } //Average deprecated.TrialData /* deprecated.TrialData[]
+			 * avgTrialData = new deprecated.TrialData[numAlgorithms]; for(int i = 0; i <
+			 * numAlgorithms; i++) { avgTrialData[i] = new deprecated.TrialData(); int
 			 * avgNumTimeSteps = 0; for(int j = 0; j < numTrials; j++) {
 			 * avgNumTimeSteps += myTrialData[i][0][j].size(); } avgNumTimeSteps
 			 * /= numTrials; double[] avgReward = new double[(int)
@@ -635,7 +636,7 @@ public class OldImplementation
 				 * out.close(); }
 				 * 
 				 * //====================================== //Run-Time v.
-				 * defaultAlgorithms.Algorithms PrintWriter tOut = new PrintWriter(new
+				 * deprecated.Algorithms PrintWriter tOut = new PrintWriter(new
 				 * FileWriter("data/timeData_"+dataNum+".txt")); String[]
 				 * algNames = {
 				 * "\"e-First Static\"","\"e-First Dynamic\"","\"Optimistic KUBE\""
@@ -647,7 +648,7 @@ public class OldImplementation
 				 * tOut.close();
 				 * 
 				 * //====================================== //core.Arm Usage v.
-				 * defaultAlgorithms.Algorithms
+				 * deprecated.Algorithms
 				 * 
 				 * PrintWriter aOut = new PrintWriter(new FileWriter()); for(int
 				 * i = 0; i < numAlgorithms; i++) { for(int j = 0; j < numArms;

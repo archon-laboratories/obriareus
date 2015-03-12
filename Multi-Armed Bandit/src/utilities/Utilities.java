@@ -10,6 +10,8 @@ import java.util.Random;
  */
 public final class Utilities
 {
+    private static Random rnd = new Random();
+
     /**
      * Gets an array of linear spaced elements of a given size.
      *
@@ -125,7 +127,7 @@ public final class Utilities
      * @param remainingIndices The ArrayList of indices that have yet to be used in the algorithm's random selection.
      * @return the index of the arm to be checked
      */
-    public static int randomIndex(List<Integer> remainingIndices, Random rnd)
+    public static int randomIndex(List<Integer> remainingIndices)
     {
         if (remainingIndices.size() == 0)
             return -1;

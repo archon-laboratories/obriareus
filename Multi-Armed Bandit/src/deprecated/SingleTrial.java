@@ -1,5 +1,6 @@
+package deprecated;
+
 import core.Agent;
-import defaultAlgorithms.Algorithms;
 import core.Bandit;
 
 import java.io.*;

@@ -1,3 +1,5 @@
+package deprecated;
+
 import core.Agent;
 import core.Arm;
 import core.ArmMemory;
@@ -99,7 +101,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Greedy defaultAlgorithms.Algorithms
+//Greedy deprecated.Algorithms
 
     public static TrialData greedyAlg(Bandit b, Agent a, boolean online) {
         TrialData myTrial = new TrialData();
@@ -139,7 +141,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// e-First defaultAlgorithms.Algorithms
+// e-First deprecated.Algorithms
 
     public static TrialData eFirstAlg(Bandit b, Agent a, double epsilon, boolean dynamic) {
         TrialData myTrial = new TrialData();
@@ -207,7 +209,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// KUBE defaultAlgorithms.Algorithms
+// KUBE deprecated.Algorithms
 
     public static TrialData KubeAlgRandom(Bandit b, Agent a, boolean optimistic) {
         //----------------------------------------
@@ -415,10 +417,10 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// KDE defaultAlgorithms.Algorithms
+// KDE deprecated.Algorithms
 
     /**
-     * KDE Unique defaultAlgorithms.Algorithms: ensures that arms are not pulled more than once during "exploration" phase
+     * KDE Unique deprecated.Algorithms: ensures that arms are not pulled more than once during "exploration" phase
      */
     public static TrialData KdeAlgUnique(Bandit b, Agent a, double gamma) {
         if (gamma <= 0) {
@@ -636,7 +638,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//UCB-BV defaultAlgorithms.Algorithms
+//UCB-BV deprecated.Algorithms
 
     /**
      * performs the UCB-BV algorithm
@@ -719,7 +721,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// z-Test defaultAlgorithms.Algorithms
+// z-Test deprecated.Algorithms
 
     public static TrialData HypothesisTestingAlg(Bandit b, Agent a, double deviation, double zValue) {
         TrialData myTrial = new TrialData();
@@ -1224,5 +1226,5 @@ public class OldAlgorithms
             return findS(mGoal, midS, rSB, tolerance, numArms);
     }
 
-}//end defaultAlgorithms.Algorithms
+}//end deprecated.Algorithms
 

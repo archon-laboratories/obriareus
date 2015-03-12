@@ -71,11 +71,11 @@
 		}
 	}
 
-	public static TrialData KubeAlg(core.Bandit b, core.Agent a, boolean optimistic)
+	public static deprecated.TrialData KubeAlg(core.Bandit b, core.Agent a, boolean optimistic)
 	{
 		//----------------------------------------
 		//Initialize Variables
-		TrialData myTrial = new TrialData();
+		deprecated.TrialData myTrial = new deprecated.TrialData();
 		int t = 0; //first arm is index 0
 		ArrayList<core.ArmMemory> agentMemory = a.getMemory();
 		int numArms = b.getNumArms();
@@ -127,14 +127,14 @@
 	}
 
 /*
-	private static TrialData KdeAlg(core.Bandit b, core.Agent a, double gamma, double dVal)
+	private static deprecated.TrialData KdeAlg(core.Bandit b, core.Agent a, double gamma, double dVal)
 	{
 		if(gamma <= 0)
 		{
 			System.out.println("Non-positive gamma value; KDE cannot function.");
 			return null;
 		}
-		TrialData myTrial = new TrialData();
+		deprecated.TrialData myTrial = new deprecated.TrialData();
 		int t = 0;
 		int numArms = b.getNumArms();
 		int numFeasibleArms = numArms;
@@ -224,7 +224,7 @@
 	* Fractional KUBE core.Algorithm
 	* Can be optimistic (in the paper) or pessimistic
 	*/
-	public static TrialData FractKubeAlg(core.Bandit b, core.Agent a, boolean optimistic)
+	public static deprecated.TrialData FractKubeAlg(core.Bandit b, core.Agent a, boolean optimistic)
 	{
 		//----------------------------------------
 		//Initialize Variables
@@ -234,7 +234,7 @@
 		int numArms = b.getNumArms();
 		double[] armsEstRD = new double[numArms]; //initial reward density estimates
 		double minCost = minCost(banditArms);
-		TrialData myTrial = new TrialData();
+		deprecated.TrialData myTrial = new deprecated.TrialData();
 
 		int bestArm = -1;
 		double bestFeasibleCost = 0;
@@ -507,7 +507,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
-public class defaultAlgorithms.Algorithms
+public class deprecated.Algorithms
 {
     static final Random rnd = new Random();
     static boolean debug = false;
@@ -597,10 +597,10 @@ public class defaultAlgorithms.Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Greedy defaultAlgorithms.Algorithms
+//Greedy deprecated.Algorithms
 
-    public static TrialData greedyAlg(core.Bandit b, core.Agent a, boolean online) {
-        TrialData myTrial = new TrialData();
+    public static deprecated.TrialData greedyAlg(core.Bandit b, core.Agent a, boolean online) {
+        deprecated.TrialData myTrial = new deprecated.TrialData();
         int numMaxPulls = 0;
         int maxIndex = b.getBestArmIndex();
 
@@ -637,10 +637,10 @@ public class defaultAlgorithms.Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// e-First defaultAlgorithms.Algorithms
+// e-First deprecated.Algorithms
 
-    public static TrialData eFirstAlg(core.Bandit b, core.Agent a, double epsilon, boolean dynamic) {
-        TrialData myTrial = new TrialData();
+    public static deprecated.TrialData eFirstAlg(core.Bandit b, core.Agent a, double epsilon, boolean dynamic) {
+        deprecated.TrialData myTrial = new deprecated.TrialData();
         int i = 0;
         ArrayList<Integer> temp = new ArrayList<Integer>();
         int numMaxPulls = 0;
@@ -705,12 +705,12 @@ public class defaultAlgorithms.Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// KUBE defaultAlgorithms.Algorithms
+// KUBE deprecated.Algorithms
 
-    public static TrialData KubeAlgRandom(core.Bandit b, core.Agent a, boolean optimistic) {
+    public static deprecated.TrialData KubeAlgRandom(core.Bandit b, core.Agent a, boolean optimistic) {
         //----------------------------------------
         //Initialize Variables
-        TrialData myTrial = new TrialData();
+        deprecated.TrialData myTrial = new deprecated.TrialData();
         ArrayList<core.ArmMemory> agentMemory = a.getMemory();
         int numArms = b.getNumArms();
 
@@ -797,10 +797,10 @@ public class defaultAlgorithms.Algorithms
         return myTrial;
     }
 
-    public static TrialData FractKubeAlgRandom(core.Bandit b, core.Agent a, boolean optimistic, boolean online) {
+    public static deprecated.TrialData FractKubeAlgRandom(core.Bandit b, core.Agent a, boolean optimistic, boolean online) {
         //----------------------------------------
         //Initialize Variables
-        TrialData myTrial = new TrialData();
+        deprecated.TrialData myTrial = new deprecated.TrialData();
         int numArms = b.getNumArms();
         double minCost = minCost(b.getArms());
         boolean doOnce = true;
@@ -913,12 +913,12 @@ public class defaultAlgorithms.Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// KDE defaultAlgorithms.Algorithms
+// KDE deprecated.Algorithms
 
     /**
-     * KDE Unique defaultAlgorithms.Algorithms: ensures that arms are not pulled more than once during "exploration" phase
+     * KDE Unique deprecated.Algorithms: ensures that arms are not pulled more than once during "exploration" phase
      */
-    public static TrialData KdeAlgUnique(core.Bandit b, core.Agent a, double gamma) {
+    public static deprecated.TrialData KdeAlgUnique(core.Bandit b, core.Agent a, double gamma) {
         if (gamma <= 0) {
             System.out.println("Non-positive gamma value; KDE cannot function.");
             return null;
@@ -933,7 +933,7 @@ public class defaultAlgorithms.Algorithms
         boolean switchedArms = false;
         boolean[] feasibleArms = new boolean[numArms];
         double minCost = minCost(b.getArms());
-        TrialData myTrial = new TrialData();
+        deprecated.TrialData myTrial = new deprecated.TrialData();
 
         for (int i = 0; i < numArms; i++) feasibleArms[i] = true;
 
@@ -1009,7 +1009,7 @@ public class defaultAlgorithms.Algorithms
     /**
      * Fractional KDE
      */
-    public static TrialData FractKdeAlg(core.Bandit b, core.Agent a, double gamma, boolean online) {
+    public static deprecated.TrialData FractKdeAlg(core.Bandit b, core.Agent a, double gamma, boolean online) {
         if (gamma <= 0) {
             System.out.println("Non-positive gamma value; KDE cannot function.");
             return null;
@@ -1018,7 +1018,7 @@ public class defaultAlgorithms.Algorithms
         int t = 0;
         int numArms = b.getNumArms();
         ArrayList<core.ArmMemory> agentMemory = a.getMemory();
-        TrialData myTrial = new TrialData();
+        deprecated.TrialData myTrial = new deprecated.TrialData();
 
         boolean[] feasibleArms = new boolean[numArms];
         for (int i = 0; i < numArms; i++) feasibleArms[i] = true;
@@ -1134,7 +1134,7 @@ public class defaultAlgorithms.Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//UCB-BV defaultAlgorithms.Algorithms
+//UCB-BV deprecated.Algorithms
 
     /**
      * performs the UCB-BV algorithm
@@ -1146,9 +1146,9 @@ public class defaultAlgorithms.Algorithms
      * @param whichBound
      * @return
      */
-    public static TrialData UCBBVAlg(core.Bandit b, core.Agent a, int whichBound, boolean online) {
+    public static deprecated.TrialData UCBBVAlg(core.Bandit b, core.Agent a, int whichBound, boolean online) {
         if (debugUcbbv) System.out.println("Starting...");
-        TrialData myTrial = new TrialData();
+        deprecated.TrialData myTrial = new deprecated.TrialData();
         int numArms = b.getNumArms();
         double[] dValues = new double[numArms]; //assume initialized at 0
 
@@ -1217,10 +1217,10 @@ public class defaultAlgorithms.Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// z-Test defaultAlgorithms.Algorithms
+// z-Test deprecated.Algorithms
 
-    public static TrialData HypothesisTestingAlg(core.Bandit b, core.Agent a, double deviation, double zValue) {
-        TrialData myTrial = new TrialData();
+    public static deprecated.TrialData HypothesisTestingAlg(core.Bandit b, core.Agent a, double deviation, double zValue) {
+        deprecated.TrialData myTrial = new deprecated.TrialData();
 
         ArrayList<Integer> acceptable = new ArrayList<Integer>();
         ArrayList<Integer> comparable = new ArrayList<Integer>(); //acceptable arms already pulled
@@ -1258,8 +1258,8 @@ public class defaultAlgorithms.Algorithms
         return myTrial;
     }
 
-    public static TrialData lSplitAlg(core.Bandit b, core.Agent a, double dropFract, boolean incScrutiny, boolean online) {
-        TrialData myData = new TrialData();
+    public static deprecated.TrialData lSplitAlg(core.Bandit b, core.Agent a, double dropFract, boolean incScrutiny, boolean online) {
+        deprecated.TrialData myData = new deprecated.TrialData();
         int pullsPerArm = 1;
         int numMaxPulls = 0;
         int iterations = 0;
@@ -1417,8 +1417,8 @@ public class defaultAlgorithms.Algorithms
         return temp;
     }
 
-    public static TrialData AdaptiveAlg1(core.Bandit b, core.Agent a, double confidence, double lBound, double rBound) {
-        TrialData myData = new TrialData();
+    public static deprecated.TrialData AdaptiveAlg1(core.Bandit b, core.Agent a, double confidence, double lBound, double rBound) {
+        deprecated.TrialData myData = new deprecated.TrialData();
         int numAllowed = b.getNumArms();
         int numMaxPulls = 0;
         boolean[] affordable = new boolean[numAllowed];
@@ -1503,8 +1503,8 @@ public class defaultAlgorithms.Algorithms
     }//end adaptive method
 
 
-    public static TrialData soaavAlg(core.Bandit b, core.Agent a, double xValue, boolean online) {
-        TrialData myData = new TrialData();
+    public static deprecated.TrialData soaavAlg(core.Bandit b, core.Agent a, double xValue, boolean online) {
+        deprecated.TrialData myData = new deprecated.TrialData();
         int currBest = 0;
         int numMaxPulls = 0;
         double meanRatio = 0;
@@ -1607,7 +1607,7 @@ public class defaultAlgorithms.Algorithms
     }//end adaptive method
 
     //pick e such that eB is evenly divisible by K
-    public static TrialData peefAlg(core.Bandit b, core.Agent a, double epsilon) {
+    public static deprecated.TrialData peefAlg(core.Bandit b, core.Agent a, double epsilon) {
         //double oldFract = 1.-1./(getSfromE(epsilon,a.getBudget(),b.getNumArms()));
         //double dropFract = 1.-1./((b.getNumArms()+m-1)/m);
 
@@ -1628,7 +1628,7 @@ public class defaultAlgorithms.Algorithms
             System.out.println("For a system with budget " + a.getBudget() + " and epsilon " + epsilon + ", we should have " + epsilon * a.getBudget() + " pulls."
                     + "\nIn fact, we drop " + dropFract + " of the arms for each pass, for a total of " + predictedPulls + " exploration pulls. m = " + m);
         }
-        TrialData myData = new TrialData();
+        deprecated.TrialData myData = new deprecated.TrialData();
         int pullsPerArm = 1;
         int numMaxPulls = 0;
         int iterations = 0;
@@ -1722,5 +1722,5 @@ public class defaultAlgorithms.Algorithms
             return findS(mGoal, midS, rSB, tolerance, numArms);
     }
 
-}//end defaultAlgorithms.Algorithms
+}//end deprecated.Algorithms
 
