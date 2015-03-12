@@ -4,9 +4,9 @@ import java.util.Random;
 public class Agent
 {
     /**
-     * The random generator for Agent.
+     * The algorithm that the agent employs.
      */
-    private Random rnd;
+    private Algorithm algorithm;
 
     /**
      * The arms that the agent pulls.
@@ -34,7 +34,7 @@ public class Agent
     private static double totalCost = 0;
 
     /**
-     * Has minCost been initialized yet? It only needs to happen once. Optimization variable.
+     * Has minCost been initialized yet? It only needs to happen once. Control flag.
      */
     private static boolean initialized = false;
 
@@ -195,11 +195,12 @@ public class Agent
     /**
      * The constructor for the agent. Pass a budget and the arms array.
      */
-    public Agent(int initBudget, Arm armRefs[], Bandit trialBandit)
+    public Agent(int initBudget, Arm armRefs[], Algorithm algorithm_, Bandit trialBandit)
     {
         budget = initBudget;
         arms = armRefs;
         bandit = trialBandit;
+        algorithm = algorithm_;
         double currMin = Double.MAX_VALUE;
         int count = 0;
         memories = new ArmMemory[armRefs.length];
@@ -287,10 +288,14 @@ public class Agent
         return totalReward;
     }
 
-    public void setBudget(double budget)
+    private void setBudget(double budget)
     {
         if (budget < 0)
             System.out.println("Attempting to set the budget less than 0 for agent " + this.toString());
         this.budget = budget;
+    }
+
+    public void run() {
+        algorithm.run(this, algorithm.getInputParameter());
     }
 }

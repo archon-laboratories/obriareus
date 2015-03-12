@@ -587,7 +587,7 @@ public class Dataset
         for (AlgObject alg : algorithms)
         {
             System.out.printf("%-20s %, 10.3f\n",
-                              alg.getAlgorithm() + ", " + alg.getInputParameter() + ": ",
+                              alg.getAlgorithm() + ", " + alg.getInputParameters() + ": ",
                               means[counter]);
             counter++;
         }

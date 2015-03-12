@@ -1,39 +1,47 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Data type that contains the enum value of an algorithm, from <code>Algorithms.AlgorithmNames</code>
  * and the second input parameter for that algorithm (set to zero if the algorithm doesn't use one)
  *
  * @author Sam Beckmann, Nate Beckemeyer
  */
-public class AlgObject
+public class AlgObject <E>
 {
     /**
-     * Name of the algorithm to be run.
+     * The algorithm itself
      */
-    private Algorithms.AlgorithmNames algorithm;
+    private Algorithm<E> algorithm;
 
     /**
      * Special parameter for the algorithm (e, l, x, etc.)
      */
-    private double inputParameter;
+    List <E> inputParameters;
 
-    public AlgObject(String algorithm_)
+    public AlgObject(Algorithm<E> algorithm_)
     {
-        this(algorithm_, 0);
+        this(algorithm_, new ArrayList<E>());
     }
 
-    public AlgObject(String algorithm_, double inputParameter_)
+    public AlgObject(Algorithm<E> algorithm_, List <E> inputParameters_)
     {
-        algorithm = Algorithms.AlgorithmNames.valueOf(algorithm_);
-        inputParameter = inputParameter_;
+        algorithm = algorithm_;
+        inputParameters = inputParameters_;
     }
 
-    public Algorithms.AlgorithmNames getAlgorithm()
-    {
-        return algorithm;
+    public void runAlgorithm(Agent curAgent) {
+        algorithm.run(curAgent, inputParameters);
     }
 
-    public double getInputParameter()
+    public String getAlgorithm()
     {
-        return inputParameter;
+        return algorithm.getAlgorithm();
+    }
+
+    public List getInputParameters()
+    {
+        return inputParameters;
     }
 }
