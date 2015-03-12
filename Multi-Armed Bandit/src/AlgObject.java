@@ -37,7 +37,7 @@ public class AlgObject <E>
 
     public String getAlgorithm()
     {
-        return algorithm.getAlgorithm();
+        return algorithm.getName();
     }
 
     public List getInputParameters()

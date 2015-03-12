@@ -8,7 +8,9 @@ public interface Algorithm <E>
     /**
      * @return the name of the algorithm
      */
-    public String getAlgorithm();
+    public Algorithm getAlgorithm();
+
+    public String getName();
 
     /**
      * Runs the algorithm

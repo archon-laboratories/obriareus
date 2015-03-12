@@ -6,7 +6,7 @@ public class Agent
     /**
      * The algorithm that the agent employs.
      */
-    private Algorithm algorithm;
+    private AlgObject algorithm;
 
     /**
      * The arms that the agent pulls.
@@ -195,24 +195,21 @@ public class Agent
     /**
      * The constructor for the agent. Pass a budget and the arms array.
      */
-    public Agent(int initBudget, Arm armRefs[], Algorithm algorithm_, Bandit trialBandit)
+    public Agent(int initBudget, Arm armRefs[], AlgObject algorithm_, Bandit trialBandit)
     {
         budget = initBudget;
         arms = armRefs;
         bandit = trialBandit;
         algorithm = algorithm_;
-        double currMin = Double.MAX_VALUE;
+
         int count = 0;
         memories = new ArmMemory[armRefs.length];
         for (Arm current : armRefs)
         {
             memories[count++] = new ArmMemory(current.getCost());
-            currMin = Math.min(currMin, current.getCost());
         }
 
-        minCost = currMin;
-
-        if (!initialized)
+        if (!initialized) // You only need to find the minimum cost arm once; cost is constant
         {
             findCosts();
             initialized = true;
@@ -296,6 +293,6 @@ public class Agent
     }
 
     public void run() {
-        algorithm.run(this, algorithm.getInputParameter());
+        algorithm.runAlgorithm(this);
     }
 }

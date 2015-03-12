@@ -74,7 +74,7 @@ public class Dataset
 
         fileName = name;
 
-        if(printRun) System.out.println("Adding Dataset: " + fileName);
+        if (printRun) System.out.println("Adding Dataset: " + fileName);
 
         getDistributions(reader);
 
@@ -421,8 +421,31 @@ public class Dataset
 
                 Scanner scanInput = new Scanner(alg);
                 scanInput.useDelimiter(", *");
-                String algorithm = scanInput.next();
+                // TODO Use the Class.forName magic here to get an actual algorithm
 
+                String algorithmName = scanInput.next();
+                Algorithm algorithm = new Algorithm();
+
+                // Get the algorithm
+                try
+                {
+                    algorithm = (Algorithm) Class.forName(algorithmName).newInstance();
+                } catch (ClassNotFoundException e)
+                {
+                    System.out.println("Error! Algorithm " + algorithmName + ".");
+                    e.printStackTrace();
+                    return;
+                } catch (InstantiationException e)
+                {
+                    System.out.println("Error! Algorithm " + algorithmName + ".");
+                    e.printStackTrace();
+                    return;
+                } catch (IllegalAccessException e)
+                {
+                    System.out.println("Error! Algorithm " + algorithmName + ".");
+                    e.printStackTrace();
+                    return;
+                }
                 boolean flag = false;
 
                 for (Algorithms.AlgorithmNames a : Algorithms.AlgorithmNames.values())
@@ -432,6 +455,7 @@ public class Dataset
                         flag = true;
                         if (scanInput.hasNext())
                         {
+                            // TODO Scan for input parameters
                             parameter = Double.parseDouble(scanInput.next());
                             algorithms.add(new AlgObject(algorithm.toUpperCase(), parameter));
                         } else
@@ -504,10 +528,10 @@ public class Dataset
                     for (AlgObject algObject : algorithms)
                     {
 
-                        Arm[] agentArms = new Arm[numArms];
-                        System.arraycopy(trialArms, 0, agentArms, 0, trialArms.length);
+                        //Arm[] agentArms = new Arm[numArms];
+                        //System.arraycopy(trialArms, 0, agentArms, 0, trialArms.length);
 
-                        Agent agent = new Agent(budget, agentArms, bandit);
+                        Agent agent = new Agent(budget, trialArms, algObject, bandit);
 
                         Algorithms.run(algObject, agent);
                         totalRewards[algIndex][trial] = agent.getTotalReward();
@@ -587,8 +611,8 @@ public class Dataset
         for (AlgObject alg : algorithms)
         {
             System.out.printf("%-20s %, 10.3f\n",
-                              alg.getAlgorithm() + ", " + alg.getInputParameters() + ": ",
-                              means[counter]);
+                    alg.getAlgorithm() + ", " + alg.getInputParameters() + ": ",
+                    means[counter]);
             counter++;
         }
 
