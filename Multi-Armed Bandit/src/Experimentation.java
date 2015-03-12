@@ -1,3 +1,7 @@
+import core.Agent;
+import core.Algorithms;
+import core.Bandit;
+
 import java.io.*;
 import java.util.Random;
 
@@ -101,7 +105,7 @@ public class Experimentation {
                     }//end switch
                     //Error-catch line
                     if (myAgent.getBudget() < 0)
-                        System.out.println("Warning! Algorithms " + whichAlg + " ended over budget (unfair advantage).");
+                        System.out.println("Warning! core.Algorithms " + whichAlg + " ended over budget (unfair advantage).");
 
                     //Store this trial's data.
                     revenueData[whichAlg][stepNumber][whichTrial] = myAgent.getRevenue() / myAgent.getTotalPulls();  //stores profit/pull
@@ -183,7 +187,7 @@ public class Experimentation {
             pOut.println("Budget: " + budget);
             pOut.println("Number of Trials: " + numTrials);
             pOut.println("Number of Steps: " + numSteps);
-            pOut.println("Arm Decay Rate: " + decayRate);
+            pOut.println("core.Arm Decay Rate: " + decayRate);
             pOut.close();
         } catch (IOException e) {
             System.out.println("IOException: " + e);

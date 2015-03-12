@@ -1,10 +1,12 @@
+package core;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Implementation of the Multi-Armed Bandit Problem
+ * core.Implementation of the Multi-Armed core.Bandit Problem
  *
  * @author Sam Beckmann, Nate Beckemeyer
  */
@@ -17,7 +19,7 @@ public class Implementation
 
         ArrayList<Dataset> datasets = new ArrayList<Dataset>();
 
-        System.out.print("Enter Dataset(s) to run, separated by comma: ");
+        System.out.print("Enter core.Dataset(s) to run, separated by comma: ");
         String input = console.nextLine();
 
         Scanner scanInput = new Scanner(input);
@@ -43,4 +45,4 @@ public class Implementation
 
     }
 
-} // end Implementation
+} // end core.Implementation

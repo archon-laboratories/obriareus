@@ -1,3 +1,7 @@
+package core;
+
+import utilities.Utilities;
+
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
@@ -5,7 +9,7 @@ import java.util.ArrayList;
 public class Algorithms
 {
     /**
-     * The random generator for Algorithms.
+     * The random generator for core.Algorithms.
      */
     private static Random rnd = new Random();
 
@@ -326,7 +330,7 @@ public class Algorithms
     /**
      * Returns the dValue for a given arm. Used for UCB-BV algorithms.
      *
-     * @param thisArm Arm that D will be caclulated for.
+     * @param thisArm core.Arm that D will be caclulated for.
      * @param lambda Minimum arm cost. (Or best guess)
      * @param totalpulls Total number of arms that have been pulled so far.
      * @return The dValue for the given arm, with the given boundType.

@@ -19,7 +19,7 @@ Gaussian
 # Number of Arms
 10
 
-# Arm Costs
+# core.Arm Costs
 1
 1
 1
@@ -55,7 +55,7 @@ Gaussian
 .3
 .3
 
-# Algorithms
+# core.Algorithms
 greedy
 eFirst, .1
 eFirst, .2

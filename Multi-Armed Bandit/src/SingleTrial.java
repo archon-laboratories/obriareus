@@ -1,3 +1,7 @@
+import core.Agent;
+import core.Algorithms;
+import core.Bandit;
+
 import java.io.*;
 import java.util.*;
 

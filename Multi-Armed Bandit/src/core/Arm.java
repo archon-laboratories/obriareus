@@ -1,4 +1,4 @@
-import java.util.Random;
+package core;
 
 /**
  * The arm that the bandit pulls. Could represent a slot machine or any other item with associated costs and rewards.
@@ -8,14 +8,9 @@ import java.util.Random;
 public class Arm
 {
     /**
-     * rnd is the random generator for each arm.
-     */
-    Random rnd = new Random();
-
-    /**
      * The distribution that this arm is currently using. Gaussian by default.
      */
-    Utilities.Distribution currentDistribution = Utilities.Distribution.GAUSSIAN;
+    DistributionInterface currentDistribution;
 
     /**
      * Cost to pull the arm.
@@ -33,39 +28,18 @@ public class Arm
     private double mean;
 
     /**
-     * Value-assigning Arm constructor.
+     * Value-assigning core.Arm constructor.
      *
-     * @param price Cost to pull the arm.
-     * @param dev   Standard deviation of the reward of the arm.
-     * @param avg   Mean reward for the arm.
+     * @param cost_ Cost to pull the arm.
+     * @param stdDev_   Standard deviation of the reward of the arm.
+     * @param mean_   Mean reward for the arm.
      */
-    public Arm(double price, double dev, double avg, Utilities.Distribution distribution)
+    public Arm(double cost_, double stdDev_, double mean_, DistributionInterface distribution)
     {
-        cost = price;
-        stdDev = dev;
-        mean = avg;
+        cost = cost_;
+        stdDev = stdDev_;
+        mean = mean_;
         currentDistribution = distribution;
-    }
-
-    /**
-     * Gets a Gaussian reward based off of the arm's mean and standard deviation.
-     *
-     * @return the Gaussian reward
-     */
-    private double getGaussian()
-    {
-        return rnd.nextGaussian() * stdDev + mean;
-    }
-
-    /**
-     * Gets a Poisson reward based off of the arm's mean and standard deviation.
-     *
-     * @return the Poisson reward
-     */
-    private double getPoisson()
-    {
-        // TODO
-        return 0;
     }
 
     /**
@@ -75,16 +49,7 @@ public class Arm
      */
     public double getReward()
     {
-        switch (currentDistribution)
-        {
-            case GAUSSIAN:
-                return getGaussian();
-            case POISSON:
-                return getPoisson();
-
-            default:
-                return -1;
-        }
+        return currentDistribution.getReward(mean, stdDev);
     }
 
     public double getStdDev()
@@ -108,7 +73,7 @@ public class Arm
 //     */
 //    public int setDistribution(String distName)
 //    {
-//        currentDistribution = Utilities.Distribution.valueOf(distName.toUpperCase());
+//        currentDistribution = utilities.Utilities.Distribution.valueOf(distName.toUpperCase());
 //        return currentDistribution.ordinal();
 //    }
 

@@ -14,7 +14,7 @@ Poisson
 # Number of Arms
 10
 
-# Arm Costs
+# core.Arm Costs
 *
 1
 
@@ -26,7 +26,7 @@ linear
 *
 .3
 
-# Algorithms
+# core.Algorithms
 greedy
 eFirst, .1
 eFirst, .2

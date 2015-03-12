@@ -1,8 +1,10 @@
+package utilities;
+
 import java.util.List;
 import java.util.Random;
 
 /**
- * Utility classes for the Multi-Armed Bandit problem
+ * Utility classes for the Multi-Armed core.Bandit problem
  *
  * @author Sam Beckmann, Nate Beckemeyer
  */
@@ -133,21 +135,5 @@ public final class Utilities
         remainingIndices.remove(indexLocation);
         return index;
 
-    }
-
-    /**
-     * The possible reward distributions.
-     */
-    public static enum Distribution
-    {
-        /**
-         * The Gaussian-based reward distribution.
-         */
-        GAUSSIAN,
-
-        /**
-         * The Poisson-based reward distribution.
-         */
-        POISSON
     }
 }

@@ -1,6 +1,9 @@
+import core.Agent;
+import core.Arm;
+import core.ArmMemory;
+import core.Bandit;
+
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Random;
 
 /**
@@ -96,7 +99,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Greedy Algorithms
+//Greedy core.Algorithms
 
     public static TrialData greedyAlg(Bandit b, Agent a, boolean online) {
         TrialData myTrial = new TrialData();
@@ -136,7 +139,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// e-First Algorithms
+// e-First core.Algorithms
 
     public static TrialData eFirstAlg(Bandit b, Agent a, double epsilon, boolean dynamic) {
         TrialData myTrial = new TrialData();
@@ -204,7 +207,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// KUBE Algorithms
+// KUBE core.Algorithms
 
     public static TrialData KubeAlgRandom(Bandit b, Agent a, boolean optimistic) {
         //----------------------------------------
@@ -412,10 +415,10 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// KDE Algorithms
+// KDE core.Algorithms
 
     /**
-     * KDE Unique Algorithms: ensures that arms are not pulled more than once during "exploration" phase
+     * KDE Unique core.Algorithms: ensures that arms are not pulled more than once during "exploration" phase
      */
     public static TrialData KdeAlgUnique(Bandit b, Agent a, double gamma) {
         if (gamma <= 0) {
@@ -633,11 +636,11 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//UCB-BV Algorithms
+//UCB-BV core.Algorithms
 
     /**
      * performs the UCB-BV algorithm
-     * bound 1 assumes known mean of cost distributions (here, fixed costs, so OK)
+     * bound 1 assumes known mean of cost defaultDistributions (here, fixed costs, so OK)
      * bound 2 assumes empirically estimated costs (probably not needed here)
      *
      * @param b
@@ -716,7 +719,7 @@ public class OldAlgorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// z-Test Algorithms
+// z-Test core.Algorithms
 
     public static TrialData HypothesisTestingAlg(Bandit b, Agent a, double deviation, double zValue) {
         TrialData myTrial = new TrialData();
@@ -856,7 +859,7 @@ public class OldAlgorithms
                 startArm = 0;
             }
             //System.out.println("startArm is "+startArm);
-            //for(int i = 0; i < feasibles.size(); i++) System.out.println("Arm "+feasibles.get(i)+": "+b.getArms().get(feasibles.get(i)).getMean()+" / "+a.getMemory().get(feasibles.get(i)).getAvgReward());
+            //for(int i = 0; i < feasibles.size(); i++) System.out.println("core.Arm "+feasibles.get(i)+": "+b.getArms().get(feasibles.get(i)).getMean()+" / "+a.getMemory().get(feasibles.get(i)).getAvgReward());
             //increase our scrutiny per pass, if applicable
             if (incScrutiny) pullsPerArm *= 2;
             if (feasibles.size() == 1) exploring = false;
@@ -878,7 +881,7 @@ public class OldAlgorithms
                 if (debugKSmall)
                     System.out.println("Something to report for i == " + i + " (arm " + indices.get(i) + ")");
                 if (debugKSmall)
-                    System.out.println("Arm " + indices.get(i) + " (" + arms.get(indices.get(i)).getRatio() + ") is larger than the pivot; move to end.");
+                    System.out.println("core.Arm " + indices.get(i) + " (" + arms.get(indices.get(i)).getRatio() + ") is larger than the pivot; move to end.");
                 indices.add(end, indices.remove(i)); //move to the end
                 pI--;
                 i--; //do not increment this time
@@ -886,7 +889,7 @@ public class OldAlgorithms
                 if (debugKSmall)
                     System.out.println("Something to report for i == " + i + " (arm " + indices.get(i) + ")");
                 if (debugKSmall)
-                    System.out.println("Arm " + indices.get(i) + " (" + arms.get(indices.get(i)).getRatio() + ") is less than the pivot; move to first");
+                    System.out.println("core.Arm " + indices.get(i) + " (" + arms.get(indices.get(i)).getRatio() + ") is less than the pivot; move to first");
                 indices.add(start, indices.remove(i)); //move to the first of this segment of the list
                 pI++; //keep pointing to the same index
             } else if (debugKSmall)
@@ -1066,7 +1069,7 @@ public class OldAlgorithms
                 {
                     if (!dominated[i] && a.getMemory().get(i).getRatio() < (1 + xValue) * meanRatio) {
                         if (numAllowed > 1) {
-                            //if(debug) System.out.println("Arm "+i+" is eliminated.");
+                            //if(debug) System.out.println("core.Arm "+i+" is eliminated.");
                             dominated[i] = true;
                             if (affordable[i] == true)
                                 numAllowed--;
@@ -1093,7 +1096,7 @@ public class OldAlgorithms
                             }
                         }
                     } else if (dominated[i] && a.getMemory().get(i).getRatio() >= (1 + xValue) * meanRatio) {
-                        //if(debug) System.out.println("Arm "+i+" is no longer eliminated.");
+                        //if(debug) System.out.println("core.Arm "+i+" is no longer eliminated.");
                         dominated[i] = false;
                         if (affordable[i] == true)
                             numAllowed++;
@@ -1221,5 +1224,5 @@ public class OldAlgorithms
             return findS(mGoal, midS, rSB, tolerance, numArms);
     }
 
-}//end Algorithms
+}//end core.Algorithms
 

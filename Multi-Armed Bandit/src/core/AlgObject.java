@@ -1,5 +1,7 @@
+package core;
+
 /**
- * Data type that contains the enum value of an algorithm, from <code>Algorithms.AlgorithmNames</code>
+ * Data type that contains the enum value of an algorithm, from <code>core.Algorithms.AlgorithmNames</code>
  * and the second input parameter for that algorithm (set to zero if the algorithm doesn't use one)
  *
  * @author Sam Beckmann, Nate Beckemeyer

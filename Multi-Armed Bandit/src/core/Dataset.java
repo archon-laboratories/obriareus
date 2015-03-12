@@ -1,7 +1,12 @@
+package core;
+
+import utilities.Utilities;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -18,19 +23,19 @@ public class Dataset
     static boolean printRun = true;
 
     /**
-     * Contains the distributions to be run (Does not check if they are applicable)
+     * Contains the distributions to run.
      */
-    private ArrayList<Utilities.Distribution> distributions = new ArrayList<Utilities.Distribution>();
+    private List<DistributionInterface> distributions = new ArrayList<DistributionInterface>();
 
     /**
      * Contains the budgets to run
      */
-    private ArrayList<Integer> budgets = new ArrayList<Integer>();
+    private List<Integer> budgets = new ArrayList<Integer>();
 
     /**
      * Contains the algorithms to run (Does not check if algorithms exist)
      */
-    private ArrayList<AlgObject> algorithms = new ArrayList<AlgObject>();
+    private List<AlgObject> algorithms = new ArrayList<AlgObject>();
 
     /**
      * Number of trials to be performed
@@ -58,7 +63,7 @@ public class Dataset
     private double[] stdDevs;
 
     /**
-     * Name of the file that this Dataset is tied to
+     * Name of the file that this core.Dataset is tied to
      */
     private String fileName;
 
@@ -74,7 +79,7 @@ public class Dataset
 
         fileName = name;
 
-        if(printRun) System.out.println("Adding Dataset: " + fileName);
+        if(printRun) System.out.println("Adding core.Dataset: " + fileName);
 
         getDistributions(reader);
 
@@ -97,7 +102,7 @@ public class Dataset
     } // end constructor
 
     /**
-     * Adds the distributions to the dataset.
+     * Adds the defaultDistributions to the dataset.
      *
      * @param reader BufferedReader that contains the input file.
      */
@@ -124,7 +129,7 @@ public class Dataset
 
         } catch (IOException e)
         {
-            System.err.println("Error in getting distributions for dataset \"" + fileName + "\": " + e);
+            System.err.println("Error in getting defaultDistributions for dataset \"" + fileName + "\": " + e);
         }
     } // end getDistributions
 
@@ -151,8 +156,7 @@ public class Dataset
                         budgets.add(i);
                     else
                     {
-                        System.out.println("ERROR: Attempted to add budget " + i + ", which is less than zero.");
-                        System.exit(3);
+                        System.err.println("ERROR: Attempted to add budget " + i + ", which is less than zero.");
                     }
                     if (printRun) System.out.println("Added Budget: " + i);
                 }
@@ -168,8 +172,7 @@ public class Dataset
                         budgets.add(toAdd);
                     else
                     {
-                        System.out.println("ERROR: Attempted to add budget " + toAdd + ", which is less than zero.");
-                        System.exit(3);
+                        System.err.println("ERROR: Attempted to add budget " + toAdd + ", which is less than zero.");
                     }
                     if (printRun) System.out.println("Added Budget: " + budget);
 
@@ -225,7 +228,7 @@ public class Dataset
             numArms = Integer.parseInt(reader.readLine());
             if (numArms <= 0)
             {
-                System.out.println("ERROR: Number of trials, " + numTrials + ", is less than or equal to zero.");
+                System.out.println("ERROR: Number of arms, " + numTrials + ", is less than or equal to zero.");
                 System.exit(5);
             }
             if (printRun) System.out.println("Number of Arms: " + numArms);
@@ -251,7 +254,7 @@ public class Dataset
     {
         try
         {
-            reader.readLine(); // # Arm Costs
+            reader.readLine(); // # core.Arm Costs
 
             String stringCost = reader.readLine();
             if (stringCost.equalsIgnoreCase("*")) // special notation
@@ -265,7 +268,7 @@ public class Dataset
                 for (int i = 0; i < numArms; i++)
                 {
                     armCosts[i] = flatCost;
-                    if (printRun) System.out.println("Arm  " + i + "'s cost set to: " + flatCost);
+                    if (printRun) System.out.println("core.Arm  " + i + "'s cost set to: " + flatCost);
                 }
                 reader.readLine();
             } else // full notation
@@ -280,7 +283,7 @@ public class Dataset
                         System.exit(6);
                     }
                     armCosts[i] = cost;
-                    if (printRun) System.out.println("Arm " + i + "'s cost set to: " + cost);
+                    if (printRun) System.out.println("core.Arm " + i + "'s cost set to: " + cost);
                     stringCost = reader.readLine();
                 }
                 if (!stringCost.isEmpty())
@@ -325,7 +328,7 @@ public class Dataset
                 if (printRun)
                 {
                     for (int i = 0; i < meanRewards.length; i++)
-                        System.out.println("Arm" + i + "'s mean set to: " + meanRewards[i]);
+                        System.out.println("core.Arm" + i + "'s mean set to: " + meanRewards[i]);
                 }
                 reader.readLine();
             } else // full notation
@@ -335,7 +338,7 @@ public class Dataset
                 {
                     meanReward = Double.parseDouble(stringReward);
                     meanRewards[i] = meanReward;
-                    if (printRun) System.out.println("Arm " + i + "'s mean reward set to: " + meanReward);
+                    if (printRun) System.out.println("core.Arm " + i + "'s mean reward set to: " + meanReward);
                     stringReward = reader.readLine();
                 }
                 if (!stringReward.isEmpty())
@@ -375,7 +378,7 @@ public class Dataset
                 for (int i = 0; i < numArms; i++)
                 {
                     stdDevs[i] = flatDeviation;
-                    if (printRun) System.out.println("Arm  " + i + "'s standard deviation set to: " + flatDeviation);
+                    if (printRun) System.out.println("core.Arm  " + i + "'s standard deviation set to: " + flatDeviation);
                 }
                 reader.readLine(); // skip blank line
 
@@ -391,7 +394,7 @@ public class Dataset
                         System.exit(8);
                     }
                     stdDevs[i] = stdDev;
-                    if (printRun) System.out.println("Arm " + i + "'s standard deviation set to: " + stdDev);
+                    if (printRun) System.out.println("core.Arm " + i + "'s standard deviation set to: " + stdDev);
                     stringDeviation = reader.readLine();
                 }
             }
@@ -411,7 +414,7 @@ public class Dataset
     {
         try
         {
-            reader.readLine(); // # Algorithms
+            reader.readLine(); // # core.Algorithms
 
             String alg = reader.readLine();
 
@@ -460,7 +463,7 @@ public class Dataset
      */
     public void runSet()
     {
-        System.out.println("Dataset: " + fileName + "\n");
+        System.out.println("core.Dataset: " + fileName + "\n");
 
         // run for each dataset
         for (Utilities.Distribution distribution : distributions)
@@ -595,4 +598,4 @@ public class Dataset
         System.out.println();
     } // end displayMeans
 
-} // end Dataset
+} // end core.Dataset

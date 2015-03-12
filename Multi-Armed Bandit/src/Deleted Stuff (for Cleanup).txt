@@ -1,4 +1,4 @@
-	public static void Exploration(Bandit b, Agent a)
+	public static void Exploration(core.Bandit b, core.Agent a)
 	{
 		int t = 0;
 		int i = 0;
@@ -13,7 +13,7 @@
 		}
 	}
 
-	public static void ExplorationRandom(Bandit b, Agent a){
+	public static void ExplorationRandom(core.Bandit b, core.Agent a){
 		int t = 0;
 		int i = 0;
 		ArrayList<Integer> temp = new ArrayList<Integer>();
@@ -36,10 +36,10 @@
 	}
 
 
-	public static void Exploitation(Bandit b, Agent a)
+	public static void Exploitation(core.Bandit b, core.Agent a)
 	{
-		ArrayList<ArmMemory> n = a.getMemory();
-		ArmMemory i;
+		ArrayList<core.ArmMemory> n = a.getMemory();
+		core.ArmMemory i;
 		while(a.getBudget() >= minCost(b.getArms()))
 		{
 			i = maxRewardDensity(n);
@@ -47,16 +47,16 @@
 			{
 				a.pullArmExplt(b.getArms().get(n.indexOf(i)),n.indexOf(i));
 			}
-		n.set(n.indexOf(i), new ArmMemory(0));
+		n.set(n.indexOf(i), new core.ArmMemory(0));
 		}
 
 	}
 
-	public static void DynamicExploitation(Bandit b, Agent a)
+	public static void DynamicExploitation(core.Bandit b, core.Agent a)
 	{
-		ArrayList<ArmMemory> n = a.getMemory();
+		ArrayList<core.ArmMemory> n = a.getMemory();
 		//int t = 1;
-		ArmMemory i;
+		core.ArmMemory i;
 		while(a.getBudget() >= minCost(b.getArms()))
 		{
 			i = maxRewardDensity(n);
@@ -66,18 +66,18 @@
 			}
 			else
 			{
-				n.set(n.indexOf(i), new ArmMemory(0));
+				n.set(n.indexOf(i), new core.ArmMemory(0));
 			}
 		}
 	}
 
-	public static TrialData KubeAlg(Bandit b, Agent a, boolean optimistic)
+	public static TrialData KubeAlg(core.Bandit b, core.Agent a, boolean optimistic)
 	{
 		//----------------------------------------
 		//Initialize Variables
 		TrialData myTrial = new TrialData();
 		int t = 0; //first arm is index 0
-		ArrayList<ArmMemory> agentMemory = a.getMemory();
+		ArrayList<core.ArmMemory> agentMemory = a.getMemory();
 		int numArms = b.getNumArms();
 
 		double[] armsEstRD = new double[numArms]; //stores estimated reward densities of arms
@@ -127,7 +127,7 @@
 	}
 
 /*
-	private static TrialData KdeAlg(Bandit b, Agent a, double gamma, double dVal)
+	private static TrialData KdeAlg(core.Bandit b, core.Agent a, double gamma, double dVal)
 	{
 		if(gamma <= 0)
 		{
@@ -138,7 +138,7 @@
 		int t = 0;
 		int numArms = b.getNumArms();
 		int numFeasibleArms = numArms;
-		ArrayList<ArmMemory> agentMemory = a.getMemory();
+		ArrayList<core.ArmMemory> agentMemory = a.getMemory();
 		int bestArm;
 		boolean[] feasibleArms = new boolean[numArms];
 		double minCost = minCost(b.getArms());
@@ -224,13 +224,13 @@
 	* Fractional KUBE Algorithm
 	* Can be optimistic (in the paper) or pessimistic
 	*/
-	public static TrialData FractKubeAlg(Bandit b, Agent a, boolean optimistic)
+	public static TrialData FractKubeAlg(core.Bandit b, core.Agent a, boolean optimistic)
 	{
 		//----------------------------------------
 		//Initialize Variables
 		int t = 0; //first arm is index 0
-		ArrayList<ArmMemory> agentMemory = a.getMemory();
-		ArrayList<Arm> banditArms = b.getArms();
+		ArrayList<core.ArmMemory> agentMemory = a.getMemory();
+		ArrayList<core.Arm> banditArms = b.getArms();
 		int numArms = b.getNumArms();
 		double[] armsEstRD = new double[numArms]; //initial reward density estimates
 		double minCost = minCost(banditArms);
@@ -296,7 +296,7 @@ AGENTEEUTSHOSUTH
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Agent {
+public class core.Agent {
 
     private int startingArm;
     private double budget;
@@ -304,14 +304,14 @@ public class Agent {
     private double revenue;
     private double halfRevenue;
     private int totalPulls;
-    private ArrayList<ArmMemory> mem;//agent stores knowledge of arms here
+    private ArrayList<core.ArmMemory> mem;//agent stores knowledge of arms here
     private ArrayList<Integer> armUsage;
-    private Bandit myBandit;
+    private core.Bandit myBandit;
 
-    public Agent(double budget, Bandit b) {
+    public core.Agent(double budget, core.Bandit b) {
         this.budget = budget;
         this.initBudget = budget;
-        mem = new ArrayList<ArmMemory>();
+        mem = new ArrayList<core.ArmMemory>();
         revenue = 0;
         halfRevenue = 0;
         totalPulls = 0;
@@ -321,11 +321,11 @@ public class Agent {
     }
 
     public void storeArm(double c) {
-        mem.add(new ArmMemory(c)); //stores cost
+        mem.add(new core.ArmMemory(c)); //stores cost
         armUsage.add(0);
     }
 
-    public ArrayList<ArmMemory> getMemory() {
+    public ArrayList<core.ArmMemory> getMemory() {
         return mem;
     }
 
@@ -372,7 +372,7 @@ public class Agent {
         return myBandit.getOMR(budget, totalPulls) - getMeanReward();
     }
 
-    public void pullArmNoMemory(Arm a, int i) {
+    public void pullArmNoMemory(core.Arm a, int i) {
         //System.out.println("\t\tCost is " + a.getCost());
         budget -= a.getCost();
         //System.out.println("\t\tTotal budget is now " + budget);
@@ -387,7 +387,7 @@ public class Agent {
         //System.out.println("\t\tRevenue is now " + revenue);
     }
 
-    public void pullArm(Arm a, int i) {
+    public void pullArm(core.Arm a, int i) {
         //System.out.println("\t\tCost is " + a.getCost());
         budget -= a.getCost();
         //System.out.println("\t\tTotal budget is now " + budget);
@@ -507,7 +507,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
-public class Algorithms
+public class core.Algorithms
 {
     static final Random rnd = new Random();
     static boolean debug = false;
@@ -528,7 +528,7 @@ public class Algorithms
         }
     }
 
-    private static double minIndexCost(ArrayList<Integer> a, Bandit b) //returns the integer of a that corresponds to the index arm with the least cost in b
+    private static double minIndexCost(ArrayList<Integer> a, core.Bandit b) //returns the integer of a that corresponds to the index arm with the least cost in b
     {
         if (a.isEmpty()) return -1;
         int min = a.get(0);
@@ -543,8 +543,8 @@ public class Algorithms
         return numList.remove(rnd.nextInt(numList.size())); //returns the element that was removed from the list;
     }
 
-    public static double minCost(ArrayList<Arm> a) {
-        Arm min = a.get(0);
+    public static double minCost(ArrayList<core.Arm> a) {
+        core.Arm min = a.get(0);
         for (int i = 0; i < a.size(); i++) {
             if (min.getCost() > a.get(i).getCost())
                 min = a.get(i);
@@ -552,8 +552,8 @@ public class Algorithms
         return min.getCost();
     }
 
-    public static double minCost(ArrayList<Integer> indices, ArrayList<Arm> arms) {
-        Arm best = arms.get(indices.get(0));
+    public static double minCost(ArrayList<Integer> indices, ArrayList<core.Arm> arms) {
+        core.Arm best = arms.get(indices.get(0));
         for (int i = 1; i < indices.size(); i++) {
             if (arms.get(indices.get(i)).getCost() < best.getCost())
                 best = arms.get(indices.get(i));
@@ -561,8 +561,8 @@ public class Algorithms
         return best.getCost();
     }
 
-    private static ArmMemory maxRewardDensity(ArrayList<ArmMemory> a, Agent agent) {
-        ArmMemory max = null;
+    private static core.ArmMemory maxRewardDensity(ArrayList<core.ArmMemory> a, core.Agent agent) {
+        core.ArmMemory max = null;
         for (int i = 0; i < a.size(); i++) {
             int index = (i + agent.getStartingArm()) % a.size();
             if (max == null) {
@@ -578,7 +578,7 @@ public class Algorithms
         return max;
     }
 
-    private static int maxRewardDensityIndex(ArrayList<ArmMemory> a, Agent agent) {
+    private static int maxRewardDensityIndex(ArrayList<core.ArmMemory> a, core.Agent agent) {
         int max = -1;
         for (int i = 0; i < a.size(); i++) {
             int index = (i + agent.getStartingArm()) % a.size();
@@ -597,9 +597,9 @@ public class Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Greedy Algorithms
+//Greedy core.Algorithms
 
-    public static TrialData greedyAlg(Bandit b, Agent a, boolean online) {
+    public static TrialData greedyAlg(core.Bandit b, core.Agent a, boolean online) {
         TrialData myTrial = new TrialData();
         int numMaxPulls = 0;
         int maxIndex = b.getBestArmIndex();
@@ -613,7 +613,7 @@ public class Algorithms
             }
         }
         //Exploitation
-        ArmMemory bestArm = maxRewardDensity(a.getMemory(), a);
+        core.ArmMemory bestArm = maxRewardDensity(a.getMemory(), a);
 
         boolean switchedBest = false;
         while (a.getBudget() >= minCost(b.getArms()))//explorer budget must be greater or equal to min cost
@@ -626,7 +626,7 @@ public class Algorithms
             myTrial.addValues(a.getTotalPulls() - 1, a.getMeanReward(), a.getRegret(), numMaxPulls, b.getOMR(a.getTotalPulls()), 1, switchedBest);
             switchedBest = false;
             if (online || a.getBudget() < bestArm.getCost()) {
-                ArmMemory temp = bestArm;
+                core.ArmMemory temp = bestArm;
                 bestArm = maxRewardDensity(a.getMemory(), a);
                 if (a.getMemory().indexOf(temp) != a.getMemory().indexOf(bestArm))
                     switchedBest = true;
@@ -637,9 +637,9 @@ public class Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// e-First Algorithms
+// e-First core.Algorithms
 
-    public static TrialData eFirstAlg(Bandit b, Agent a, double epsilon, boolean dynamic) {
+    public static TrialData eFirstAlg(core.Bandit b, core.Agent a, double epsilon, boolean dynamic) {
         TrialData myTrial = new TrialData();
         int i = 0;
         ArrayList<Integer> temp = new ArrayList<Integer>();
@@ -672,9 +672,9 @@ public class Algorithms
 //        if(debug) System.out.println(explorCount + " pulls for exploration");
 
         //Exploitation
-        ArrayList<ArmMemory> n = a.getMemory();
-        ArmMemory bestArm = maxRewardDensity(n, a);
-        ArmMemory lastBestArm = bestArm;
+        ArrayList<core.ArmMemory> n = a.getMemory();
+        core.ArmMemory bestArm = maxRewardDensity(n, a);
+        core.ArmMemory lastBestArm = bestArm;
         boolean switchedBest = false;
         while (a.getBudget() >= minCost(b.getArms())) {
             if (dynamic) {
@@ -705,13 +705,13 @@ public class Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// KUBE Algorithms
+// KUBE core.Algorithms
 
-    public static TrialData KubeAlgRandom(Bandit b, Agent a, boolean optimistic) {
+    public static TrialData KubeAlgRandom(core.Bandit b, core.Agent a, boolean optimistic) {
         //----------------------------------------
         //Initialize Variables
         TrialData myTrial = new TrialData();
-        ArrayList<ArmMemory> agentMemory = a.getMemory();
+        ArrayList<core.ArmMemory> agentMemory = a.getMemory();
         int numArms = b.getNumArms();
 
         //double[] armsEstRD = new double[numArms];
@@ -797,7 +797,7 @@ public class Algorithms
         return myTrial;
     }
 
-    public static TrialData FractKubeAlgRandom(Bandit b, Agent a, boolean optimistic, boolean online) {
+    public static TrialData FractKubeAlgRandom(core.Bandit b, core.Agent a, boolean optimistic, boolean online) {
         //----------------------------------------
         //Initialize Variables
         TrialData myTrial = new TrialData();
@@ -862,7 +862,7 @@ public class Algorithms
      * Use the density-ordered greedy algorithm to find M*, the best
      * combination of arms to be pulled probabilistically.
      */
-    private static int[] KubeDOG(double budget, double minCost, ArrayList<ArmMemory> arms, boolean opt, int t) {
+    private static int[] KubeDOG(double budget, double minCost, ArrayList<core.ArmMemory> arms, boolean opt, int t) {
         //Get "best" arms combination, M*, to pull from
         int[] bestComb = new int[arms.size()];
         double tempBudget = budget;
@@ -897,7 +897,7 @@ public class Algorithms
      * KUBE Confidence Estimation - Applies the confidence interval specified in the paper to
      * re-evaluate projected rewards for a given arm.
      */
-    private static double KubeConfEst(ArmMemory a, boolean opt, int t) {
+    private static double KubeConfEst(core.ArmMemory a, boolean opt, int t) {
         double estimate = a.getMeanReward();
         if (opt)
             estimate += Math.sqrt(2 * Math.log((double) t) / a.getPulls()); //upper confidence bound
@@ -907,18 +907,18 @@ public class Algorithms
         return estimate;
     }
 
-    private static double fKubeEst(ArmMemory thisArm, int time) {
+    private static double fKubeEst(core.ArmMemory thisArm, int time) {
         return thisArm.getRatio() + Math.sqrt(2 * Math.log(time) / thisArm.getPulls()) / thisArm.getCost();
     }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// KDE Algorithms
+// KDE core.Algorithms
 
     /**
-     * KDE Unique Algorithms: ensures that arms are not pulled more than once during "exploration" phase
+     * KDE Unique core.Algorithms: ensures that arms are not pulled more than once during "exploration" phase
      */
-    public static TrialData KdeAlgUnique(Bandit b, Agent a, double gamma) {
+    public static TrialData KdeAlgUnique(core.Bandit b, core.Agent a, double gamma) {
         if (gamma <= 0) {
             System.out.println("Non-positive gamma value; KDE cannot function.");
             return null;
@@ -927,7 +927,7 @@ public class Algorithms
         int t = 1;
         int numArms = b.getNumArms();
         int numFeasibleArms = numArms;
-        ArrayList<ArmMemory> agentMemory = a.getMemory();
+        ArrayList<core.ArmMemory> agentMemory = a.getMemory();
         int bestArm;
         int lastBestArm = -1;
         boolean switchedArms = false;
@@ -1009,7 +1009,7 @@ public class Algorithms
     /**
      * Fractional KDE
      */
-    public static TrialData FractKdeAlg(Bandit b, Agent a, double gamma, boolean online) {
+    public static TrialData FractKdeAlg(core.Bandit b, core.Agent a, double gamma, boolean online) {
         if (gamma <= 0) {
             System.out.println("Non-positive gamma value; KDE cannot function.");
             return null;
@@ -1017,7 +1017,7 @@ public class Algorithms
 
         int t = 0;
         int numArms = b.getNumArms();
-        ArrayList<ArmMemory> agentMemory = a.getMemory();
+        ArrayList<core.ArmMemory> agentMemory = a.getMemory();
         TrialData myTrial = new TrialData();
 
         boolean[] feasibleArms = new boolean[numArms];
@@ -1108,7 +1108,7 @@ public class Algorithms
      * @param arms
      * @return
      */
-    private static int[] KdeDOG(double budget, double minCost, int bestArm, ArrayList<ArmMemory> arms) {
+    private static int[] KdeDOG(double budget, double minCost, int bestArm, ArrayList<core.ArmMemory> arms) {
         //Get "best" arms combination, M*, to pull from
         int[] bestComb = new int[arms.size()];
         double tempBudget = budget;
@@ -1134,11 +1134,11 @@ public class Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//UCB-BV Algorithms
+//UCB-BV core.Algorithms
 
     /**
      * performs the UCB-BV algorithm
-     * bound 1 assumes known mean of cost distributions (here, fixed costs, so OK)
+     * bound 1 assumes known mean of cost defaultDistributions (here, fixed costs, so OK)
      * bound 2 assumes empirically estimated costs (probably not needed here)
      *
      * @param b
@@ -1146,7 +1146,7 @@ public class Algorithms
      * @param whichBound
      * @return
      */
-    public static TrialData UCBBVAlg(Bandit b, Agent a, int whichBound, boolean online) {
+    public static TrialData UCBBVAlg(core.Bandit b, core.Agent a, int whichBound, boolean online) {
         if (debugUcbbv) System.out.println("Starting...");
         TrialData myTrial = new TrialData();
         int numArms = b.getNumArms();
@@ -1217,9 +1217,9 @@ public class Algorithms
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// z-Test Algorithms
+// z-Test core.Algorithms
 
-    public static TrialData HypothesisTestingAlg(Bandit b, Agent a, double deviation, double zValue) {
+    public static TrialData HypothesisTestingAlg(core.Bandit b, core.Agent a, double deviation, double zValue) {
         TrialData myTrial = new TrialData();
 
         ArrayList<Integer> acceptable = new ArrayList<Integer>();
@@ -1258,7 +1258,7 @@ public class Algorithms
         return myTrial;
     }
 
-    public static TrialData lSplitAlg(Bandit b, Agent a, double dropFract, boolean incScrutiny, boolean online) {
+    public static TrialData lSplitAlg(core.Bandit b, core.Agent a, double dropFract, boolean incScrutiny, boolean online) {
         TrialData myData = new TrialData();
         int pullsPerArm = 1;
         int numMaxPulls = 0;
@@ -1357,7 +1357,7 @@ public class Algorithms
                 startArm = 0;
             }
             //System.out.println("startArm is "+startArm);
-            //for(int i = 0; i < feasibles.size(); i++) System.out.println("Arm "+feasibles.get(i)+": "+b.getArms().get(feasibles.get(i)).getMean()+" / "+a.getMemory().get(feasibles.get(i)).getAvgReward());
+            //for(int i = 0; i < feasibles.size(); i++) System.out.println("core.Arm "+feasibles.get(i)+": "+b.getArms().get(feasibles.get(i)).getMean()+" / "+a.getMemory().get(feasibles.get(i)).getAvgReward());
             //increase our scrutiny per pass, if applicable
             if (incScrutiny) pullsPerArm *= 2;
             if (feasibles.size() == 1) exploring = false;
@@ -1366,7 +1366,7 @@ public class Algorithms
         return myData;
     }
 
-    static int kSmall(ArrayList<Integer> indices, ArrayList<ArmMemory> arms, int k, int start, int end) {
+    static int kSmall(ArrayList<Integer> indices, ArrayList<core.ArmMemory> arms, int k, int start, int end) {
         if (debugKSmall) System.out.println("start is " + start + "; end is " + end);
         if (start == end) return start;
         else if (start > end)
@@ -1379,7 +1379,7 @@ public class Algorithms
                 if (debugKSmall)
                     System.out.println("Something to report for i == " + i + " (arm " + indices.get(i) + ")");
                 if (debugKSmall)
-                    System.out.println("Arm " + indices.get(i) + " (" + arms.get(indices.get(i)).getRatio() + ") is larger than the pivot; move to end.");
+                    System.out.println("core.Arm " + indices.get(i) + " (" + arms.get(indices.get(i)).getRatio() + ") is larger than the pivot; move to end.");
                 indices.add(end, indices.remove(i)); //move to the end
                 pI--;
                 i--; //do not increment this time
@@ -1387,7 +1387,7 @@ public class Algorithms
                 if (debugKSmall)
                     System.out.println("Something to report for i == " + i + " (arm " + indices.get(i) + ")");
                 if (debugKSmall)
-                    System.out.println("Arm " + indices.get(i) + " (" + arms.get(indices.get(i)).getRatio() + ") is less than the pivot; move to first");
+                    System.out.println("core.Arm " + indices.get(i) + " (" + arms.get(indices.get(i)).getRatio() + ") is less than the pivot; move to first");
                 indices.add(start, indices.remove(i)); //move to the first of this segment of the list
                 pI++; //keep pointing to the same index
             } else if (debugKSmall)
@@ -1417,7 +1417,7 @@ public class Algorithms
         return temp;
     }
 
-    public static TrialData AdaptiveAlg1(Bandit b, Agent a, double confidence, double lBound, double rBound) {
+    public static TrialData AdaptiveAlg1(core.Bandit b, core.Agent a, double confidence, double lBound, double rBound) {
         TrialData myData = new TrialData();
         int numAllowed = b.getNumArms();
         int numMaxPulls = 0;
@@ -1503,7 +1503,7 @@ public class Algorithms
     }//end adaptive method
 
 
-    public static TrialData soaavAlg(Bandit b, Agent a, double xValue, boolean online) {
+    public static TrialData soaavAlg(core.Bandit b, core.Agent a, double xValue, boolean online) {
         TrialData myData = new TrialData();
         int currBest = 0;
         int numMaxPulls = 0;
@@ -1567,7 +1567,7 @@ public class Algorithms
                 {
                     if (!dominated[i] && a.getMemory().get(i).getRatio() < (1 + xValue) * meanRatio) {
                         if (numAllowed > 1) {
-                            //if(debug) System.out.println("Arm "+i+" is eliminated.");
+                            //if(debug) System.out.println("core.Arm "+i+" is eliminated.");
                             dominated[i] = true;
                             if (affordable[i] == true)
                                 numAllowed--;
@@ -1594,7 +1594,7 @@ public class Algorithms
                             }
                         }
                     } else if (dominated[i] && a.getMemory().get(i).getRatio() >= (1 + xValue) * meanRatio) {
-                        //if(debug) System.out.println("Arm "+i+" is no longer eliminated.");
+                        //if(debug) System.out.println("core.Arm "+i+" is no longer eliminated.");
                         dominated[i] = false;
                         if (affordable[i] == true)
                             numAllowed++;
@@ -1607,7 +1607,7 @@ public class Algorithms
     }//end adaptive method
 
     //pick e such that eB is evenly divisible by K
-    public static TrialData peefAlg(Bandit b, Agent a, double epsilon) {
+    public static TrialData peefAlg(core.Bandit b, core.Agent a, double epsilon) {
         //double oldFract = 1.-1./(getSfromE(epsilon,a.getBudget(),b.getNumArms()));
         //double dropFract = 1.-1./((b.getNumArms()+m-1)/m);
 
@@ -1722,5 +1722,5 @@ public class Algorithms
             return findS(mGoal, midS, rSB, tolerance, numArms);
     }
 
-}//end Algorithms
+}//end core.Algorithms
 

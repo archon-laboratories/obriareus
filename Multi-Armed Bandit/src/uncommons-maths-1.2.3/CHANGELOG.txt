@@ -71,7 +71,7 @@ Changes in version 1.1
 
 * Moved NumberGenerator and its implementations into new number package.
 
-* Added demo program for different probability distributions (ISSUE#2).
+* Added demo program for different probability defaultDistributions (ISSUE#2).
 
 * Added method to the DataSet class for calculating the harmonic mean.
 

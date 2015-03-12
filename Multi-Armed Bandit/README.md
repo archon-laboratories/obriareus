@@ -1,4 +1,4 @@
-Multi-Armed Bandit
+Multi-Armed core.Bandit
 ==================
 
 *By: Sam Beckmann, Nate Beckemeyer*
@@ -11,11 +11,11 @@ Changeable Parameters:
 
 * Number of Trials
 
-* Mean Reward of Each Arm
+* Mean Reward of Each core.Arm
 
-* Standard Deviation of Reward for Each Arm
+* Standard Deviation of Reward for Each core.Arm
 
-* Cost of Each Arm
+* Cost of Each core.Arm
 
 * Reward Distributions
 
@@ -27,7 +27,7 @@ Inputting Data
 --------------
 
 To input a dataset to the program, create a file named `datasetXXX.dat` where `XXX` can be anything.
-Place this file in the `datasets` folder, one level under Multi-Armed Bandit.
+Place this file in the `datasets` folder, one level under Multi-Armed core.Bandit.
 The following two datasets input the same information.
 
 `datasetSample1.dat` :
@@ -55,7 +55,7 @@ Poisson
 # Number of Arms
 10
 
-# Arm Costs
+# core.Arm Costs
 1
 1
 1
@@ -91,7 +91,7 @@ Poisson
 .3
 .3
 
-# Algorithms
+# core.Algorithms
 greedy
 eFirst, .1
 eFirst, .2
@@ -120,7 +120,7 @@ Poisson
 # Number of Arms
 10
 
-# Arm Costs
+# core.Arm Costs
 *
 1
 
@@ -132,7 +132,7 @@ linear
 *
 .3
 
-# Algorithms
+# core.Algorithms
 greedy
 eFirst, .1
 eFirst, .2
@@ -147,7 +147,7 @@ SOAAv, 0
 ```
 To break down the precise syntax:
 
-* **Distributions to Run:** The first line of the dataset is skipped by the interpretor, but should be `# Distributions to Run` or something equally descriptive. The next lines should contain one distribution to run per line. Each distribution run will generate its own output file. The distributions supported by default are Gaussian and Poisson, but more can be added. As in all sections, a blank line should be left after the last dataset to indicate to the interpretor you are finsihed adding distributions.
+* **Distributions to Run:** The first line of the dataset is skipped by the interpretor, but should be `# Distributions to Run` or something equally descriptive. The next lines should contain one distribution to run per line. Each distribution run will generate its own output file. The defaultDistributions supported by default are Gaussian and Poisson, but more can be added. As in all sections, a blank line should be left after the last dataset to indicate to the interpretor you are finsihed adding defaultDistributions.
 
 * **Budgets:** The next line is skipped by the interpretor, but should be `# Budgets to Run` or something equally descriptive. The next lines should contain one budget per line. Budgets are natural numbers. Each budget will run once for each distribution. The shortened syntax for this is indicated by making the first line under `# Budgets to Run` equal to `*`. The next line should contain the minimum budget. The line after that contains the maximum budget. The final line contains the increment by which the budget increases by. An example can be found in the `Sample2` dataset.
 
@@ -155,4 +155,4 @@ To break down the precise syntax:
 
 * **Number of Arms:** The next line is skipped by the interpretor, but should be `# Number of Arms` or something equally descriptive. The next line contains the number of arms that will be used the bandit. Note that the number of arms is a natural number.
 
-* **Arm Costs:** 
+* **core.Arm Costs:**
