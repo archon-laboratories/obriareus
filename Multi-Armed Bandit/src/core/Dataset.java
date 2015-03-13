@@ -116,11 +116,18 @@ public class Dataset
             {
                 try
                 {
-                    distributions.add((IDistribution) Class.forName("defaultDistributions." + distribution).newInstance());
+                    distributions.add((IDistribution)
+                            Class.forName("defaultDistributions." +distribution).newInstance());
                     if (printRun) System.out.println("Added Distribution: " + distribution);
                 } catch (Exception e)
                 {
-                    System.err.println("Could not add distribution \"" + distribution + "\": " + e);
+                    try
+                    {
+                        distributions.add((IDistribution) Class.forName("distributions." + distribution).newInstance());
+                    } catch (Exception e1)
+                    {
+                        System.err.println("Could not add distribution \"" + distribution + "\": " + e1);
+                    }
                 }
                 distribution = reader.readLine();
 
@@ -441,8 +448,22 @@ public class Dataset
                     found = true;
                 } catch (ClassNotFoundException e)
                 {
-                    System.out.println("Error! Algorithm " + algorithmName + " not found. Excluding!");
-                    e.printStackTrace();
+                    try
+                    {
+                        algorithm = (IAlgorithm) Class.forName("algorithms." + algorithmName).newInstance();
+                        found = true;
+                    } catch (ClassNotFoundException e1)
+                    {
+                        System.out.println("Error! Algorithm " + algorithmName + " not found. Excluding!");
+                    } catch (InstantiationException e1)
+                    {
+                        System.out.println("Error! Algorithm " + algorithmName + " not instantiated. Excluding!.");
+                        e1.printStackTrace();
+                    } catch (IllegalAccessException e1)
+                    {
+                        System.out.println("Error! Algorithm " + algorithmName + " not accessed. Excluding!");
+                        e1.printStackTrace();
+                    }
                 } catch (InstantiationException e)
                 {
                     System.out.println("Error! Algorithm " + algorithmName + " not instantiated. Excluding!.");
@@ -453,9 +474,10 @@ public class Dataset
                     e.printStackTrace();
                 }
                 if (found)
-                    if (printRun)
-                        System.out.println("Algorithm added: " + alg);
+                {
+                    if (printRun) System.out.println("Algorithm added: " + alg);
                     algorithms.add(new AlgObject(algorithm, parameters));
+                }
 
                 alg = reader.readLine();
             }
