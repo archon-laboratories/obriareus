@@ -154,12 +154,12 @@ public class Dataset
             if (budget.equalsIgnoreCase("*")) // Simplified notation
             {
                 int start = Integer.parseInt(reader.readLine());
-                int end = Integer.parseInt(reader.readLine());
                 int increment = Integer.parseInt(reader.readLine());
-                for (int i = start; i <= end; i += increment)
+                int number = Integer.parseInt(reader.readLine());
+                for (int i = 0; i < number; i ++)
                 {
-                    if (i >= 0)
-                        budgets.add(i);
+                    if (start + increment * i >= 0)
+                        budgets.add(start + increment * i);
                     else
                     {
                         System.err.println("ERROR: Attempted to add budget " + i + ", which is less than zero.");
