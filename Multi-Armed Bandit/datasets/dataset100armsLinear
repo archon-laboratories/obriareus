@@ -1,0 +1,39 @@
+# Distributions to Run
+Gaussian
+Poisson
+
+# Budgets to Run
+*
+500
+500
+10
+
+# Number of Trials
+1000
+
+# Number of Arms
+100
+
+# Arm Costs
+*
+1
+
+# Mean Rewards
+*
+linear
+
+# Standard Deviations
+*
+.3
+
+# Algorithms
+Greedy
+EFirst, .1
+EFirst, .2
+FKUBE
+FKDE, 10
+UCBBV
+EProgressive, .1
+EProgressive, .2
+LSplit, .5
+SOAAv, 0

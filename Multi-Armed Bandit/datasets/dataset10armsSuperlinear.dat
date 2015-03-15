@@ -1,17 +1,12 @@
 # Distributions to Run
 Gaussian
+Poisson
 
 # Budgets to Run
+*
 50
-100
-150
-200
-250
-300
-350
-400
-450
-500
+50
+10
 
 # Number of Trials
 1000
@@ -19,47 +14,24 @@ Gaussian
 # Number of Arms
 10
 
-# core.Arm Costs
-1
-1
-1
-1
-1
-1
-1
-1
-1
+# Arm Costs
+*
 1
 
 # Mean Rewards
-.1
-.2
-.3
-.4
-.5
-.6
-.7
-.8
-.9
-1
+*
+superlinear
 
 # Standard Deviations
-.3
-.3
-.3
-.3
-.3
-.3
-.3
-.3
-.3
+*
 .3
 
 # Algorithms
 Greedy
 EFirst, .1
 EFirst, .2
-Fkube
+FKUBE
+FKDE, 10
 UCBBV
 EProgressive, .1
 EProgressive, .2

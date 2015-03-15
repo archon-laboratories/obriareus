@@ -4,36 +4,36 @@ Poisson
 
 # Budgets to Run
 *
-50
-500
-50
+250
+250
+10
 
 # Number of Trials
 1000
 
 # Number of Arms
-10
+50
 
-# core.Arm Costs
+# Arm Costs
 *
 1
 
 # Mean Rewards
 *
-linear
+sublinear
 
 # Standard Deviations
 *
 .3
 
-# deprecated.Algorithms
-greedy
-eFirst, .1
-eFirst, .2
-fKUBE
-fKDE
+# Algorithms
+Greedy
+EFirst, .1
+EFirst, .2
+FKUBE
+FKDE, 10
 UCBBV
-eProgressive, .1
-eProgressive, .2
-lSplit, .5
+EProgressive, .1
+EProgressive, .2
+LSplit, .5
 SOAAv, 0

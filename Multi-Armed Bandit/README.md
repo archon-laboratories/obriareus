@@ -1,4 +1,4 @@
-Multi-Armed core.Bandit
+Multi-Armed Bandit
 ==================
 
 *By: Sam Beckmann, Nate Beckemeyer*
@@ -11,11 +11,11 @@ Changeable Parameters:
 
 * Number of Trials
 
-* Mean Reward of Each core.Arm
+* Mean Reward of Each Arm
 
-* Standard Deviation of Reward for Each core.Arm
+* Standard Deviation of Reward for Each Arm
 
-* Cost of Each core.Arm
+* Cost of Each Arm
 
 * Reward Distributions
 
@@ -27,10 +27,8 @@ Inputting Data
 --------------
 
 To input a dataset to the program, create a file named `datasetXXX.dat` where `XXX` can be anything.
-Place this file in the `datasets` folder, one level under Multi-Armed core.Bandit.
+Place this file in the `datasets` folder, one level under Multi-Armed Bandit.
 The following two datasets input the same information.
-
-`datasetSample1.dat` :
 
 ```
 # Distributions to Run
@@ -91,18 +89,18 @@ Poisson
 .3
 .3
 
-# deprecated.Algorithms
-greedy
-eFirst, .1
-eFirst, .2
-fKUBE
+# Algorithms
+Greedy
+EFirst, .1
+EFirst, .2
+FKUBE
+FKDE, 10
 UCBBV
-eProgressive, .1
-eProgressive, .2
-lSplit, .5
+EProgressive, .1
+EProgressive, .2
+LSplit, .5
 SOAAv, 0
 ```
-`datasetSample2.dat` :
 ```
 # Distributions to Run
 Gaussian
@@ -132,27 +130,145 @@ linear
 *
 .3
 
-# deprecated.Algorithms
-greedy
-eFirst, .1
-eFirst, .2
-fKUBE
-fKDE
+# Algorithms
+Greedy
+EFirst, .1
+EFirst, .2
+FKUBE
+FKDE, 10
 UCBBV
-eProgressive, .1
-eProgressive, .2
-lSplit, .5
+EProgressive, .1
+EProgressive, .2
+LSplit, .5
 SOAAv, 0
 
 ```
 To break down the precise syntax:
 
-* **Distributions to Run:** The first line of the dataset is skipped by the interpretor, but should be `# Distributions to Run` or something equally descriptive. The next lines should contain one distribution to run per line. Each distribution run will generate its own output file. The defaultDistributions supported by default are Gaussian and Poisson, but more can be added. As in all sections, a blank line should be left after the last dataset to indicate to the interpretor you are finsihed adding defaultDistributions.
+* **Distributions to Run:** The first line of the dataset is skipped by the interpreter, but should be
+                            `# Distributions to Run` or something equally descriptive. The next lines should contain
+                            one distribution to run per line. Each distribution run will generate its own output file.
+                            The Distributions supported by default are Gaussian and Poisson, but more can be added.
+                            As in all sections, a blank line should be left after the last dataset to indicate to
+                            the interpreter you are finished adding defaultDistributions.
 
-* **Budgets:** The next line is skipped by the interpretor, but should be `# Budgets to Run` or something equally descriptive. The next lines should contain one budget per line. Budgets are natural numbers. Each budget will run once for each distribution. The shortened syntax for this is indicated by making the first line under `# Budgets to Run` equal to `*`. The next line should contain the minimum budget. The line after that contains the maximum budget. The final line contains the increment by which the budget increases by. An example can be found in the `Sample2` dataset.
+* **Budgets:** The next line is skipped by the interpreter, but should be `# Budgets to Run` or something equally
+               descriptive. The next lines should contain one budget per line. Budgets are natural numbers.
+               Each budget will run once for each distribution. The shortened syntax for this is indicated by making
+               the first line under `# Budgets to Run` equal to `*`. The next line should contain the minimum budget.
+               The line after that contains the maximum budget. The final line contains the increment by which the
+               budget increases by. An example can be found in the `Sample2` dataset.
 
-* **Number of Trials:** The next line is skipped by the interpretor, but should be `# Number of Trials` or something equally descriptive. The next line contains the number of trials that will be averaged for each algorithm for each budget. We recommend 1000, though when running with high numbers of arms or budgets, it might be necessary to decrease this value in order to achieve timely results. Note that the number of trials is a natural number.
+* **Number of Trials:** The next line is skipped by the interpreter, but should be `# Number of Trials`  or something
+                        equally descriptive. The next line contains the number of trials that will be averaged for
+                        each algorithm for each budget. We recommend 1000, though when running with high numbers of
+                        arms or budgets, it might be necessary to decrease this value in order to achieve timely results
+                        Note that the number of trials is a natural number.
 
-* **Number of Arms:** The next line is skipped by the interpretor, but should be `# Number of Arms` or something equally descriptive. The next line contains the number of arms that will be used the bandit. Note that the number of arms is a natural number.
+* **Number of Arms:** The next line is skipped by the interpreter, but should be `# Number of Arms` or something
+                      equally descriptive. The next line contains the number of arms that will be used the bandit.
+                      Note that the number of arms is a natural number.
 
-* **core.Arm Costs:**
+* **Arm Costs:** The next line is skipped by the interpreter, but should be `# Arm Costs` or something equally
+                 descriptive. The next lines should be the costs for each arm, iterating from the first arm through the
+                 last arm. There should be the the same number of lines in this section at the number of arms specified
+                 in the section before. The shortened syntax for this section is indicated by a `*` in the first line of
+                 the section. The next line then contains a single cost, which is applied to all the lines.
+                 Note that a cost is a double greater than 0.
+
+* **Mean Rewards:** The next line is skipped by the interpreter, but should be `# Mean Rewards` or something equally
+                    descriptive. The next lines should be the costs for each arm, iterating from the first arm through
+                    the last arm. There should be the same number of lines in this section at the number of arms
+                    specified in an earlier section. The shortened syntax for this section is indicated by a `*` in the
+                    first line of the section. The next line then contains a distibution to applied to the mean rewards.
+                    The accepted notations are `linear`, which spaces the means according to the algorithm
+
+* **Standard Deviations:** The next line is skipped by the interpreter, but should be `# Standard Deviations` or
+                           something equally descriptive. The next lines should be the standard deviations for each arm,
+                           iterating from the first arm through the last arm. There should be the the same number
+                           of lines in this section at the number of arms specified in a previous section.
+                           The shortened syntax for this section is indicated by a `*` in the first line of the section.
+                           The next line then contains a single standard deviation, which is applied to all the lines.
+                           Note that a standard deviation is a double greater than 0.
+
+* **Algorithms:** The next line is skipped by the interpreter, but should be `# Algorithms` of something equally
+                  descriptive. The following lines each initialize one algorithm that will be used by the dataset.
+                  Initializing an algorithm is done by writing the name of the class that contains the algorithm.
+                  (Or classpath, if the algorithm is not in one of the default locations). If the algorithm accepts
+                  any other arguments, they are given in doubles separated by a comma and a space. The default
+                  algorithms and their arguments are detailed below.
+
+Output
+------
+
+The program outputs data in two ways: First, a sample of data is outputted the console. The output lists the
+distribution, budget, and algorithm that is being evaluated, followed by the normalized output of the algorithm
+(its average utility minus the average utility of of all the algorithms).
+
+For plotting purposes, the data is also outputted to the `output` folder in the project as a .csv file under the name
+`dataset_distribution.csv` where dataset is the name of the dataset that is being used, and distribution being the
+distribution of rewards for that specific output. The file is formatted with the first item in each line is the
+budget for that line contains the output of, and the remaining items are the normalized rewards of the algorithms,
+printed in the order the algorithms were initialized in the dataset.
+
+Default Algorithms
+------------------
+
+Multi-Armed Bandit contains 8 different algorithms by default:
+
+* **e-first:** This algorithm uniformly selects from the set of arms, performing unordered sweeps of each arm
+               before beginning again, until its exploration budget is exhausted (not enough remains to pull even
+               the minimum cost arm). At the end of the exploration phase, the arms are sorted by the ratio of their
+               estimated mean reward to pulling cost. During exploitation, the best-ranking arm, which we refer to
+               as the active arm, is pulled until it cannot be afforded in the remainder of the budget.
+               This process is repeated with the best of the remaining affordable arms until the budget is exhausted.
+               Note that this algorithm, along with all algorithms included by default, is "online," meaning
+               that if an arm other than the active arm becomes the best-ranking arm, the active arm will switch
+               to the new best-arm.
+
+* **greedy:** A specific case of the e-first algorithm, greedy pulls each arm exactly once in the exploration phase, and
+              thereafter always pulls the arm with the highest observed average payoff.
+
+* **fKUBE:** The Fractional Knapsack-based
+             Upper Confidence Bound Exploration and Exploitation
+             (fKUBE) [Tran-Thanh et al., 2010], is based on a class of
+             upper-confidence bound (UCB) based algorithms originally
+             developed for the MAB problem without budget constraints.
+             This algorithm has a minimal exploration phase, pulling each
+             arm exactly once, and thereafter uses a confidence bound
+             based on the reward-cost ratio of the arms to determine
+             which arm should be pulled at time t + 1.
+
+* **fKDE:**
+
+* **UCB-BV:**
+
+* **l-split:**
+
+* **e-progressive:**
+
+* **SOAAv:** This algorithm also successively narrows down the set of active arms by eliminating underperforming arms.
+             But rather than eliminating a fixed number of arms after each pass, it eliminates arms whose estimate
+             reward-cost ratio is below (1 + x) times the average of such ratios of the arms in the last pass. Setting
+             x = 0 means only above average individuals survive from one pass of the arms to the next. Note again tha
+             this is an online-exploration approach where a previously eliminated arm can come back into the active set
+             if estimates of other active arms drop.
+
+Default Distributions
+---------------------
+
+Multi-Armed Bandit contains 2 different reward distributions by default:
+
+* **Gaussian:**
+
+* **Poisson:**
+
+Extending
+---------
+
+It is possible to extend Multi-Armed Bandit to implement your own algorithms and reward distributions.
+
+To do so, simply create directories titled `algorithms` and `distributions`, respectively. For algorithms to be
+recognized by the program, the must implement the `IAlgorithms` interface. Reward distributions must implement the
+`IDistribution` interface. To call new algorithms and distributions, simply put the name of their class down in the
+dataset.
