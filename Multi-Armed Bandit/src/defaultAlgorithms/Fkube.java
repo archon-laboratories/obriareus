@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Sam Beckmann, Nate Beckemeyer. Thanks to Anton Ridgeway for original implementations.
  */
-public class Fkube implements core.IAlgorithm
+public class FKUBE implements core.IAlgorithm
 {
     @Override
     public String getName()
