@@ -32,7 +32,7 @@ public class Implementation
                 File inputFile = new File("datasets/dataset" + set + ".txt");
                 Dataset dataset = new Dataset(inputFile, set);
                 datasets.add(dataset);
-            } catch(IOException e)
+            } catch (IOException e)
             {
                 System.err.println("Error trying to read dataset \"" + set + "\": " + e);
             }
@@ -42,7 +42,6 @@ public class Implementation
         {
             dataset.runSet();
         }
-
-    }
+    } // end main
 
 } // end core.Implementation

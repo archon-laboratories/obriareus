@@ -66,6 +66,7 @@ public class Dataset
      */
     private String fileName;
 
+
     /**
      * Constructs the data for a dataset from a given file.
      *
@@ -78,7 +79,7 @@ public class Dataset
 
         fileName = name;
 
-        if(printRun) System.out.println("Adding Dataset: " + fileName);
+        if (printRun) System.out.println("Adding Dataset: " + fileName);
 
         getDistributions(reader);
 
@@ -117,7 +118,7 @@ public class Dataset
                 try
                 {
                     distributions.add((IDistribution)
-                            Class.forName("defaultDistributions." +distribution).newInstance());
+                            Class.forName("defaultDistributions." + distribution).newInstance());
                     if (printRun) System.out.println("Added Distribution: " + distribution);
                 } catch (Exception e)
                 {
@@ -437,7 +438,8 @@ public class Dataset
                 IAlgorithm algorithm = null;
                 int count = 0;
 
-                while (scanInput.hasNextDouble()) {
+                while (scanInput.hasNextDouble())
+                {
                     parameters.add(count++, scanInput.nextDouble());
                 }
 

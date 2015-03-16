@@ -30,8 +30,8 @@ public class Arm
     /**
      * Value-assigning core.Arm constructor.
      *
-     * @param cost_ Cost to pull the arm.
-     * @param stdDev_   Standard deviation of the reward of the arm.
+     * @param cost_   Cost to pull the arm.
+     * @param stdDev_ Standard deviation of the reward of the arm.
      * @param mean_   Mean reward for the arm.
      */
     public Arm(double cost_, double stdDev_, double mean_, IDistribution distribution)
@@ -40,7 +40,7 @@ public class Arm
         stdDev = stdDev_;
         mean = mean_;
         currentDistribution = distribution;
-    }
+    } // end constructor
 
     /**
      * Gets the reward off the arm based off of the currently used reward distribution.
@@ -64,16 +64,4 @@ public class Arm
     {
         return cost;
     }
-
-//    /**
-//     * Sets the reward distribution of the arm
-//     *
-//     * @param distName the name of the distribution (does not need to be capitalized)
-//     * @return the ordinal value of the distribution in the enum
-//     */
-//    public int setDistribution(String distName)
-//    {
-//        currentDistribution = utilities.Utilities.Distribution.valueOf(distName.toUpperCase());
-//        return currentDistribution.ordinal();
-//    }
 }

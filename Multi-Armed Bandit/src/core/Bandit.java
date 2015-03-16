@@ -5,12 +5,25 @@ import java.util.List;
 
 public class Bandit
 {
-
     /**
      * The rewards for each arm after n pulls, to ensure consistent rewards across algorithms (removing the chance one
      * algorithm outperforms another based purely on luck).
      */
     private List<List<Double>> rewards;
+
+    /**
+     * Generates bandit given number of arms for each trial.
+     *
+     * @param numArms The number of arms in the dataset used by the bandit.
+     */
+    public Bandit(int numArms)
+    {
+        rewards = new ArrayList<List<Double>>(numArms);
+        for (int i = 0; i < numArms; i++)
+        {
+            rewards.add(new ArrayList<Double>());
+        }
+    } // end constructor
 
     /**
      * Returns the pre-calculated reward for an arm if one exists. If one does not exist, creates one to be used across
@@ -29,19 +42,5 @@ public class Bandit
             rewards.get(armIndex).add(pullingAgent.getArms()[armIndex].getReward());
 
         return rewards.get(armIndex).get(count);
-    }
-
-    /**
-     * Generates bandit given number of arms for each trial.
-     *
-     * @param numArms The number of arms in the dataset used by the bandit.
-     */
-    public Bandit(int numArms)
-    {
-        rewards = new ArrayList<List<Double>>(numArms);
-        for (int i = 0; i < numArms; i++)
-        {
-            rewards.add(new ArrayList<Double>());
-        }
-    }
+    } // end pullArm
 }

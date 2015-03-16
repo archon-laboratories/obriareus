@@ -11,27 +11,22 @@ import java.util.List;
 public class AlgObject
 {
     /**
+     * Special parameter for the algorithm (e, l, x, etc.)
+     */
+    List<Double> inputParameters;
+    /**
      * The algorithm itself
      */
     private IAlgorithm algorithm;
-
-    /**
-     * Special parameter for the algorithm (e, l, x, etc.)
-     */
-    List <Double> inputParameters;
-
-//    public AlgObject(IAlgorithm algorithm_)
-//    {
-//        this(algorithm_, new ArrayList<Double>());
-//    }
 
     public AlgObject(IAlgorithm algorithm_, List<Double> inputParameters_)
     {
         algorithm = algorithm_;
         inputParameters = inputParameters_;
-    }
+    } // end AlgObject
 
-    public void runAlgorithm(Agent curAgent) {
+    public void runAlgorithm(Agent curAgent)
+    {
         algorithm.run(curAgent, inputParameters);
     }
 
