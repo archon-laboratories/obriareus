@@ -23,6 +23,8 @@ Changeable Parameters:
 
 * Budgets
 
+* Algorithms
+
 Inputting Data
 --------------
 
@@ -157,7 +159,7 @@ To break down the precise syntax:
                Each budget will run once for each distribution. The shortened syntax for this is indicated by making
                the first line under `# Budgets to Run` equal to `*`. The next line should contain the minimum budget.
                The line after that contains the maximum budget. The final line contains the increment by which the
-               budget increases by. An example can be found in the `Sample2` dataset.
+               budget increases by. An example can be found in the second dataset above.
 
 * **Number of Trials:** The next line is skipped by the interpreter, but should be `# Number of Trials`  or something
                         equally descriptive. The next line contains the number of trials that will be averaged for
@@ -243,14 +245,14 @@ Multi-Armed Bandit contains 8 different algorithms by default:
 
 * **UCB-BV:**
 
-* **l-split:**
+* **l-split:** l-split drops a proportion of the available arms. The drop fraction is given by a passed l-value. After each iteration, the drop fraction of the remaing arms is dropped, only the arms with the best cost/reward ratio making it to the next iteration.
 
-* **e-progressive:**
+* **e-progressive:** A special version of the l-split algorithm, e-progressive has a well-defined exploration phase detertermined by an epsilon passed to the algorithm. The l-value is generated such that the algorithm gets down to one arm at the end of the exploration phase.
 
 * **SOAAv:** This algorithm also successively narrows down the set of active arms by eliminating underperforming arms.
              But rather than eliminating a fixed number of arms after each pass, it eliminates arms whose estimate
              reward-cost ratio is below (1 + x) times the average of such ratios of the arms in the last pass. Setting
-             x = 0 means only above average individuals survive from one pass of the arms to the next. Note again tha
+             x = 0 means only above average individuals survive from one pass of the arms to the next. Note again that
              this is an online-exploration approach where a previously eliminated arm can come back into the active set
              if estimates of other active arms drop.
 
@@ -259,7 +261,7 @@ Default Distributions
 
 Multi-Armed Bandit contains 2 different reward distributions by default:
 
-* **Gaussian:**
+* **Gaussian:** A normal distribution of rewards, centered on a passed mean and standard deviation given by a passed standard deviation.
 
 * **Poisson:**
 

@@ -11,7 +11,7 @@ import java.util.Random;
  *
  * @author Sam Beckmann, Nate Beckemeyer. Thanks to Anton Ridgeway for original implementations.
  */
-public class Fkde implements core.IAlgorithm
+public class FKDE implements core.IAlgorithm
 {
     Random rnd = new Random();
 

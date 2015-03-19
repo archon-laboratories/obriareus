@@ -29,7 +29,7 @@ public class Implementation
             String set = scanInput.next();
             try
             {
-                File inputFile = new File("datasets/dataset" + set + ".txt");
+                File inputFile = new File("datasets/dataset" + set + ".dat");
                 Dataset dataset = new Dataset(inputFile, set);
                 datasets.add(dataset);
             } catch (IOException e)

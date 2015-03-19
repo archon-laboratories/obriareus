@@ -54,7 +54,7 @@ public class LSplit implements core.IAlgorithm
             {
                 if (arms[i].getCost() <= budget)
                 {
-                    curAgent.pull(i);
+                    curAgent.pull(remainingArms.get(i));
                     if (debugLSplit) System.out.println("[l-split] Pulled arm " + i +
                             "(mean = [" + memories[i].getMeanReward() +
                             "], sd = [" + arms[i].getStdDev() +
