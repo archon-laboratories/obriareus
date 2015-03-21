@@ -37,7 +37,7 @@ public class SOAAv implements core.IAlgorithm
         double passAverageRatio;
 
         // Add all arms to list to be pulled for first iteration
-        for(int i = 0; i < arms.length; i++)
+        for (int i = 0; i < arms.length; i++)
             activeArms.add(i);
 
         // Loop until budget exhausted
@@ -46,38 +46,48 @@ public class SOAAv implements core.IAlgorithm
             numPullsInPass = 0;
             passAverageRatio = 0;
 
-            for (int i : activeArms)
+            List<Integer> indices = new ArrayList<Integer>();
+            Utilities.generateIndices(indices, activeArms.size());
+
+            while (!indices.isEmpty())
             {
-                if (arms[i].getCost() <= curAgent.getBudget())
+                int armToPull = activeArms.get(Utilities.randomIndex(indices));
+
+                if (arms[armToPull].getCost() <= curAgent.getBudget())
                 {
-                    curAgent.pull(i);
+                    curAgent.pull(armToPull);
                     numPullsInPass++;
-                    passAverageRatio += memories[i].getRecentReward() / arms[i].getCost();
-                    if (debugSOAAv) System.out.println(Utilities.getPullResult(getName(), i, arms[i], memories[i]));
+//                    passAverageRatio += memories[armToPull].getRecentReward() / arms[armToPull].getCost();
+                    if (debugSOAAv) System.out.println(Utilities.getPullResult(
+                            getName(), armToPull, arms[armToPull], memories[armToPull]));
+
                 }
             }
 
-            if (numPullsInPass > 0)
+            for (int i = 0; i < activeArms.size(); i++)
             {
-                passAverageRatio = passAverageRatio / numPullsInPass;
-                activeArms.clear();
+                passAverageRatio += memories[activeArms.get(i)].getRatio() / arms[activeArms.get(i)].getCost();
+            }
 
-                // Update activeArms for next iteration
-                for (int i = 0; i < arms.length; i++)
+//            if (numPullsInPass > 0)
+//            {
+            passAverageRatio = passAverageRatio / activeArms.size();
+            activeArms.clear();
+
+            // Update activeArms for next iteration
+            for (int i = 0; i < arms.length; i++)
+            {
+                if (arms[i].getCost() <= curAgent.getBudget()
+                        && memories[i].getRatio() >= (1 + xValue) * passAverageRatio)
                 {
-                    if (arms[i].getCost() <= curAgent.getBudget()
-                            && memories[i].getRatio() >= (1 + xValue) * passAverageRatio)
-                    {
-                        activeArms.add(i);
-                    }
-                }
-                if (activeArms.size() == 0)
-                {
-                    activeArms.add(curAgent.getBestArm());
+                    activeArms.add(i);
                 }
             }
-        } // TODO: Make random choice of arms though activeArms, to ensure no bias when budget is exhausted. Minor.
-
+            if (activeArms.size() == 0)
+            {
+                activeArms.add(curAgent.getBestArm());
+            }
+        }
         if (debugSOAAv) System.out.println("[" + getName() + "] Budget Exhausted. Trial complete.");
     }
 }

@@ -3,8 +3,8 @@ package core;
 import java.util.List;
 
 /**
- * Data type that contains the enum value of an algorithm, from <code>Algorithms.AlgorithmNames</code>
- * and the second input parameter for that algorithm (set to zero if the algorithm doesn't use one)
+ * Data type that contains the Algorithm to be used,
+ * and a list of the input parameters for that algorithm (empty if the algorithm doesn't use one)
  *
  * @author Sam Beckmann, Nate Beckemeyer
  */
@@ -14,6 +14,7 @@ public class AlgObject
      * Special parameter for the algorithm (e, l, x, etc.)
      */
     List<Double> inputParameters;
+
     /**
      * The algorithm itself
      */
