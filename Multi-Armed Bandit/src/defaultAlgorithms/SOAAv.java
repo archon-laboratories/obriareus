@@ -3,6 +3,7 @@ package defaultAlgorithms;
 import core.Agent;
 import core.Arm;
 import core.ArmMemory;
+import utilities.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,11 +53,7 @@ public class SOAAv implements core.IAlgorithm
                     curAgent.pull(i);
                     numPullsInPass++;
                     passAverageRatio += memories[i].getRecentReward() / arms[i].getCost();
-                    if (debugSOAAv) System.out.println("[SOAAv] Pulled arm " + i +
-                            "(mean = [" + memories[i].getMeanReward() +
-                            "], sd = [" + arms[i].getStdDev() +
-                            "], est. ratio = [" + memories[i].getRatio() +
-                            "]); Got Reward " + memories[i].getRecentReward());
+                    if (debugSOAAv) System.out.println(Utilities.getPullResult(getName(), i, arms[i], memories[i]));
                 }
             }
 
@@ -80,5 +77,7 @@ public class SOAAv implements core.IAlgorithm
                 }
             }
         } // TODO: Make random choice of arms though activeArms, to ensure no bias when budget is exhausted. Minor.
+
+        if (debugSOAAv) System.out.println("[" + getName() + "] Budget Exhausted. Trial complete.");
     }
 }

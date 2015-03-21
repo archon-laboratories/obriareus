@@ -55,11 +55,8 @@ public class LSplit implements core.IAlgorithm
                 if (arms[i].getCost() <= budget)
                 {
                     curAgent.pull(remainingArms.get(i));
-                    if (debugLSplit) System.out.println("[l-split] Pulled arm " + i +
-                            "(mean = [" + memories[i].getMeanReward() +
-                            "], sd = [" + arms[i].getStdDev() +
-                            "], est. ratio = [" + memories[i].getRatio() +
-                            "]); Got Reward " + memories[i].getRecentReward());
+                    if (debugLSplit) System.out.println(Utilities.getPullResult(getName(), remainingArms.get(i),
+                            arms[remainingArms.get(i)], memories[remainingArms.get(i)]));
                 }
 
             }
@@ -75,7 +72,8 @@ public class LSplit implements core.IAlgorithm
                 numToPull = (int) (arms.length * (Math.pow(1 - lValue, iterations)));
                 if (numToPull < 1)
                     numToPull = 1;
-                if (debugLSplit) System.out.println("[l-split] Number of Arms to pull on next iteration: " + numToPull);
+                if (debugLSplit) System.out.println("[" + getName() + "] Number of Arms to pull on next iteration: "
+                        + numToPull);
             }
 
             // Picks the best arms, which will be pulled on the next iteration
@@ -97,5 +95,7 @@ public class LSplit implements core.IAlgorithm
                 }
             }
         }
+
+        if (debugLSplit) System.out.println("[" + getName() + "] Budget Exhausted. Trial Complete");
     }
 }

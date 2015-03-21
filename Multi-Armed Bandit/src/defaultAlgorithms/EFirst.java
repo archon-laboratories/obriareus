@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class EFirst implements core.IAlgorithm
 {
+    private static final boolean debugEFirst = false;
+
     @Override
     public String getName()
     {
@@ -61,10 +63,15 @@ public class EFirst implements core.IAlgorithm
             {
                 // Pull it!
                 curAgent.pull(armIndex);
+                if (debugEFirst)
+                    System.out.println(Utilities.getPullResult(
+                            getName(), armIndex, arms[armIndex], memories[armIndex]));
+
                 eBudget -= arms[armIndex].getCost();
             }
         }
         // eBudget has run out. Begin exploitation phase.
+        if (debugEFirst) System.out.println("[" + getName() + "] Exploration budget exhausted.");
 
         int bestArm = curAgent.getBestArm(); // Get the index of the first largest element
         int secondBestArm = curAgent.getSecondBest(); // Get the index of the second largest element
@@ -72,6 +79,8 @@ public class EFirst implements core.IAlgorithm
         while (curAgent.getBudget() >= curAgent.getMinCost())
         {
             curAgent.pull(bestArm);
+            if (debugEFirst)
+                System.out.println(Utilities.getPullResult(getName(), bestArm, arms[bestArm], memories[bestArm]));
 
             if (arms[bestArm].getCost() > curAgent.getBudget()) // Does the best arm cost too much?
             {
@@ -87,5 +96,7 @@ public class EFirst implements core.IAlgorithm
                 secondBestArm = curAgent.getSecondBest();
             }
         }
+
+        if (debugEFirst) System.out.println("[" + getName() + "] Budget Exhausted. Trial complete.");
     }
 }

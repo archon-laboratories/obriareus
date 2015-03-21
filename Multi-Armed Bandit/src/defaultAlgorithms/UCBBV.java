@@ -24,7 +24,7 @@ public class UCBBV implements core.IAlgorithm
     }
 
     /**
-     * THE UCB-BV (specifically, UCB-BV 1) algorithm. Iterates through all the arms once, then dulls the arm with
+     * THE UCB-BV (specifically, UCB-BV 1) algorithm. Iterates through all the arms once, then pulls the arm with
      * the greatest D-value.
      *
      * @param curAgent        The agent currently employing this algorithm.
@@ -51,12 +51,10 @@ public class UCBBV implements core.IAlgorithm
             int i = Utilities.randomIndex(indices);
             curAgent.pull(i);
             totalPulls++;
-            if (debugUCBBV) System.out.println("[UCB-BV] Pulled arm " + i +
-                    "(mean = [" + memories[i].getMeanReward() +
-                    "], sd = [" + arms[i].getStdDev() +
-                    "], est. ratio = [" + memories[i].getRatio() +
-                    "]); Got Reward " + memories[i].getRecentReward());
+            if (debugUCBBV) System.out.println(Utilities.getPullResult(getName(), i, arms[i], memories[i]));
         }
+
+        if (debugUCBBV) System.out.println("[" + getName() + "] Initial phase complete.");
 
         // Exploitation phase
         while (curAgent.getBudget() >= curAgent.getMinCost())
@@ -81,13 +79,11 @@ public class UCBBV implements core.IAlgorithm
 
             curAgent.pull(currentBest);
 
-            if (debugUCBBV) System.out.println("[UCB-BV] Pulled arm " + currentBest +
-                    "(mean = [" + memories[currentBest].getMeanReward() +
-                    "], sd = [" + arms[currentBest].getStdDev() +
-                    "], est. ratio = [" + memories[currentBest].getRatio() +
-                    "]); Got Reward " + memories[currentBest].getRecentReward());
-        }
+            if (debugUCBBV) System.out.println(Utilities.getPullResult(
+                    getName(), currentBest, arms[currentBest], memories[currentBest]));
 
+        }
+        if (debugUCBBV) System.out.println("[" + getName() + "] Budget Exhausted. Trial Complete.");
     }
 
     /**

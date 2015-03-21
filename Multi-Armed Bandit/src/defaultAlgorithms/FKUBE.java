@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class FKUBE implements core.IAlgorithm
 {
+    public static final boolean debugFKUBE = false;
+
     @Override
     public String getName()
     {
@@ -56,6 +58,7 @@ public class FKUBE implements core.IAlgorithm
                 if (arms[x].getCost() <= curAgent.getBudget())
                 {
                     curAgent.pull(x);
+                    if (debugFKUBE) System.out.println(Utilities.getPullResult(getName(), x, arms[x], memories[x]));
                     time++;
                 }
             } else
@@ -78,6 +81,8 @@ public class FKUBE implements core.IAlgorithm
                 time++;
             }
         }//end else (which phase are we in)
+
+        if (debugFKUBE) System.out.println("[" + getName() + "] Budget Exhausted. Trial Complete.");
     }
 
     /**
