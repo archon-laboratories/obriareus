@@ -79,7 +79,6 @@ public class FKDE implements core.IAlgorithm
 
             double randomVal = rnd.nextDouble();
 
-            // TODO BROKEN
             int pullIndex = -1; // The index of the arm to pull
 
             for (int z = 0; z < numArms && pullIndex < 0; z++)

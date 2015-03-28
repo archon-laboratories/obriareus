@@ -30,6 +30,7 @@ public class FKUBE implements core.IAlgorithm
      * @param curAgent        The agent currently employing this algorithm.
      * @param inputParameters Null for this algorithm.
      */
+
     @Override
     public void run(Agent curAgent, List<Double> inputParameters)
     {
