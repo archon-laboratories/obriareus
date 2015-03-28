@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * fKDE algorithm.
+ * fKDE (Fractional Knapsack Based Decreasing ε–greedy)
  *
  * @author Sam Beckmann, Nate Beckemeyer. Thanks to Anton Ridgeway for original implementations.
  */
@@ -41,12 +41,12 @@ public class FKDE implements core.IAlgorithm
         int numArms = arms.length;
 
         int bestArm; //The best arm to pull: I+
-        int numFeasibleArms = 0; // The number of feasible terms
 
         while (curAgent.getBudget() >= curAgent.getMinCost())
         {
             bestArm = curAgent.getBestArm();
             double epsT = Math.min(1, gamma / (t + 1));
+            int numFeasibleArms = 0; // The number of feasible terms
 
             double[] armProb = new double[numArms]; // Probability of pulling the corresponding arms
             for (int z = 0; z < numArms; z++)
