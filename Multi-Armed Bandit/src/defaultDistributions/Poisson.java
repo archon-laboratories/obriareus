@@ -19,14 +19,22 @@ public class Poisson implements IDistribution
     /**
      * Gets the reward from this distribution, given a mean and standard deviation.
      *
-     * @param mean   The mean reward.
-     * @param stdDev The standard deviation of rewards.
+     * @param mean   The mean reward (lambda).
+     * @param stdDev Does nothing.
      * @return A returned reward from the distribution.
      */
     public double getReward(double mean, double stdDev)
     {
-        // TODO: Add Poisson Distribution
-        return 0;
+        double l = Math.exp(-mean);
+        int k = 0;
+        double p = 1;
+
+        do {
+            k++;
+            p *= rnd.nextDouble();
+        } while (p > l);
+
+        return k - 1;
     }
 
     @Override
