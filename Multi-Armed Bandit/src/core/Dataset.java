@@ -578,6 +578,7 @@ public class Dataset
                 }
 
                 displayMeans(normalizedRewards);
+                outputFile(normalizedRewards, distribution.getName(), budget);
             }
         }
     } // end runSet
