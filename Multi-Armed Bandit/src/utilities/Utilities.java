@@ -1,5 +1,6 @@
 package utilities;
 
+import core.Agent;
 import core.Arm;
 import core.ArmMemory;
 
@@ -110,4 +111,57 @@ public final class Utilities
                         algName, armNum, memory.getMeanReward(),
                         arm.getStdDev(), memory.getRatio(), memory.getRecentReward());
     }
+
+    /**
+     * Gets the best arm Agent knows of, in terms of mean reward/cost ratio.
+     *
+     * @return the index of the best arm
+     * @param caller The agent calling the method
+     */
+    public static int getBestArm(Agent caller)
+    {
+        ArmMemory[] memories = caller.getMemories();
+        double budget = caller.getBudget();
+        int best = 0; // Index of the best arm in terms of mean reward/cost ratio.
+
+        for (int j = 1; j < memories.length; j++)
+        {
+            if (memories[best].getCost() > budget && memories[j].getCost() <= budget) // Is it comparably usable?
+                best = j;
+
+            if ((memories[j].getRatio() > memories[best].getRatio() && memories[j].getCost() <= budget))
+                best = j;
+        }
+        return best;
+    } // end getBestArm
+
+    /**
+     * Gets the second best arm Agent knows of, in terms of mean reward/cost ratio.
+     *
+     * @return the index of the second best arm
+     * @param caller The agent calling the method
+     */
+    public static int getSecondBest(Agent caller)
+    {
+        ArmMemory [] memories = caller.getMemories();
+        double budget = caller.getBudget();
+        int best = 0;
+        int secondBest = 1;
+
+        for (int j = 2; j < memories.length; j++)
+        {
+            if (memories[best].getCost() > budget && memories[j].getCost() <= budget) // Is it comparably usable?
+                best = j;
+            else if (memories[secondBest].getCost() > budget && memories[j].getCost() <= budget) // How about this one?
+                secondBest = j;
+
+            if ((memories[j].getRatio() > memories[best].getRatio() && memories[j].getCost() <= budget))
+            {
+                secondBest = best;
+                best = j;
+            } else if (memories[j].getRatio() > memories[secondBest].getRatio() && memories[j].getCost() <= budget)
+                secondBest = j;
+        }
+        return secondBest;
+    } // end getSecondBest
 }

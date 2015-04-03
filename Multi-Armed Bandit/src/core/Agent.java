@@ -94,58 +94,8 @@ public class Agent
         minCost = min;
     } // end findCosts
 
-    /**
-     * Gets the best arm Agent knows of, in terms of mean reward/cost ratio.
-     *
-     * @return the index of the best arm
-     */
-    public int getBestArm() // TODO: Should this be moved to the appropriate Algorithm / Utilities?
-    {
-        int best = 0; // Index of the best arm in terms of mean reward/cost ratio.
-
-        for (int j = 1; j < memories.length; j++)
-        {
-            if (memories[best].getCost() > budget && memories[j].getCost() <= budget) // Is it comparably usable?
-                best = j;
-
-            if ((memories[j].getRatio() > memories[best].getRatio() && memories[j].getCost() <= budget))
-                best = j;
-        }
-        return best;
-    } // end getBestArm
-
-    /**
-     * Gets the second best arm Agent knows of, in terms of mean reward/cost ratio.
-     *
-     * @return the index of the second best arm
-     */
-    public int getSecondBest() // TODO: Should this be moved to the appropriate Algorithm / Utilities?
-    {
-        int best = 0;
-        int secondBest = 1;
-
-        for (int j = 2; j < memories.length; j++)
-        {
-            if (memories[best].getCost() > budget && memories[j].getCost() <= budget) // Is it comparably usable?
-                best = j;
-            else if (memories[secondBest].getCost() > budget && memories[j].getCost() <= budget) // How about this one?
-                secondBest = j;
-
-            if ((memories[j].getRatio() > memories[best].getRatio() && memories[j].getCost() <= budget))
-            {
-                secondBest = best;
-                best = j;
-            } else if (memories[j].getRatio() > memories[secondBest].getRatio() && memories[j].getCost() <= budget)
-            {
-                secondBest = j;
-            }
-        }
-        return secondBest;
-    } // end getSecondBest
-
     public int getBestFromFeasibles(List<Integer> feasibles)
     {
-        // TODO: Should this be moved to the appropriate Algorithm / Utilities?
         int best = -1; // Index of the best arm in terms of mean reward/cost ratio.
 
         for (int j : feasibles)
@@ -182,16 +132,6 @@ public class Agent
     public double getBudget()
     {
         return budget;
-    }
-
-    /**
-     * @param budget value to set the budget to
-     */
-    private void setBudget(double budget) // TODO: Should this be removed?
-    {
-        if (budget < 0)
-            System.out.println("Attempting to set the budget less than 0 for agent " + this.toString());
-        this.budget = budget;
     }
 
     /**

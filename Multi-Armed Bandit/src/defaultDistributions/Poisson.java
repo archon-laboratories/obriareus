@@ -18,6 +18,7 @@ public class Poisson implements IDistribution
 
     /**
      * Gets the reward from this distribution, given a mean and standard deviation.
+     * Calculated according to the Knuth algorithm.
      *
      * @param mean   The mean reward (lambda).
      * @param stdDev Does nothing.

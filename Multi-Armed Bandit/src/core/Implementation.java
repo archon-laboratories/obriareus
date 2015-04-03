@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * core.Implementation of the Multi-Armed core.Bandit Problem
+ * Implementation of the Multi-Armed Bandit Problem
  *
  * @author Sam Beckmann, Nate Beckemeyer
  */

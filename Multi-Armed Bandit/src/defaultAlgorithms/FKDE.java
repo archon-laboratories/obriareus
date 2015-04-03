@@ -2,6 +2,7 @@ package defaultAlgorithms;
 
 import core.Agent;
 import core.Arm;
+import utilities.Utilities;
 
 import java.util.List;
 import java.util.Random;
@@ -44,7 +45,7 @@ public class FKDE implements core.IAlgorithm
 
         while (curAgent.getBudget() >= curAgent.getMinCost())
         {
-            bestArm = curAgent.getBestArm();
+            bestArm = Utilities.getBestArm(curAgent);
             double epsT = Math.min(1, gamma / (t + 1));
             int numFeasibleArms = 0; // The number of feasible terms
 

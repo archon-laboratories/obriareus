@@ -64,10 +64,8 @@ public class SOAAv implements core.IAlgorithm
                 }
             }
 
-            for (int i = 0; i < activeArms.size(); i++)
-            {
-                passAverageRatio += memories[activeArms.get(i)].getRatio() / arms[activeArms.get(i)].getCost();
-            }
+            for (Integer activeArm : activeArms)
+                passAverageRatio += memories[activeArm].getRatio() / arms[activeArm].getCost();
 
 //            if (numPullsInPass > 0)
 //            {
@@ -85,7 +83,7 @@ public class SOAAv implements core.IAlgorithm
             }
             if (activeArms.size() == 0)
             {
-                activeArms.add(curAgent.getBestArm());
+                activeArms.add(Utilities.getBestArm(curAgent));
             }
         }
         if (debugSOAAv) System.out.println("[" + getName() + "] Budget Exhausted. Trial complete.");

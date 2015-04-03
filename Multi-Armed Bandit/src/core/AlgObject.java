@@ -20,22 +20,36 @@ public class AlgObject
      */
     private IAlgorithm algorithm;
 
+    /**
+     * Constructor
+     */
     public AlgObject(IAlgorithm algorithm_, List<Double> inputParameters_)
     {
         algorithm = algorithm_;
         inputParameters = inputParameters_;
     } // end AlgObject
 
+    /**
+     * Runs the algorithm inside agent.
+     * @param curAgent The agent containing the algorithm.
+     */
     public void runAlgorithm(Agent curAgent)
     {
         algorithm.run(curAgent, inputParameters);
     }
 
+    /**
+     * @return The name of the algorithm
+     */
     public String getAlgorithm()
     {
         return algorithm.getName();
     }
 
+    /**
+     *
+     * @return The list of input parameters.
+     */
     public List getInputParameters()
     {
         return inputParameters;

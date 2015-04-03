@@ -71,7 +71,7 @@ public class FKUBE implements core.IAlgorithm
                 {
                     if (curAgent.getMemories()[i].getCost() <= curAgent.getBudget() &&
                             (bestArm < 0 || fKubeEst(memories[i], time) >
-                                    fKubeEst(memories[curAgent.getBestArm()], time)))
+                                    fKubeEst(memories[Utilities.getBestArm(curAgent)], time)))
                         bestArm = i;
                 }
 
