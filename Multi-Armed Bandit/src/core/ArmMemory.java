@@ -1,5 +1,11 @@
 package core;
 
+/**
+ * Contains the memory of an arm,
+ * such as the most recent reward and current ratio.
+ *
+ * @author Sam Beckmann, Nate Beckemeyer
+ */
 public class ArmMemory implements Comparable<ArmMemory>
 {
     /**

@@ -1,7 +1,7 @@
 package core;
 
 /**
- * The arm that the bandit pulls. Could represent a slot machine or any other item with associated costs and rewards.
+ * Defines an arm, of which a bandit can pull
  *
  * @author Nate Beckemeyer, Sam Beckmann
  */
@@ -30,9 +30,9 @@ public class Arm
     /**
      * Value and distribution assigning Arm constructor.
      *
-     * @param cost_   Cost to pull the arm.
-     * @param stdDev_ Standard deviation of the reward of the arm.
-     * @param mean_   Mean reward for the arm.
+     * @param cost_        Cost to pull the arm.
+     * @param stdDev_      Standard deviation of the reward of the arm.
+     * @param mean_        Mean reward for the arm.
      * @param distribution The distribution used by the arm
      */
     public Arm(double cost_, double stdDev_, double mean_, IDistribution distribution)
@@ -85,7 +85,11 @@ public class Arm
         return cost;
     }
 
-    public void setCurrentDistribution(IDistribution distribution) {
+    /**
+     * @param distribution IDistribution for this arms distribution to be set to.
+     */
+    public void setCurrentDistribution(IDistribution distribution)
+    {
         currentDistribution = distribution;
     }
 }

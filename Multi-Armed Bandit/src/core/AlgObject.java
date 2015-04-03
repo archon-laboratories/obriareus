@@ -31,6 +31,7 @@ public class AlgObject
 
     /**
      * Runs the algorithm inside agent.
+     *
      * @param curAgent The agent containing the algorithm.
      */
     public void runAlgorithm(Agent curAgent)
@@ -47,7 +48,6 @@ public class AlgObject
     }
 
     /**
-     *
      * @return The list of input parameters.
      */
     public List getInputParameters()

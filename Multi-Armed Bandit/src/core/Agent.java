@@ -2,6 +2,14 @@ package core;
 
 import java.util.List;
 
+/**
+ * Defines an agent.
+ * An agent is called for each trial with each algorithm.
+ * The agent contains the Arms for this trial, as well as
+ * an array of ArmMemories: What the Bandit knows.
+ *
+ * @author Sam Beckmann, Nate Beckemeyer
+ */
 public class Agent
 {
     /**
@@ -19,13 +27,8 @@ public class Agent
      */
     private static double totalCost = 0;
 
-    public static void implementArms(Arm [] armRefs) {
-        arms = armRefs;
-        findCosts();
-    }
-
     /**
-     * The random generator for Agent.
+     * Algorithm that this agent is running.
      */
     private AlgObject algorithm;
 
@@ -71,6 +74,12 @@ public class Agent
         }
     } // end constructor
 
+    public static void implementArms(Arm[] armRefs)
+    {
+        arms = armRefs;
+        findCosts();
+    }
+
     /**
      * Sets the minCost and totalCost variables
      */
@@ -86,20 +95,6 @@ public class Agent
         }
         minCost = min;
     } // end findCosts
-
-    public int getBestFromFeasibles(List<Integer> feasibles)
-    {
-        int best = -1; // Index of the best arm in terms of mean reward/cost ratio.
-
-        for (int j : feasibles)
-        {
-            if (best == -1)
-                best = j;
-            if (memories[j].getRatio() > memories[best].getRatio() && memories[j].getCost() <= budget)
-                best = j;
-        }
-        return best;
-    } // end getBestFromFeasibles
 
     /**
      * Pulls the arm at index toPull

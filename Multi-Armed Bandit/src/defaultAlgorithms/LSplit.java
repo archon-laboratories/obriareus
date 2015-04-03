@@ -83,7 +83,7 @@ public class LSplit implements core.IAlgorithm
             {
                 if (!feasibles.isEmpty())
                 {
-                    int currentBest = curAgent.getBestFromFeasibles(feasibles);
+                    int currentBest = Utilities.getBestFromFeasibles(curAgent, feasibles);
                     if (arms[currentBest].getCost() <= curAgent.getBudget())
                     {
                         remainingArms.add(currentBest);

@@ -22,12 +22,12 @@ public final class Utilities
      * @param numItems number of items in the array to return
      * @return A double array of linearly spaced items of size numItems
      */
-    public static double [] getLinear(int numItems)
+    public static double[] getLinear(int numItems)
     {
-        double [] linValues = new double [numItems];
+        double[] linValues = new double[numItems];
         for (int i = 0; i < linValues.length; i++)
         {
-            linValues[i] = (i+1.)/numItems;
+            linValues[i] = (i + 1.) / numItems;
         }
         return linValues;
     }
@@ -38,12 +38,12 @@ public final class Utilities
      * @param numItems number of items in the array to return
      * @return A double array of superlinearly spaced items of size numItems
      */
-    public static double [] getSuperlinear(int numItems)
+    public static double[] getSuperlinear(int numItems)
     {
-        double [] superlinValues = new double [numItems];
+        double[] superlinValues = new double[numItems];
         for (int i = 0; i < superlinValues.length; i++)
         {
-            superlinValues[i] = Math.log(((Math.exp(1) - 1) * (i+1) / numItems) + 1);
+            superlinValues[i] = Math.log(((Math.exp(1) - 1) * (i + 1) / numItems) + 1);
         }
         return superlinValues;
     }
@@ -54,12 +54,12 @@ public final class Utilities
      * @param numItems number of items in the array to return
      * @return A double array of sublinearly spaced items of size numItems
      */
-    public static double [] getSublinear(int numItems)
+    public static double[] getSublinear(int numItems)
     {
-        double [] sublinValues = new double [numItems];
+        double[] sublinValues = new double[numItems];
         for (int i = 0; i < sublinValues.length; i++)
         {
-            sublinValues[i] = Math.pow(10 * ((i+1.) / numItems), 2) / 100;
+            sublinValues[i] = Math.pow(10 * ((i + 1.) / numItems), 2) / 100;
         }
         return sublinValues;
     }
@@ -99,9 +99,9 @@ public final class Utilities
      * Gets the result of a given pull, for use in debugging or logging.
      *
      * @param algName Name of the algorithm doing the pull
-     * @param armNum Number of the arm being pulled
-     * @param arm Arm that is being pulled
-     * @param memory ArmMemory of the arm that is being pulled
+     * @param armNum  Number of the arm being pulled
+     * @param arm     Arm that is being pulled
+     * @param memory  ArmMemory of the arm that is being pulled
      * @return A formatted String of the results of a given pull.
      */
     public static String getPullResult(String algName, int armNum, Arm arm, ArmMemory memory)
@@ -115,8 +115,8 @@ public final class Utilities
     /**
      * Gets the best arm Agent knows of, in terms of mean reward/cost ratio.
      *
-     * @return the index of the best arm
      * @param caller The agent calling the method
+     * @return the index of the best arm
      */
     public static int getBestArm(Agent caller)
     {
@@ -138,12 +138,12 @@ public final class Utilities
     /**
      * Gets the second best arm Agent knows of, in terms of mean reward/cost ratio.
      *
-     * @return the index of the second best arm
      * @param caller The agent calling the method
+     * @return the index of the second best arm
      */
     public static int getSecondBest(Agent caller)
     {
-        ArmMemory [] memories = caller.getMemories();
+        ArmMemory[] memories = caller.getMemories();
         double budget = caller.getBudget();
         int best = 0;
         int secondBest = 1;
@@ -164,4 +164,26 @@ public final class Utilities
         }
         return secondBest;
     } // end getSecondBest
+
+    /**
+     * Gets the best arms from a sent set of possible arms.
+     *
+     * @param caller    Agent that is calling this method.
+     * @param feasibles List of the arms that can possibly be chosen as best.
+     * @return Index of the best arm.
+     */
+    public static int getBestFromFeasibles(Agent caller, List<Integer> feasibles)
+    {
+        int best = -1; // Index of the best arm in terms of mean reward/cost ratio.
+
+        for (int j : feasibles)
+        {
+            if (best == -1)
+                best = j;
+            if (caller.getMemories()[j].getRatio() > caller.getMemories()[best].getRatio()
+                    && caller.getMemories()[j].getCost() <= caller.getBudget())
+                best = j;
+        }
+        return best;
+    } // end getBestFromFeasibles
 }

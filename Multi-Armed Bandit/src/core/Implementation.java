@@ -44,4 +44,4 @@ public class Implementation
         }
     } // end main
 
-} // end core.Implementation
+} // end Implementation
