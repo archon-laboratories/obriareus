@@ -28,11 +28,12 @@ public class Arm
     private double mean;
 
     /**
-     * Value-assigning core.Arm constructor.
+     * Value and distribution assigning Arm constructor.
      *
      * @param cost_   Cost to pull the arm.
      * @param stdDev_ Standard deviation of the reward of the arm.
      * @param mean_   Mean reward for the arm.
+     * @param distribution The distribution used by the arm
      */
     public Arm(double cost_, double stdDev_, double mean_, IDistribution distribution)
     {
@@ -40,6 +41,18 @@ public class Arm
         stdDev = stdDev_;
         mean = mean_;
         currentDistribution = distribution;
+    } // end constructor
+
+    /**
+     * Value-assigning Arm constructor.
+     *
+     * @param cost_   Cost to pull the arm.
+     * @param stdDev_ Standard deviation of the reward of the arm.
+     * @param mean_   Mean reward for the arm.
+     */
+    public Arm(double cost_, double stdDev_, double mean_)
+    {
+        this(cost_, stdDev_, mean_, null);
     } // end constructor
 
     /**
@@ -56,6 +69,9 @@ public class Arm
         else return reward;
     }
 
+    /**
+     * @return The standard deviation of the arm
+     */
     public double getStdDev()
     {
         return stdDev;
@@ -67,5 +83,9 @@ public class Arm
     public double getCost()
     {
         return cost;
+    }
+
+    public void setCurrentDistribution(IDistribution distribution) {
+        currentDistribution = distribution;
     }
 }

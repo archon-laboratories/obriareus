@@ -19,7 +19,7 @@ public class Dataset
     /**
      * If {@code true} prints out the program's interpretation of the file
      */
-    static boolean printRun = true;
+    static final boolean printRun = false;
 
     /**
      * Contains the distributions to run.
@@ -165,7 +165,7 @@ public class Dataset
                     {
                         System.err.println("ERROR: Attempted to add budget " + i + ", which is less than zero.");
                     }
-                    if (printRun) System.out.println("Added Budget: " + i);
+                    if (printRun) System.out.println("Added Budget: " + (start + increment*i));
                 }
 
                 reader.readLine(); // Skip blank line
@@ -498,11 +498,25 @@ public class Dataset
     public void runSet()
     {
         System.out.println("Dataset: " + fileName + "\n");
+        Arm[] datasetArms = new Arm[numArms];
+        ArrayList<Integer> indices = new ArrayList<Integer>();
+        Utilities.generateIndices(indices, numArms);
+
+        int count = 0;
+        while (!indices.isEmpty())
+        {
+            int index = Utilities.randomIndex(indices);
+            datasetArms[count] = new Arm(armCosts[index], stdDevs[index], meanRewards[index]);
+            count++;
+        }
+        Agent.implementArms(datasetArms);
 
         // run for each dataset
         for (IDistribution distribution : distributions)
         {
             System.out.println("Distribution: " + distribution.getName() + "\n");
+            for (Arm current : datasetArms)
+                current.setCurrentDistribution(distribution);
 
             try // delete the old output if it exists
             {
@@ -524,17 +538,6 @@ public class Dataset
                 // run the number of trials specified in the dataset
                 for (int trial = 0; trial < numTrials; trial++)
                 {
-                    Arm[] trialArms = new Arm[numArms];
-                    ArrayList<Integer> indices = new ArrayList<Integer>();
-                    Utilities.generateIndices(indices, numArms);
-
-                    int count = 0;
-                    while (!indices.isEmpty())
-                    {
-                        int index = Utilities.randomIndex(indices);
-                        trialArms[count] = new Arm(armCosts[index], stdDevs[index], meanRewards[index], distribution);
-                        count++;
-                    }
 
                     int algIndex = 0;
 
@@ -544,7 +547,7 @@ public class Dataset
                         //Arm[] agentArms = new Arm[numArms];
                         //System.arraycopy(trialArms, 0, agentArms, 0, trialArms.length);
 
-                        Agent agent = new Agent(budget, trialArms, algObject, bandit);
+                        Agent agent = new Agent(budget, algObject, bandit);
                         agent.run();
 
                         totalRewards[algIndex][trial] = agent.getTotalReward();
