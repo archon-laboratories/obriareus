@@ -19,10 +19,10 @@ public class Agent
      */
     private static double totalCost = 0;
 
-    /**
-     * Has minCost been initialized yet? It only needs to happen once. Control flag.
-     */
-    private static boolean initialized = false;
+    public static void implementArms(Arm [] armRefs) {
+        arms = armRefs;
+        findCosts();
+    }
 
     /**
      * The random generator for Agent.
@@ -57,31 +57,24 @@ public class Agent
     /**
      * The constructor for the agent. Pass a budget and the arms array.
      */
-    public Agent(int initBudget, Arm armRefs[], AlgObject algorithm_, Bandit trialBandit)
+    public Agent(int initBudget, AlgObject algorithm_, Bandit trialBandit)
     {
         budget = initBudget;
-        arms = armRefs;
         bandit = trialBandit;
         algorithm = algorithm_;
 
         int count = 0;
-        memories = new ArmMemory[armRefs.length];
-        for (Arm current : armRefs)
+        memories = new ArmMemory[arms.length];
+        for (Arm current : arms)
         {
             memories[count++] = new ArmMemory(current.getCost());
-        }
-
-        if (!initialized) // You only need to find the minimum cost arm once; cost is constant
-        {
-            findCosts();
-            initialized = true;
         }
     } // end constructor
 
     /**
      * Sets the minCost and totalCost variables
      */
-    public void findCosts()
+    public static void findCosts()
     {
         double min = arms[0].getCost();
         for (Arm current : arms)
