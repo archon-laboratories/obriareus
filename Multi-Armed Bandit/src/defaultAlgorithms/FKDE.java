@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class FKDE implements core.IAlgorithm
 {
-    Random rnd = new Random();
+    private Random rnd = new Random();
 
     @Override
     public String getName()

@@ -14,12 +14,12 @@ public interface IDistribution
      * @param stdDev The standard deviation of rewards.
      * @return A returned reward from the distribution.
      */
-    public double getReward(double mean, double stdDev);
+    double getReward(double mean, double stdDev);
 
     /**
      * To print the name of the distribution.
      *
      * @return Name of the distribution.
      */
-    public String getName();
+    String getName();
 }

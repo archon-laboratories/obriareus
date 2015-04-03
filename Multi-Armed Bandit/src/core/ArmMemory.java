@@ -26,7 +26,7 @@ public class ArmMemory implements Comparable<ArmMemory>
     /**
      * The cost to pull the arm
      */
-    private double cost;
+    private final double cost;
 
     /**
      * The reward:cost ratio.

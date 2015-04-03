@@ -19,7 +19,7 @@ public class Dataset
     /**
      * If {@code true} prints out the program's interpretation of the file
      */
-    static final boolean printRun = false;
+    private static final boolean printRun = false;
 
     /**
      * Contains the distributions to run.
@@ -593,7 +593,7 @@ public class Dataset
      * @param distribution The current distribution being used.
      * @param budget       The budget that this data is being outputted to.
      */
-    public void outputFile(double[] means, String distribution, int budget)
+    private void outputFile(double[] means, String distribution, int budget)
     {
         try
         {
@@ -621,7 +621,7 @@ public class Dataset
      *
      * @param means double array of the normalized mean rewards.
      */
-    public void displayMeans(double[] means)
+    private void displayMeans(double[] means)
     {
         int counter = 0;
         for (AlgObject alg : algorithms)

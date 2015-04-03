@@ -12,7 +12,7 @@ public interface IAlgorithm
     /**
      * @return the name of the algorithm
      */
-    public String getName();
+    String getName();
 
     /**
      * Runs the algorithm.
@@ -21,5 +21,5 @@ public interface IAlgorithm
      *                        memories of the arm pulls,
      * @param inputParameters The input parameter necessary for the algorithm. Can be empty if unused.
      */
-    public void run(Agent curAgent, List<Double> inputParameters);
+    void run(Agent curAgent, List<Double> inputParameters);
 }

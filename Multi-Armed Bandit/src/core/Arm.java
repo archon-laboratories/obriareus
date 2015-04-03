@@ -10,22 +10,22 @@ public class Arm
     /**
      * The distribution that this arm is currently using. Gaussian by default.
      */
-    IDistribution currentDistribution;
+    private IDistribution currentDistribution;
 
     /**
      * Cost to pull the arm.
      */
-    private double cost;
+    private final double cost;
 
     /**
      * Standard deviation of the reward.
      */
-    private double stdDev;
+    private final double stdDev;
 
     /**
      * Mean reward for the arm.
      */
-    private double mean;
+    private final double mean;
 
     /**
      * Value and distribution assigning Arm constructor.

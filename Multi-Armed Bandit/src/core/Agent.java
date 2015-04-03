@@ -1,7 +1,5 @@
 package core;
 
-import java.util.List;
-
 /**
  * Defines an agent.
  * An agent is called for each trial with each algorithm.
@@ -30,12 +28,12 @@ public class Agent
     /**
      * Algorithm that this agent is running.
      */
-    private AlgObject algorithm;
+    private final AlgObject algorithm;
 
     /**
      * Bandit for this trial, contains all the rewards for this trial.
      */
-    private Bandit bandit;
+    private final Bandit bandit;
 
     /**
      * The total reward from pulling arms so far.
@@ -83,7 +81,7 @@ public class Agent
     /**
      * Sets the minCost and totalCost variables
      */
-    public static void findCosts()
+    private static void findCosts()
     {
         double min = arms[0].getCost();
         for (Arm current : arms)

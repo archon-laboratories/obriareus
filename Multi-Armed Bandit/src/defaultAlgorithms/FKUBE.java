@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class FKUBE implements core.IAlgorithm
 {
-    public static final boolean debugFKUBE = false;
+    private static final boolean debugFKUBE = false;
 
     @Override
     public String getName()

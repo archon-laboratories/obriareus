@@ -13,12 +13,12 @@ public class AlgObject
     /**
      * Special parameter for the algorithm (e, l, x, etc.)
      */
-    List<Double> inputParameters;
+    private final List<Double> inputParameters;
 
     /**
      * The algorithm itself
      */
-    private IAlgorithm algorithm;
+    private final IAlgorithm algorithm;
 
     /**
      * Constructor
