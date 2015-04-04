@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UCB-BV algorithm.
+ * UCB-BV 1 algorithm.
  *
  * @author Sam Beckmann, Nate Beckemeyer. Thanks to Anton Ridgeway for original implementations.
  */
@@ -24,8 +24,7 @@ public class UCBBV1 implements core.IAlgorithm
     }
 
     /**
-     * THE UCB-BV (specifically, UCB-BV 1) algorithm. Iterates through all the arms once, then pulls the arm with
-     * the greatest D-value.
+     * Iterates through all the arms once, then pulls the arm with the greatest D-value.
      *
      * @param curAgent        The agent currently employing this algorithm.
      * @param inputParameters Null for this algorithm.
@@ -91,12 +90,12 @@ public class UCBBV1 implements core.IAlgorithm
      *
      * @param thisArm Arm that D will be calculated for.
      * @param lambda Minimum arm cost. (Or best guess)
-     * @param totalpulls Total number of arms that have been pulled so far.
+     * @param totalPulls Total number of arms that have been pulled so far.
      * @return The dValue for the given arm, with the given boundType.
      */
-    private static double getDValue(ArmMemory thisArm, double lambda, int totalpulls)
+    private static double getDValue(ArmMemory thisArm, double lambda, int totalPulls)
     {
-        double root = Math.sqrt(Math.log(totalpulls - 1) / thisArm.getPulls());
+        double root = Math.sqrt(Math.log(totalPulls - 1) / thisArm.getPulls());
         return thisArm.getRatio() + (1 + (1 / lambda)) * root / (lambda - root);
     }
 }
