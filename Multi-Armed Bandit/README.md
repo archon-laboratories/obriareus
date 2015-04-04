@@ -1,5 +1,5 @@
-Multi-Armed Bandit
-==================
+Obriareus
+=========
 
 *By: Sam Beckmann, Nate Beckemeyer*
 
@@ -28,7 +28,7 @@ Changeable Parameters:
 Inputting Data
 --------------
 
-To input a dataset to the program, create a file named `datasetXXX.dat` where `XXX` can be anything.
+To input a dataset to the program, create a file named `datasetXXX.txt` where `XXX` can be anything.
 Place this file in the `datasets` folder, one level under Multi-Armed Bandit.
 The following two datasets input the same information.
 
@@ -97,7 +97,7 @@ EFirst, .1
 EFirst, .2
 FKUBE
 FKDE, 10
-UCBBV
+UCBBV1
 EProgressive, .1
 EProgressive, .2
 LSplit, .5
@@ -138,7 +138,7 @@ EFirst, .1
 EFirst, .2
 FKUBE
 FKDE, 10
-UCBBV
+UCBBV1
 EProgressive, .1
 EProgressive, .2
 LSplit, .5
@@ -207,16 +207,16 @@ The program outputs data in two ways: First, a sample of data is outputted the c
 distribution, budget, and algorithm that is being evaluated, followed by the normalized output of the algorithm
 (its average utility minus the average utility of of all the algorithms).
 
-For plotting purposes, the data is also outputted to the `output` folder in the project as a .csv file under the name
-`dataset_distribution.csv` where dataset is the name of the dataset that is being used, and distribution being the
+For plotting purposes, the data is also outputted to the `output` folder in the project as a .txt file under the name
+`dataset_distribution.txt` where dataset is the name of the dataset that is being used, and distribution being the
 distribution of rewards for that specific output. The file is formatted with the first item in each line is the
 budget for that line contains the output of, and the remaining items are the normalized rewards of the algorithms,
-printed in the order the algorithms were initialized in the dataset.
+printed in the order the algorithms were initialized in the dataset. All values are separated by commas.
 
 Default Algorithms
 ------------------
 
-Multi-Armed Bandit contains 8 different algorithms by default:
+Obriareus contains 8 algorithms by default:
 
 * **e-first:** This algorithm uniformly selects from the set of arms, performing unordered sweeps of each arm
                before beginning again, until its exploration budget is exhausted (not enough remains to pull even
@@ -241,13 +241,19 @@ Multi-Armed Bandit contains 8 different algorithms by default:
              based on the reward-cost ratio of the arms to determine
              which arm should be pulled at time t + 1.
 
-* **fKDE:**
+* **fKDE:** The Fractional Knapsack-based Decreasing Epsilon algorithm (fKDE) [Need Reference], [Need Documentation]
 
-* **UCB-BV:**
+* **UCB-BV1:** An upper confidence-bound (UCB) algorithm, UCB-BV1 [Wenkui Ding et al., 2013] explores by pulling each
+               arm once, then calculating a "d value" for each arm. The arm with the highest d value is then pulled on
+               each pass.
 
-* **l-split:** l-split drops a proportion of the available arms. The drop fraction is given by a passed l-value. After each iteration, the drop fraction of the remaing arms is dropped, only the arms with the best cost/reward ratio making it to the next iteration.
+* **l-split:** l-split drops a proportion of the available arms. The drop fraction is given by a passed l-value.
+               After each iteration, the drop fraction of the remaing arms is dropped, only the arms with the best
+               cost/reward ratio making it to the next iteration.
 
-* **e-progressive:** A special version of the l-split algorithm, e-progressive has a well-defined exploration phase detertermined by an epsilon passed to the algorithm. The l-value is generated such that the algorithm gets down to one arm at the end of the exploration phase.
+* **e-progressive:** A special version of the l-split algorithm, e-progressive has a well-defined exploration phase
+                     determined by an epsilon passed to the algorithm. The l-value is generated such that the algorithm
+                     gets down to one arm at the end of the exploration phase.
 
 * **SOAAv:** This algorithm also successively narrows down the set of active arms by eliminating underperforming arms.
              But rather than eliminating a fixed number of arms after each pass, it eliminates arms whose estimate
@@ -263,7 +269,7 @@ Multi-Armed Bandit contains 2 different reward distributions by default:
 
 * **Gaussian:** A normal distribution of rewards, centered on a passed mean and standard deviation given by a passed standard deviation.
 
-* **Poisson:**
+* **Poisson:** [Need Documentation]
 
 Extending
 ---------
@@ -271,6 +277,6 @@ Extending
 It is possible to extend Multi-Armed Bandit to implement your own algorithms and reward distributions.
 
 To do so, simply create directories titled `algorithms` and `distributions`, respectively. For algorithms to be
-recognized by the program, the must implement the `IAlgorithms` interface. Reward distributions must implement the
+recognized by the program, they must implement the `IAlgorithms` interface. Reward distributions must implement the
 `IDistribution` interface. To call new algorithms and distributions, simply put the name of their class down in the
 dataset.

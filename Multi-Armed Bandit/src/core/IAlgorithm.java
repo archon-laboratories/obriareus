@@ -1,6 +1,7 @@
 package core;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Contains the methods necessary to define an algorithm for the Multi-Armed Bandit program.
@@ -9,6 +10,8 @@ import java.util.List;
  */
 public interface IAlgorithm
 {
+    Random rnd = new Random();
+
     /**
      * @return the name of the algorithm
      */

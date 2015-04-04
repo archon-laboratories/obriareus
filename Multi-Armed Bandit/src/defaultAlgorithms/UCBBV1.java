@@ -13,14 +13,14 @@ import java.util.List;
  *
  * @author Sam Beckmann, Nate Beckemeyer. Thanks to Anton Ridgeway for original implementations.
  */
-public class UCBBV implements core.IAlgorithm
+public class UCBBV1 implements core.IAlgorithm
 {
-    private static final boolean debugUCBBV = false;
+    private static final boolean debugUCBBV = true;
 
     @Override
     public String getName()
     {
-        return "UCB-BV";
+        return "UCB-BV1";
     }
 
     /**
@@ -63,17 +63,17 @@ public class UCBBV implements core.IAlgorithm
             for (int i = 0; i < arms.length; i++)
             {
                 dValues[i] = getDValue(memories[i], lambda, totalPulls);
-                if (debugUCBBV) System.out.println("[UCB-BV] D for arm " + i + " set to: " + dValues[i]);
+                if (debugUCBBV) System.out.println("[" + getName() + "] D for arm " + i + " set to: " + dValues[i]);
             }
 
-            Utilities.generateIndices(indices, arms.length);
-            while(!indices.isEmpty())
+            int start = rnd.nextInt(arms.length);
+            for(int i = 0; i < arms.length; i++)
             {
-                int testArm = Utilities.randomIndex(indices);
-                if (arms[testArm].getCost() <= curAgent.getBudget()
-                        && (currentBest < 0 || dValues[testArm] > dValues[currentBest]))
+                int index = (i+start)%arms.length;
+                if (arms[index].getCost() <= curAgent.getBudget()
+                        && (currentBest < 0 || dValues[index] > dValues[currentBest]))
                 {
-                    currentBest = testArm;
+                    currentBest = index;
                 }
             }
 
@@ -89,7 +89,7 @@ public class UCBBV implements core.IAlgorithm
     /**
      * Returns the dValue for a given arm. Used for UCB-BV algorithms.
      *
-     * @param thisArm core.Arm that D will be caclulated for.
+     * @param thisArm Arm that D will be calculated for.
      * @param lambda Minimum arm cost. (Or best guess)
      * @param totalpulls Total number of arms that have been pulled so far.
      * @return The dValue for the given arm, with the given boundType.

@@ -20,7 +20,7 @@ public class SOAAv implements core.IAlgorithm
     @Override
     public String getName()
     {
-        return "sOAAv";
+        return "SOAAv";
     }
 
     @Override
@@ -32,8 +32,6 @@ public class SOAAv implements core.IAlgorithm
         Arm[] arms = curAgent.getArms();
         ArmMemory[] memories = curAgent.getMemories();
         ArrayList<Integer> activeArms = new ArrayList<Integer>();
-
-        int numPullsInPass;
         double passAverageRatio;
 
         // Add all arms to list to be pulled for first iteration
@@ -43,7 +41,6 @@ public class SOAAv implements core.IAlgorithm
         // Loop until budget exhausted
         while (curAgent.getBudget() >= curAgent.getMinCost())
         {
-            numPullsInPass = 0;
             passAverageRatio = 0;
 
             List<Integer> indices = new ArrayList<Integer>();
@@ -56,8 +53,6 @@ public class SOAAv implements core.IAlgorithm
                 if (arms[armToPull].getCost() <= curAgent.getBudget())
                 {
                     curAgent.pull(armToPull);
-                    numPullsInPass++;
-//                    passAverageRatio += memories[armToPull].getRecentReward() / arms[armToPull].getCost();
                     if (debugSOAAv) System.out.println(Utilities.getPullResult(
                             getName(), armToPull, arms[armToPull], memories[armToPull]));
 
@@ -67,8 +62,6 @@ public class SOAAv implements core.IAlgorithm
             for (Integer activeArm : activeArms)
                 passAverageRatio += memories[activeArm].getRatio() / arms[activeArm].getCost();
 
-//            if (numPullsInPass > 0)
-//            {
             passAverageRatio = passAverageRatio / activeArms.size();
             activeArms.clear();
 
