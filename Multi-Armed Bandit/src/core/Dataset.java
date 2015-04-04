@@ -4,6 +4,7 @@ import utilities.Utilities;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -518,13 +519,22 @@ public class Dataset
             for (Arm current : datasetArms)
                 current.setCurrentDistribution(distribution);
 
-            try // delete the old output if it exists
+
+            try // Delete absolute output file if it exists
             {
-                Files.delete(Paths.get("output/" + fileName + "_" + distribution.getName().toLowerCase() + ".txt"));
+                Files.delete(Paths.get("output/" + fileName + "_" + distribution.getName() + "_Absolute.txt"));
             } catch (IOException x)
             {
                 // NOOP
             }
+            try // Delete normalized output file if it exists
+            {
+                Files.delete(Paths.get("output/" + fileName + "_" + distribution.getName() + "_Normalized.txt"));
+            } catch (IOException x)
+            {
+                // NOOP
+            }
+
 
             // run for each budget
             for (int budget : budgets)
@@ -581,7 +591,8 @@ public class Dataset
                 }
 
                 displayMeans(normalizedRewards, meanRewards);
-                outputFile(normalizedRewards, distribution.getName(), budget);
+                outputFile(normalizedRewards, distribution.getName(), budget, true);
+                outputFile(meanRewards, distribution.getName(), budget, false);
             }
         }
     } // end runSet
@@ -592,12 +603,14 @@ public class Dataset
      * @param means        An array of the mean rewards for each algorithm.
      * @param distribution The current distribution being used.
      * @param budget       The budget that this data is being outputted to.
+     * @param normalized       Whether or not the output is normalized
      */
-    private void outputFile(double[] means, String distribution, int budget)
+    private void outputFile(double[] means, String distribution, int budget, boolean normalized)
     {
+        String outputNormal = normalized ? "Normalized" : "Absolute";
         try
         {
-            File output = new File("output/" + fileName + "_" + distribution + ".txt");
+            File output = new File("output/" + fileName + "_" + distribution + "_" + outputNormal + ".txt");
             PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)));
 
             writer.write(((String.valueOf(budget))));

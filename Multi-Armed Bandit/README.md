@@ -228,8 +228,8 @@ Obriareus contains 8 algorithms by default:
                that if an arm other than the active arm becomes the best-ranking arm, the active arm will switch
                to the new best-arm.
 
-* **greedy:** A specific case of the e-first algorithm, greedy pulls each arm exactly once in the exploration phase, and
-              thereafter always pulls the arm with the highest observed average payoff.
+* **greedy:** A specific case of the e-first algorithm, greedy pulls each arm exactly once in the exploration phase, 
+              and thereafter always pulls the arm with the highest observed average payoff.
 
 * **fKUBE:** The Fractional Knapsack-based
              Upper Confidence Bound Exploration and Exploitation
@@ -241,14 +241,18 @@ Obriareus contains 8 algorithms by default:
              based on the reward-cost ratio of the arms to determine
              which arm should be pulled at time t + 1.
 
-* **fKDE:** The Fractional Knapsack-based Decreasing Epsilon algorithm (fKDE) [Need Reference], [Need Documentation]
+* **fKDE:** The Fractional Knapsack-based Decreasing Epsilon algorithm (fKDE) [Long Tran–Thanh], uses an epsilon value
+            to assign each arm (whose cost <= budget) a probability of being pulled. The arm with the best reward/cost
+            ratio is given a probability of (1 - epsilon), all other feasible arms are assigned a probability of
+            epsilon/K, where K is the number of feasible arms. An arm is selected based on those probabilities to be
+            pulled. As the time increases, the epsilon decreases.
 
 * **UCB-BV1:** An upper confidence-bound (UCB) algorithm, UCB-BV1 [Wenkui Ding et al., 2013] explores by pulling each
                arm once, then calculating a "d value" for each arm. The arm with the highest d value is then pulled on
                each pass.
 
 * **l-split:** l-split drops a proportion of the available arms. The drop fraction is given by a passed l-value.
-               After each iteration, the drop fraction of the remaing arms is dropped, only the arms with the best
+               After each iteration, the drop fraction of the remaining arms is dropped, only the arms with the best
                cost/reward ratio making it to the next iteration.
 
 * **e-progressive:** A special version of the l-split algorithm, e-progressive has a well-defined exploration phase
@@ -267,9 +271,11 @@ Default Distributions
 
 Multi-Armed Bandit contains 2 different reward distributions by default:
 
-* **Gaussian:** A normal distribution of rewards, centered on a passed mean and standard deviation given by a passed standard deviation.
+* **Gaussian:** A normal distribution of rewards, centered on a passed mean and standard deviation given by a passed
+                standard deviation.
 
-* **Poisson:** [Need Documentation]
+* **Poisson:** The poisson distribution of rewards, where the rewards center on a mean and only return positive values.
+               Calculated using the Knuth algorithm.
 
 Extending
 ---------
@@ -279,4 +285,4 @@ It is possible to extend Multi-Armed Bandit to implement your own algorithms and
 To do so, simply create directories titled `algorithms` and `distributions`, respectively. For algorithms to be
 recognized by the program, they must implement the `IAlgorithms` interface. Reward distributions must implement the
 `IDistribution` interface. To call new algorithms and distributions, simply put the name of their class down in the
-dataset.
+appropriate location in the dataset file.

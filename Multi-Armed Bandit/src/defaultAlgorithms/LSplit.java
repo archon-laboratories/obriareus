@@ -27,8 +27,8 @@ public class LSplit implements core.IAlgorithm
      * The l-split algorithm retains <code>lValue^(iteration)</code> arms after each iteration.
      *
      * @param curAgent        The agent currently employing this algorithm.
-     * @param inputParameters [0] --> lValue: Value that determines how quickly arms are dropped. <code>lValue * 100%</code>
-     *                                will be dropped in the first iteration.
+     * @param inputParameters [0] --> lValue: Value that determines how quickly arms are dropped.
+     *                        <code>lValue * 100%</code> will be dropped in the first iteration.
      */
     @Override
     public void run(Agent curAgent, List<Double> inputParameters)

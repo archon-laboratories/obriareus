@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class UCBBV1 implements core.IAlgorithm
 {
-    private static final boolean debugUCBBV = true;
+    private static final boolean debugUCBBV = false;
 
     @Override
     public String getName()
