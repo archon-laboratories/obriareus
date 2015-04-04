@@ -14,6 +14,7 @@ import java.util.Random;
  */
 public class FKDE implements core.IAlgorithm
 {
+    private static final boolean debugFKDE = false;
     Random rnd = new Random();
 
     @Override
@@ -47,7 +48,9 @@ public class FKDE implements core.IAlgorithm
         {
             bestArm = Utilities.getBestArm(curAgent);
             double epsT = Math.min(1, gamma / (t + 1));
-            int numFeasibleArms = 0; // The number of feasible terms
+            if (debugFKDE)
+                System.out.println("Epsilon T: " + epsT);
+            int numFeasibleArms = 0; // The number of feasible arms
 
             double[] armProb = new double[numArms]; // Probability of pulling the corresponding arms
             for (int z = 0; z < numArms; z++)
@@ -66,10 +69,16 @@ public class FKDE implements core.IAlgorithm
             // of 1 - ε for the best arm)
             for (int z = 0; z < numArms; z++)
                 if (armProb[z] > 0)
+                {
                     armProb[z] /= numFeasibleArms - 1;
+                    if (debugFKDE)
+                        System.out.println("Arm " + z + " probability: " + armProb[z]);
+                }
 
             // Assign the best arm the probability of 1 - ε
             armProb[bestArm] = 1 - epsT;
+            if (debugFKDE)
+                System.out.println("Best arm probability: " + (1 - epsT));
 
             // Calculate cumulative probabilities; the last arm should have a cumulative probability of 1
             double[] cmlProb = new double[numArms];
@@ -89,6 +98,8 @@ public class FKDE implements core.IAlgorithm
                     pullIndex = z;
             }
 
+            if (debugFKDE)
+                Utilities.getPullResult(getName(), pullIndex, arms[pullIndex], curAgent.getMemories()[pullIndex]);
             curAgent.pull(pullIndex);
             t++;
         }
