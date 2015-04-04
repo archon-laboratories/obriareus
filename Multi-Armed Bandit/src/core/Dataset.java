@@ -580,7 +580,7 @@ public class Dataset
                     normalizedRewards[alg] = meanRewards[alg] - totalAverage;
                 }
 
-                displayMeans(normalizedRewards);
+                displayMeans(normalizedRewards, meanRewards);
             }
         }
     } // end runSet
@@ -618,16 +618,16 @@ public class Dataset
     /**
      * Outputs the normalized mean rewards of the algorithm to console.
      *
-     * @param means double array of the normalized mean rewards.
+     * @param normalized double array of the normalized mean rewards.
+     * @param means The actual mean reward of the algorithm
      */
-    public void displayMeans(double[] means)
+    public void displayMeans(double[] normalized, double[] means)
     {
         int counter = 0;
         for (AlgObject alg : algorithms)
         {
-            System.out.printf("%-20s %15s: %10.3f\n",
-                    alg.getAlgorithm() + ",", alg.getInputParameters(),
-                    means[counter]);
+            System.out.printf("%-20s %15s: %10.3f;%10.3f\n", alg.getAlgorithm() + ",", alg.getInputParameters(),
+                    normalized[counter], means[counter]);
             counter++;
         }
 

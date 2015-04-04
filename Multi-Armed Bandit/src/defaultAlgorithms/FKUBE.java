@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * fKUBE algorithm.
+ * The Fractional Knapsack-based Upper Confidence Bound Exploration and Exploitation (fKUBE) algorithm.
  *
  * @author Sam Beckmann, Nate Beckemeyer. Thanks to Anton Ridgeway for original implementations.
  */
@@ -24,7 +24,6 @@ public class FKUBE implements core.IAlgorithm
     }
 
     /**
-     * The Fractional Knapsack-based Upper Confidence Bound Exploration and Exploitation (fKUBE) algorithm.
      * Pulls the arm with the estimated highest confidence bound:cost ratio (item density).
      *
      * @param curAgent        The agent currently employing this algorithm.
