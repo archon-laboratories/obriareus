@@ -84,6 +84,8 @@ public class Agent
     private static void findCosts()
     {
         double min = arms[0].getCost();
+
+        // Implemented as a foreach loop because totalCost needs to be incremented by the cost of the first arm as well
         for (Arm current : arms)
         {
             double curCost = current.getCost();
@@ -106,7 +108,7 @@ public class Agent
         if (budget >= current.getCost())
         {
             budget -= current.getCost();
-            memories[toPull].addPull(bandit.pullArm(toPull, this));
+            memories[toPull].addPull(arms[toPull].getReward());
             totalPulls++;
             totalReward += memories[toPull].getRecentReward();
         }

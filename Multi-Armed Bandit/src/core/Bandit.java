@@ -9,6 +9,7 @@ import java.util.List;
  * thus eliminating randomness benefits for one algorithm compared to another.
  *
  * @author Sam Beckmann, Nate Beckemeyer
+ * @deprecated
  */
 public class Bandit
 {
@@ -16,7 +17,7 @@ public class Bandit
      * The rewards for each arm after n pulls, to ensure consistent rewards across algorithms (removing the chance one
      * algorithm outperforms another based purely on luck).
      */
-    private List<List<Double>> rewards;
+    private ArrayList<List<Double>> rewards;
 
     /**
      * Generates bandit given number of arms for each trial.
@@ -42,12 +43,6 @@ public class Bandit
      */
     public double pullArm(int armIndex, Agent pullingAgent)
     {
-        // The number of times the arm has been pulled
-        int count = pullingAgent.getMemories()[armIndex].getPulls();
-
-        if (count == rewards.get(armIndex).size() || rewards.get(armIndex).isEmpty()) // Calculate the new reward
-            rewards.get(armIndex).add(pullingAgent.getArms()[armIndex].getReward());
-
-        return rewards.get(armIndex).get(count);
+        return pullingAgent.getArms()[armIndex].getReward();
     } // end pullArm
 }
