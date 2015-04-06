@@ -1,6 +1,6 @@
 package defaultAlgorithms;
 
-import core.Agent;
+import core.Bandit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,18 +22,18 @@ public class EProgressive implements core.IAlgorithm
      * e-Progressive algorithm. Special case of the l-split algorithm, designed to have an l-values
      * that gives an exploration phase of epsilon, before the number of arms is reduced to one.
      *
-     * @param curAgent The agent currently employing this algorithm.
+     * @param curBandit       The agent currently employing this algorithm.
      * @param inputParameters <code>epsilon * 100%</code> is the percent of budget used on exploration.
      */
     @Override
-    public void run(Agent curAgent, List<Double> inputParameters)
+    public void run(Bandit curBandit, List<Double> inputParameters)
     {
         LSplit lSplit = new LSplit();
         double epsilon = inputParameters.get(0);
 
         double lValue;
-        double eBudget = epsilon * curAgent.getBudget();
-        int numArms = curAgent.getArms().length;
+        double eBudget = epsilon * curBandit.getBudget();
+        int numArms = curBandit.getArms().length;
 
         if (eBudget / numArms <= 1)
             lValue = (numArms - 1.) / numArms;
@@ -44,6 +44,6 @@ public class EProgressive implements core.IAlgorithm
 
         newInputParameters.add(lValue);
 
-        lSplit.run(curAgent, newInputParameters);
+        lSplit.run(curBandit, newInputParameters);
     }
 }

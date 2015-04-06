@@ -1,8 +1,8 @@
 package utilities;
 
-import core.Agent;
 import core.Arm;
 import core.ArmMemory;
+import core.Bandit;
 
 import java.util.List;
 import java.util.Random;
@@ -113,12 +113,12 @@ public final class Utilities
     }
 
     /**
-     * Gets the best arm Agent knows of, in terms of mean reward/cost ratio.
+     * Gets the best arm Bandit knows of, in terms of mean reward/cost ratio.
      *
      * @param caller The agent calling the method
      * @return the index of the best arm
      */
-    public static int getBestArm(Agent caller)
+    public static int getBestArm(Bandit caller)
     {
         ArmMemory[] memories = caller.getMemories();
         double budget = caller.getBudget();
@@ -136,12 +136,12 @@ public final class Utilities
     } // end getBestArm
 
     /**
-     * Gets the second best arm Agent knows of, in terms of mean reward/cost ratio.
+     * Gets the second best arm Bandit knows of, in terms of mean reward/cost ratio.
      *
      * @param caller The agent calling the method
      * @return the index of the second best arm
      */
-    public static int getSecondBest(Agent caller)
+    public static int getSecondBest(Bandit caller)
     {
         ArmMemory[] memories = caller.getMemories();
         double budget = caller.getBudget();
@@ -168,11 +168,11 @@ public final class Utilities
     /**
      * Gets the best arms from a sent set of possible arms.
      *
-     * @param caller    Agent that is calling this method.
+     * @param caller    Bandit that is calling this method.
      * @param feasibles List of the arms that can possibly be chosen as best.
      * @return Index of the best arm.
      */
-    public static int getBestFromFeasibles(Agent caller, List<Integer> feasibles)
+    public static int getBestFromFeasibles(Bandit caller, List<Integer> feasibles)
     {
         int best = -1; // Index of the best arm in terms of mean reward/cost ratio.
 

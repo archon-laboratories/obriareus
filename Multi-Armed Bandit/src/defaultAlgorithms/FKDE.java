@@ -1,7 +1,7 @@
 package defaultAlgorithms;
 
-import core.Agent;
 import core.Arm;
+import core.Bandit;
 import utilities.Utilities;
 
 import java.util.List;
@@ -23,30 +23,32 @@ public class FKDE implements core.IAlgorithm
         return "fKDE";
     }
 
-    /** Fractional Knapsack Based Decreasing ε–greedy (fKDE)
+    /**
+     * Fractional Knapsack Based Decreasing ε–greedy (fKDE)
      *
-     * @param curAgent        The agent currently employing the algorithm
+     * @param curBandit       The agent currently employing the algorithm
      * @param inputParameters [0] --> gamma, The tuning factor > 0 associated with fKDE
      */
     @Override
-    public void run(Agent curAgent, List<Double> inputParameters)
+    public void run(Bandit curBandit, List<Double> inputParameters)
     {
         double gamma = inputParameters.get(0);
 
-        if (gamma <= 0) {
+        if (gamma <= 0)
+        {
             System.out.println("Non-positive gamma value; KDE cannot function.");
             return;
         }
 
         int t = 0;
-        Arm[] arms = curAgent.getArms();
+        Arm[] arms = curBandit.getArms();
         int numArms = arms.length;
 
         int bestArm; //The best arm to pull: I+
 
-        while (curAgent.getBudget() >= curAgent.getMinCost())
+        while (curBandit.getBudget() >= curBandit.getMinCost())
         {
-            bestArm = Utilities.getBestArm(curAgent);
+            bestArm = Utilities.getBestArm(curBandit);
             double epsT = Math.min(1, gamma / (t + 1));
             if (debugFKDE)
                 System.out.println("Epsilon T: " + epsT);
@@ -55,12 +57,11 @@ public class FKDE implements core.IAlgorithm
             double[] armProb = new double[numArms]; // Probability of pulling the corresponding arms
             for (int z = 0; z < numArms; z++)
             {
-                if (arms[z].getCost() <= curAgent.getBudget())
+                if (arms[z].getCost() <= curBandit.getBudget())
                 {
                     armProb[z] = epsT; // Set it up
                     numFeasibleArms++;
-                }
-                else
+                } else
                     armProb[z] = 0;
             }
 
@@ -99,8 +100,8 @@ public class FKDE implements core.IAlgorithm
             }
 
             if (debugFKDE)
-                Utilities.getPullResult(getName(), pullIndex, arms[pullIndex], curAgent.getMemories()[pullIndex]);
-            curAgent.pull(pullIndex);
+                Utilities.getPullResult(getName(), pullIndex, arms[pullIndex], curBandit.getMemories()[pullIndex]);
+            curBandit.pull(pullIndex);
             t++;
         }
     }

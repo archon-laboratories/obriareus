@@ -1,8 +1,8 @@
 package defaultAlgorithms;
 
-import core.Agent;
 import core.Arm;
 import core.ArmMemory;
+import core.Bandit;
 import utilities.Utilities;
 
 import java.util.ArrayList;
@@ -27,23 +27,23 @@ public class EFirst implements core.IAlgorithm
      * The eFirst algorithm. Begins with a period of exploration determined by the epsilon value,
      * then chooses the best available arm. Online algorithm.
      *
-     * @param curAgent        The current agent employing this algorithm.
+     * @param curBandit       The current agent employing this algorithm.
      * @param inputParameters [0] --> The epsilon value <= 1 for the exploration budget
      *                        (exploration budget = epsilon * budget).
      */
     @Override
-    public void run(Agent curAgent, List<Double> inputParameters)
+    public void run(Bandit curBandit, List<Double> inputParameters)
     {
         // Initialize variables
-        Arm[] arms = curAgent.getArms();
-        ArmMemory[] memories = curAgent.getMemories();
+        Arm[] arms = curBandit.getArms();
+        ArmMemory[] memories = curBandit.getMemories();
         double epsilon = inputParameters.get(0);
 
-        double eBudget = curAgent.getBudget() * epsilon; // Exploration budget for the algorithm
-        if (eBudget <= curAgent.getTotalCost())
-            eBudget = curAgent.getTotalCost();
+        double eBudget = curBandit.getBudget() * epsilon; // Exploration budget for the algorithm
+        if (eBudget <= curBandit.getTotalCost())
+            eBudget = curBandit.getTotalCost();
 
-        if ((curAgent.getBudget() - eBudget) < 0)
+        if ((curBandit.getBudget() - eBudget) < 0)
             System.out.println("Budget too low.");
 
         // Declare the arraylist of remaining indices
@@ -53,7 +53,7 @@ public class EFirst implements core.IAlgorithm
         Utilities.generateIndices(remainingIndices, arms.length);
 
         // Exploration
-        while (eBudget >= curAgent.getMinCost())
+        while (eBudget >= curBandit.getMinCost())
         {
             if (remainingIndices.size() == 0)
                 Utilities.generateIndices(remainingIndices, arms.length);
@@ -62,7 +62,7 @@ public class EFirst implements core.IAlgorithm
             if (arms[armIndex].getCost() <= eBudget)
             {
                 // Pull it!
-                curAgent.pull(armIndex);
+                curBandit.pull(armIndex);
                 if (debugEFirst)
                     System.out.println(Utilities.getPullResult(
                             getName(), armIndex, arms[armIndex], memories[armIndex]));
@@ -73,27 +73,27 @@ public class EFirst implements core.IAlgorithm
         // eBudget has run out. Begin exploitation phase.
         if (debugEFirst) System.out.println("[" + getName() + "] Exploration budget exhausted.");
 
-        int bestArm = Utilities.getBestArm(curAgent); // Get the index of the first largest element
-        int secondBestArm = Utilities.getSecondBest(curAgent); // Get the index of the second largest element
+        int bestArm = Utilities.getBestArm(curBandit); // Get the index of the first largest element
+        int secondBestArm = Utilities.getSecondBest(curBandit); // Get the index of the second largest element
 
-        while (curAgent.getBudget() >= curAgent.getMinCost())
+        while (curBandit.getBudget() >= curBandit.getMinCost())
         {
-            curAgent.pull(bestArm);
+            curBandit.pull(bestArm);
             if (debugEFirst)
                 System.out.println(Utilities.getPullResult(getName(), bestArm, arms[bestArm], memories[bestArm]));
 
-            if (arms[bestArm].getCost() > curAgent.getBudget()) // Does the best arm cost too much?
+            if (arms[bestArm].getCost() > curBandit.getBudget()) // Does the best arm cost too much?
             {
                 // Reassign the arms, taking into account budget constraints.
-                bestArm = Utilities.getBestArm(curAgent);
-                secondBestArm = Utilities.getSecondBest(curAgent);
+                bestArm = Utilities.getBestArm(curBandit);
+                secondBestArm = Utilities.getSecondBest(curBandit);
             }
 
             if (memories[bestArm].getRatio() < memories[secondBestArm].getRatio()) // Did the best arm fall behind?
             {
                 // Promote the second best, and find the new second best.
                 bestArm = secondBestArm;
-                secondBestArm = Utilities.getSecondBest(curAgent);
+                secondBestArm = Utilities.getSecondBest(curBandit);
             }
         }
 

@@ -157,7 +157,7 @@ public class Dataset
                 int start = Integer.parseInt(reader.readLine());
                 int increment = Integer.parseInt(reader.readLine());
                 int number = Integer.parseInt(reader.readLine());
-                for (int i = 0; i < number; i ++)
+                for (int i = 0; i < number; i++)
                 {
                     if (start + increment * i >= 0)
                         budgets.add(start + increment * i);
@@ -165,7 +165,7 @@ public class Dataset
                     {
                         System.err.println("ERROR: Attempted to add budget " + i + ", which is less than zero.");
                     }
-                    if (printRun) System.out.println("Added Budget: " + (start + increment*i));
+                    if (printRun) System.out.println("Added Budget: " + (start + increment * i));
                 }
 
                 reader.readLine(); // Skip blank line
@@ -509,7 +509,7 @@ public class Dataset
             datasetArms[count] = new Arm(armCosts[index], stdDevs[index], meanRewards[index]);
             count++;
         }
-        Agent.implementArms(datasetArms);
+        Bandit.implementArms(datasetArms);
 
         // run for each dataset
         for (IDistribution distribution : distributions)
@@ -542,8 +542,6 @@ public class Dataset
 
                 double[][] totalRewards = new double[algorithms.size()][numTrials];
 
-                Bandit bandit = new Bandit(numArms);
-
                 // run the number of trials specified in the dataset
                 for (int trial = 0; trial < numTrials; trial++)
                 {
@@ -556,10 +554,10 @@ public class Dataset
                         //Arm[] agentArms = new Arm[numArms];
                         //System.arraycopy(trialArms, 0, agentArms, 0, trialArms.length);
 
-                        Agent agent = new Agent(budget, algObject, bandit);
-                        agent.run();
+                        Bandit bandit = new Bandit(budget, algObject);
+                        bandit.run();
 
-                        totalRewards[algIndex][trial] = agent.getTotalReward();
+                        totalRewards[algIndex][trial] = bandit.getTotalReward();
                         algIndex++;
                     }
                 }
@@ -585,9 +583,7 @@ public class Dataset
                 double[] normalizedRewards = new double[algorithms.size()];
 
                 for (int alg = 0; alg < normalizedRewards.length; alg++)
-                {
                     normalizedRewards[alg] = meanRewards[alg] - totalAverage;
-                }
 
                 displayMeans(normalizedRewards, meanRewards);
                 outputFile(normalizedRewards, distribution.getName(), budget, true);
@@ -602,7 +598,7 @@ public class Dataset
      * @param means        An array of the mean rewards for each algorithm.
      * @param distribution The current distribution being used.
      * @param budget       The budget that this data is being outputted to.
-     * @param normalized       Whether or not the output is normalized
+     * @param normalized   Whether or not the output is normalized
      */
     private void outputFile(double[] means, String distribution, int budget, boolean normalized)
     {
@@ -632,7 +628,7 @@ public class Dataset
      * Outputs the normalized mean rewards of the algorithm to console.
      *
      * @param normalized double array of the normalized mean rewards.
-     * @param means The actual mean reward of the algorithm
+     * @param means      The actual mean reward of the algorithm
      */
     public void displayMeans(double[] normalized, double[] means)
     {

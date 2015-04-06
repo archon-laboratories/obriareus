@@ -20,9 +20,9 @@ public interface IAlgorithm
     /**
      * Runs the algorithm.
      *
-     * @param curAgent        The agent currently employing the algorithm. Contains vital data, such as the arms, budget,
+     * @param curBandit       The agent currently employing the algorithm. Contains vital data, such as the arms, budget,
      *                        memories of the arm pulls,
      * @param inputParameters The input parameter necessary for the algorithm. Can be empty if unused.
      */
-    void run(Agent curAgent, List<Double> inputParameters);
+    void run(Bandit curBandit, List<Double> inputParameters);
 }

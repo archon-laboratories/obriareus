@@ -1,8 +1,8 @@
 package defaultAlgorithms;
 
-import core.Agent;
 import core.Arm;
 import core.ArmMemory;
+import core.Bandit;
 import utilities.Utilities;
 
 import java.util.ArrayList;
@@ -24,13 +24,13 @@ public class SOAAv implements core.IAlgorithm
     }
 
     @Override
-    public void run(Agent curAgent, List<Double> inputParameters)
+    public void run(Bandit curBandit, List<Double> inputParameters)
     {
         double xValue = inputParameters.get(0);
 
         // Initialize variables
-        Arm[] arms = curAgent.getArms();
-        ArmMemory[] memories = curAgent.getMemories();
+        Arm[] arms = curBandit.getArms();
+        ArmMemory[] memories = curBandit.getMemories();
         ArrayList<Integer> activeArms = new ArrayList<Integer>();
         double passAverageRatio;
 
@@ -39,7 +39,7 @@ public class SOAAv implements core.IAlgorithm
             activeArms.add(i);
 
         // Loop until budget exhausted
-        while (curAgent.getBudget() >= curAgent.getMinCost())
+        while (curBandit.getBudget() >= curBandit.getMinCost())
         {
             passAverageRatio = 0;
 
@@ -50,9 +50,9 @@ public class SOAAv implements core.IAlgorithm
             {
                 int armToPull = activeArms.get(Utilities.randomIndex(indices));
 
-                if (arms[armToPull].getCost() <= curAgent.getBudget())
+                if (arms[armToPull].getCost() <= curBandit.getBudget())
                 {
-                    curAgent.pull(armToPull);
+                    curBandit.pull(armToPull);
                     if (debugSOAAv) System.out.println(Utilities.getPullResult(
                             getName(), armToPull, arms[armToPull], memories[armToPull]));
 
@@ -68,7 +68,7 @@ public class SOAAv implements core.IAlgorithm
             // Update activeArms for next iteration
             for (int i = 0; i < arms.length; i++)
             {
-                if (arms[i].getCost() <= curAgent.getBudget()
+                if (arms[i].getCost() <= curBandit.getBudget()
                         && memories[i].getRatio() >= (1 + xValue) * passAverageRatio)
                 {
                     activeArms.add(i);
@@ -76,7 +76,7 @@ public class SOAAv implements core.IAlgorithm
             }
             if (activeArms.size() == 0)
             {
-                activeArms.add(Utilities.getBestArm(curAgent));
+                activeArms.add(Utilities.getBestArm(curBandit));
             }
         }
         if (debugSOAAv) System.out.println("[" + getName() + "] Budget Exhausted. Trial complete.");

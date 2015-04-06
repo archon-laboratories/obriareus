@@ -32,11 +32,11 @@ public class AlgObject
     /**
      * Runs the algorithm inside agent.
      *
-     * @param curAgent The agent containing the algorithm.
+     * @param curBandit The agent containing the algorithm.
      */
-    public void runAlgorithm(Agent curAgent)
+    public void runAlgorithm(Bandit curBandit)
     {
-        algorithm.run(curAgent, inputParameters);
+        algorithm.run(curBandit, inputParameters);
     }
 
     /**

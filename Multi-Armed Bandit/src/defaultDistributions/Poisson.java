@@ -30,7 +30,8 @@ public class Poisson implements IDistribution
         int k = 0;
         double p = 1;
 
-        do {
+        do
+        {
             k++;
             p *= rnd.nextDouble();
         } while (p > l);
