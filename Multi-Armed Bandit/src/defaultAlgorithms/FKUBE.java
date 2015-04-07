@@ -65,14 +65,7 @@ public class FKUBE implements core.IAlgorithm
             { // combined exploration/exploitation phase
 
                 //Find the current best arm, pull it, and re-estimate its value by the result
-                bestArm = -1;
-                for (int i = 0; i < numArms; i++)
-                {
-                    if (curBandit.getMemories()[i].getCost() <= curBandit.getBudget() &&
-                            (bestArm < 0 || fKubeEst(memories[i], time) >
-                                    fKubeEst(memories[Utilities.getBestArm(curBandit)], time)))
-                        bestArm = i;
-                }
+                bestArm = getBestArm(memories, time, curBandit.getBudget());
 
                 if (lastBestArm != bestArm || lastBestArm == -1)
                     lastBestArm = bestArm;
@@ -95,5 +88,23 @@ public class FKUBE implements core.IAlgorithm
     private static double fKubeEst(ArmMemory thisArm, int time)
     {
         return thisArm.getRatio() + Math.sqrt(2 * Math.log(time) / thisArm.getPulls()) / thisArm.getCost();
+    }
+
+    /**
+     * @param memories The arm memories that store information
+     * @param time The current timestep in the algorithm
+     * @param budget The budget remaining
+     * @return the best arm based on the item density of the arm
+     */
+    private static int getBestArm(ArmMemory [] memories, int time, double budget) {
+        int numArms = memories.length;
+        int bestArm = -1;
+        for (int i = 0; i < numArms; i++)
+        {
+            if (memories[i].getCost() <= budget && (bestArm < 0 || fKubeEst(memories[i], time) >
+                            fKubeEst(memories[bestArm], time)))
+                bestArm = i;
+        }
+        return bestArm;
     }
 }

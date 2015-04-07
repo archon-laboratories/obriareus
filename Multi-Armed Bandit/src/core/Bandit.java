@@ -1,10 +1,8 @@
 package core;
 
 /**
- * Defines a bandit.
- * A bandit is called for each trial with each algorithm.
- * The bandit contains the Arms for this trial, as well as
- * an array of ArmMemories: What the Bandit knows.
+ * Defines a bandit. A bandit is called for each trial with each algorithm.
+ * The bandit contains the Arms for this trial, as well as an array of ArmMemories: What the Bandit knows.
  *
  * @author Sam Beckmann, Nate Beckemeyer
  */
@@ -64,6 +62,10 @@ public class Bandit
             memories[count++] = new ArmMemory(current.getCost());
     } // end constructor
 
+    /**
+     * Implements the arms for the Bandit
+     * @param armRefs The reference to the arms that were created by Dataset
+     */
     public static void implementArms(Arm[] armRefs)
     {
         arms = armRefs;

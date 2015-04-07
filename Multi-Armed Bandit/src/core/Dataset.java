@@ -551,9 +551,6 @@ public class Dataset
                     for (AlgObject algObject : algorithms)
                     {
 
-                        //Arm[] agentArms = new Arm[numArms];
-                        //System.arraycopy(trialArms, 0, agentArms, 0, trialArms.length);
-
                         Bandit bandit = new Bandit(budget, algObject);
                         bandit.run();
 
@@ -568,17 +565,13 @@ public class Dataset
 
                 for (int alg = 0; alg < meanRewards.length; alg++)
                 {
-                    double average = 0;
                     for (int place = 0; place < numTrials; place++)
-                    {
-                        average += totalRewards[alg][place];
-                    }
-                    average /= numTrials;
-                    meanRewards[alg] = average;
-                    totalAverage += average;
+                        meanRewards[alg] += totalRewards[alg][place];
+                    meanRewards[alg] /= numTrials;
+                    totalAverage += meanRewards[alg];
                 }
 
-                totalAverage /= algorithms.size();
+                totalAverage /= meanRewards.length;
 
                 double[] normalizedRewards = new double[algorithms.size()];
 
