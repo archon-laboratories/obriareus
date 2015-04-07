@@ -54,7 +54,7 @@ public class FKUBE implements core.IAlgorithm
             if (temp.size() > 0) // initial phase
             {
                 //Make sure we can't go over budget here.
-                int x = Utilities.randomIndex(temp);
+                int x = Utilities.randomIndex(temp, curBandit.getRnd());
                 if (arms[x].getCost() <= curBandit.getBudget())
                 {
                     curBandit.pull(x);

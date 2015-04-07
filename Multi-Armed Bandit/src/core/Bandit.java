@@ -1,8 +1,11 @@
 package core;
 
+import java.util.Random;
+
 /**
- * Defines a bandit. A bandit is called for each trial with each algorithm.
- * The bandit contains the Arms for this trial, as well as an array of ArmMemories: What the Bandit knows.
+ * Defines a bandit.
+ * A bandit uses an algorithm to pull arms until its
+ * budget is expired.
  *
  * @author Sam Beckmann, Nate Beckemeyer
  */
@@ -22,6 +25,13 @@ public class Bandit
      * The total cost to pull all of the arms.
      */
     private static double totalCost = 0;
+
+    /**
+     * Random for the Bandit.
+     * All algorithm random operations should be
+     * done through this random.
+     */
+    private Random rnd = new Random();
 
     /**
      * Algorithm that this bandit is running.
@@ -162,6 +172,11 @@ public class Bandit
     public double getTotalReward()
     {
         return totalReward;
+    }
+
+    public Random getRnd()
+    {
+        return rnd;
     }
 
     /**

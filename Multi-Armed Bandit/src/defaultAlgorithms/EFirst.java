@@ -58,7 +58,7 @@ public class EFirst implements core.IAlgorithm
             if (remainingIndices.size() == 0)
                 Utilities.generateIndices(remainingIndices, arms.length);
 
-            int armIndex = Utilities.randomIndex(remainingIndices); // Get a random remaining index
+            int armIndex = Utilities.randomIndex(remainingIndices, curBandit.getRnd()); // Get a random remaining index
             if (arms[armIndex].getCost() <= eBudget)
             {
                 // Pull it!

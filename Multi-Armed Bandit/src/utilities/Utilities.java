@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public final class Utilities
 {
-    private static Random rnd = new Random();
+    private static Random utilRnd = new Random();
 
     /**
      * Gets an array of linear spaced elements of a given size.
@@ -77,13 +77,19 @@ public final class Utilities
             indices.add(i);
     }
 
+    public static int randomIndex(List<Integer> remainingIndices)
+    {
+        return randomIndex(remainingIndices, utilRnd);
+    }
+
     /**
      * Generates a random armIndex given an ArrayList of remaining armIndices. Then removes the
      *
      * @param remainingIndices The ArrayList of indices that have yet to be used in the algorithm's random selection.
+     * @param rnd              Random to be used.
      * @return the index of the arm to be checked
      */
-    public static int randomIndex(List<Integer> remainingIndices)
+    public static int randomIndex(List<Integer> remainingIndices, Random rnd)
     {
         if (remainingIndices.size() == 0)
             return -1;

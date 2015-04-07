@@ -15,7 +15,6 @@ import java.util.Random;
 public class FKDE implements core.IAlgorithm
 {
     private static final boolean debugFKDE = false;
-    private Random rnd = new Random();
 
     @Override
     public String getName()
@@ -88,7 +87,7 @@ public class FKDE implements core.IAlgorithm
             for (int z = 1; z < numArms; z++)
                 cmlProb[z] = cmlProb[z - 1] + armProb[z];
 
-            double randomVal = rnd.nextDouble();
+            double randomVal = curBandit.getRnd().nextDouble();
 
             int pullIndex = -1; // The index of the arm to pull
 

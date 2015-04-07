@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Survival of the Above Average (sOAAv) algorithm.
+ * Survival of the Above Average (SOAAv) algorithm.
  *
  * @author Sam Beckmann, Nate Beckemeyer. Thanks to Anton Ridgeway for original implementations.
  */
@@ -17,13 +17,11 @@ public class SOAAv implements core.IAlgorithm
 {
     private static final boolean debugSOAAv = false;
 
-    @Override
     public String getName()
     {
         return "SOAAv";
     }
 
-    @Override
     public void run(Bandit curBandit, List<Double> inputParameters)
     {
         double xValue = inputParameters.get(0);
@@ -48,7 +46,7 @@ public class SOAAv implements core.IAlgorithm
 
             while (!indices.isEmpty())
             {
-                int armToPull = activeArms.get(Utilities.randomIndex(indices));
+                int armToPull = activeArms.get(Utilities.randomIndex(indices, curBandit.getRnd()));
 
                 if (arms[armToPull].getCost() <= curBandit.getBudget())
                 {

@@ -28,7 +28,7 @@ Changeable Parameters:
 Inputting Data
 --------------
 
-To input a dataset to the program, create a file named `datasetXXX.txt` where `XXX` can be anything.
+To input a dataset to the program, create a file named `datasetXXX.dat` where `XXX` can be anything.
 Place this file in the `datasets` folder, one level under Multi-Armed Bandit.
 The following two datasets input the same information.
 
@@ -259,12 +259,12 @@ Obriareus contains 8 algorithms by default:
                      determined by an epsilon passed to the algorithm. The l-value is generated such that the algorithm
                      gets down to one arm at the end of the exploration phase.
 
-* **SOAAv:** This algorithm also successively narrows down the set of active arms by eliminating underperforming arms.
-             But rather than eliminating a fixed number of arms after each pass, it eliminates arms whose estimate
-             reward-cost ratio is below (1 + x) times the average of such ratios of the arms in the last pass. Setting
-             x = 0 means only above average individuals survive from one pass of the arms to the next. Note again that
-             this is an online-exploration approach where a previously eliminated arm can come back into the active set
-             if estimates of other active arms drop.
+* **SOAAv:** Survival of the Above Averge (SOAAv), successively narrows down the set of active arms by eliminating
+             underperforming arms. But rather than eliminating a fixed number of arms after each pass, it eliminates
+             arms whose estimate reward-cost ratio is below (1 + x) times the average of such ratios of the arms in the
+             last pass. Setting x = 0 means only above average individuals survive from one pass of the arms to the
+             next. Note again that this is an online-exploration approach where a previously eliminated arm can come
+             back into the active set if estimates of other active arms drop.
 
 Default Distributions
 ---------------------

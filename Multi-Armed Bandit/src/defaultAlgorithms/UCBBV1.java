@@ -47,7 +47,7 @@ public class UCBBV1 implements core.IAlgorithm
 
         while (!indices.isEmpty())
         {
-            int i = Utilities.randomIndex(indices);
+            int i = Utilities.randomIndex(indices, curBandit.getRnd());
             curBandit.pull(i);
             totalPulls++;
             if (debugUCBBV) System.out.println(Utilities.getPullResult(getName(), i, arms[i], memories[i]));
@@ -65,7 +65,7 @@ public class UCBBV1 implements core.IAlgorithm
                 if (debugUCBBV) System.out.println("[" + getName() + "] D for arm " + i + " set to: " + dValues[i]);
             }
 
-            int start = rnd.nextInt(arms.length);
+            int start = curBandit.getRnd().nextInt(arms.length);
             for (int i = 0; i < arms.length; i++)
             {
                 int index = (i + start) % arms.length;
