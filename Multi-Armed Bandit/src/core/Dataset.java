@@ -425,7 +425,7 @@ public class Dataset
 
             String alg = reader.readLine();
 
-            while (alg != null)
+            while (alg != null && !alg.equals(""))
             {
 
                 List<Double> parameters = new ArrayList<Double>();
