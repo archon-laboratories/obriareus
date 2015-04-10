@@ -145,29 +145,20 @@ public final class Utilities
      * Gets the second best arm Bandit knows of, in terms of mean reward/cost ratio.
      *
      * @param caller The agent calling the method
+     * @param best The index of the best arm (to prevent repeats)
      * @return the index of the second best arm
      */
-    public static int getSecondBest(Bandit caller)
+    public static int getSecondBest(Bandit caller, int best)
     {
         ArmMemory[] memories = caller.getMemories();
         double budget = caller.getBudget();
-        int best = 0;
-        int secondBest = 1;
+        int secondBest = 0;
 
-        for (int j = 2; j < memories.length; j++)
-        {
-            if (memories[best].getCost() > budget && memories[j].getCost() <= budget) // Is it comparably usable?
-                best = j;
-            else if (memories[secondBest].getCost() > budget && memories[j].getCost() <= budget) // How about this one?
+        for (int j = secondBest + 1; j < memories.length; j++)
+            if (memories[j].getCost() <= budget && j != best && (memories[secondBest].getCost() > budget
+                    || (memories[j].getRatio() > memories[secondBest].getRatio())))
                 secondBest = j;
 
-            if ((memories[j].getRatio() > memories[best].getRatio() && memories[j].getCost() <= budget))
-            {
-                secondBest = best;
-                best = j;
-            } else if (memories[j].getRatio() > memories[secondBest].getRatio() && memories[j].getCost() <= budget)
-                secondBest = j;
-        }
         return secondBest;
     } // end getSecondBest
 

@@ -74,7 +74,7 @@ public class EFirst implements core.IAlgorithm
         if (debugEFirst) System.out.println("[" + getName() + "] Exploration budget exhausted.");
 
         int bestArm = Utilities.getBestArm(curBandit); // Get the index of the first largest element
-        int secondBestArm = Utilities.getSecondBest(curBandit); // Get the index of the second largest element
+        int secondBestArm = Utilities.getSecondBest(curBandit, bestArm); // Get the index of the second largest element
 
         while (curBandit.getBudget() >= curBandit.getMinCost())
         {
@@ -86,14 +86,14 @@ public class EFirst implements core.IAlgorithm
             {
                 // Reassign the arms, taking into account budget constraints.
                 bestArm = Utilities.getBestArm(curBandit);
-                secondBestArm = Utilities.getSecondBest(curBandit);
+                secondBestArm = Utilities.getSecondBest(curBandit, bestArm);
             }
 
             if (memories[bestArm].getRatio() < memories[secondBestArm].getRatio()) // Did the best arm fall behind?
             {
                 // Promote the second best, and find the new second best.
                 bestArm = secondBestArm;
-                secondBestArm = Utilities.getSecondBest(curBandit);
+                secondBestArm = Utilities.getSecondBest(curBandit, bestArm);
             }
         }
 
