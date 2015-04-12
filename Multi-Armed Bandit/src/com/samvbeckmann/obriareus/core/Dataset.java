@@ -1,6 +1,6 @@
-package core;
+package com.samvbeckmann.obriareus.core;
 
-import utilities.Utilities;
+import com.samvbeckmann.obriareus.utilities.Utilities;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -118,7 +118,7 @@ public class Dataset
                 try
                 {
                     distributions.add((IDistribution)
-                            Class.forName("defaultDistributions." + distribution).newInstance());
+                            Class.forName("com.samvbeckmann.obriareus.defaultDistributions." + distribution).newInstance());
                     if (printRun) System.out.println("Added Distribution: " + distribution);
                 } catch (Exception e)
                 {
@@ -208,7 +208,7 @@ public class Dataset
             numTrials = Integer.parseInt(reader.readLine());
             if (numTrials < 0)
             {
-                System.out.println("ERROR: Number of trials, " + numTrials + ", is less than zero.");
+                System.err.println("ERROR: Number of trials, " + numTrials + ", is less than zero.");
                 System.exit(4);
             }
             if (printRun) System.out.println("Number of Trials: " + numTrials);
@@ -235,7 +235,7 @@ public class Dataset
             numArms = Integer.parseInt(reader.readLine());
             if (numArms <= 0)
             {
-                System.out.println("ERROR: Number of arms, " + numTrials + ", is less than or equal to zero.");
+                System.err.println("ERROR: Number of arms, " + numTrials + ", is less than or equal to zero.");
                 System.exit(5);
             }
             if (printRun) System.out.println("Number of Arms: " + numArms);
@@ -446,7 +446,7 @@ public class Dataset
                 // Get the algorithm
                 try
                 {
-                    algorithm = (IAlgorithm) Class.forName("defaultAlgorithms." + algorithmName).newInstance();
+                    algorithm = (IAlgorithm) Class.forName("com.samvbeckmann.obriareus.defaultAlgorithms." + algorithmName).newInstance();
                     found = true;
                 } catch (ClassNotFoundException e)
                 {
@@ -456,23 +456,23 @@ public class Dataset
                         found = true;
                     } catch (ClassNotFoundException e1)
                     {
-                        System.out.println("Error! Algorithm " + algorithmName + " not found. Excluding!");
+                        System.err.println("Error! Algorithm " + algorithmName + " not found. Excluding!");
                     } catch (InstantiationException e1)
                     {
-                        System.out.println("Error! Algorithm " + algorithmName + " not instantiated. Excluding!.");
+                        System.err.println("Error! Algorithm " + algorithmName + " not instantiated. Excluding!.");
                         e1.printStackTrace();
                     } catch (IllegalAccessException e1)
                     {
-                        System.out.println("Error! Algorithm " + algorithmName + " not accessed. Excluding!");
+                        System.err.println("Error! Algorithm " + algorithmName + " not accessed. Excluding!");
                         e1.printStackTrace();
                     }
                 } catch (InstantiationException e)
                 {
-                    System.out.println("Error! Algorithm " + algorithmName + " not instantiated. Excluding!.");
+                    System.err.println("Error! Algorithm " + algorithmName + " not instantiated. Excluding!.");
                     e.printStackTrace();
                 } catch (IllegalAccessException e)
                 {
-                    System.out.println("Error! Algorithm " + algorithmName + " not accessed. Excluding!");
+                    System.err.println("Error! Algorithm " + algorithmName + " not accessed. Excluding!");
                     e.printStackTrace();
                 }
                 if (found)

@@ -1,4 +1,4 @@
-package core;
+package com.samvbeckmann.obriareus.core;
 
 import java.io.File;
 import java.io.IOException;

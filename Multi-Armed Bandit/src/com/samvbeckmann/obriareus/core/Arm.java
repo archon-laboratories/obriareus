@@ -1,4 +1,4 @@
-package core;
+package com.samvbeckmann.obriareus.core;
 
 /**
  * Defines an arm, of which a bandit can pull

@@ -1,6 +1,6 @@
-package defaultAlgorithms;
+package com.samvbeckmann.obriareus.defaultAlgorithms;
 
-import core.Bandit;
+import com.samvbeckmann.obriareus.core.Bandit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Sam Beckmann, Nate Beckemeyer. Thanks to Anton Ridgeway for original implementations.
  */
-public class Greedy implements core.IAlgorithm
+public class Greedy implements com.samvbeckmann.obriareus.core.IAlgorithm
 {
     @Override
     public String getName()

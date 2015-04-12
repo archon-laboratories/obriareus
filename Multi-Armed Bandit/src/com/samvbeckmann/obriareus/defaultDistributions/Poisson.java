@@ -1,6 +1,6 @@
-package defaultDistributions;
+package com.samvbeckmann.obriareus.defaultDistributions;
 
-import core.IDistribution;
+import com.samvbeckmann.obriareus.core.IDistribution;
 
 import java.util.Random;
 

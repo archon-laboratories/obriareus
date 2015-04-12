@@ -1,9 +1,9 @@
-package defaultAlgorithms;
+package com.samvbeckmann.obriareus.defaultAlgorithms;
 
-import core.Arm;
-import core.ArmMemory;
-import core.Bandit;
-import utilities.Utilities;
+import com.samvbeckmann.obriareus.core.Arm;
+import com.samvbeckmann.obriareus.core.ArmMemory;
+import com.samvbeckmann.obriareus.core.Bandit;
+import com.samvbeckmann.obriareus.utilities.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Sam Beckmann, Nate Beckemeyer. Thanks to Anton Ridgeway for original implementations.
  */
-public class SOAAv implements core.IAlgorithm
+public class SOAAv implements com.samvbeckmann.obriareus.core.IAlgorithm
 {
     private static final boolean debugSOAAv = false;
 

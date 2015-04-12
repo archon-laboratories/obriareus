@@ -1,18 +1,17 @@
-package defaultAlgorithms;
+package com.samvbeckmann.obriareus.defaultAlgorithms;
 
-import core.Arm;
-import core.Bandit;
-import utilities.Utilities;
+import com.samvbeckmann.obriareus.core.Arm;
+import com.samvbeckmann.obriareus.core.Bandit;
+import com.samvbeckmann.obriareus.utilities.Utilities;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * fKDE (Fractional Knapsack Based Decreasing ε–greedy)
  *
  * @author Sam Beckmann, Nate Beckemeyer. Thanks to Anton Ridgeway for original implementations.
  */
-public class FKDE implements core.IAlgorithm
+public class FKDE implements com.samvbeckmann.obriareus.core.IAlgorithm
 {
     private static final boolean debugFKDE = false;
 

@@ -1,4 +1,4 @@
-package core;
+package com.samvbeckmann.obriareus.core;
 
 /**
  * Interface for defaultDistributions that can return rewards.

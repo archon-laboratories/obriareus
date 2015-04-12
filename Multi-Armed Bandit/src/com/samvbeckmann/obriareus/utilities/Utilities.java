@@ -1,8 +1,8 @@
-package utilities;
+package com.samvbeckmann.obriareus.utilities;
 
-import core.Arm;
-import core.ArmMemory;
-import core.Bandit;
+import com.samvbeckmann.obriareus.core.Arm;
+import com.samvbeckmann.obriareus.core.ArmMemory;
+import com.samvbeckmann.obriareus.core.Bandit;
 
 import java.util.List;
 import java.util.Random;

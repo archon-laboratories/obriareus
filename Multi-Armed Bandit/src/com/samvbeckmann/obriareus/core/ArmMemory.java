@@ -1,4 +1,4 @@
-package core;
+package com.samvbeckmann.obriareus.core;
 
 /**
  * Contains the memory of an arm,
