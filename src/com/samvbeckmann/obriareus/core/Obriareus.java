@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Implementation of the Multi-Armed Bandit Problem
+ * Implementation of Obriareus, a Multi-Armed Bandit Problem utility.
  *
  * @author Sam Beckmann, Nate Beckemeyer
  */
-public class Implementation
+public class Obriareus
 {
 
     public static void main(String[] args) throws IOException
