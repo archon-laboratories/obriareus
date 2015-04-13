@@ -148,7 +148,7 @@ To break down the precise syntax:
 * **Distributions to Run:** The first line of the dataset is skipped by the interpreter, but should be
                             `# Distributions to Run` or something equally descriptive. The next lines should contain
                             one distribution to run per line. Each distribution run will generate its own output file.
-                            The Distributions supported by default are Gaussian and Poisson, but more can be added.
+                            The distributions supported by default are Gaussian and Poisson, but more can be added.
                             As in all sections, a blank line should be left after the last dataset to indicate to
                             the interpreter you are finished adding defaultDistributions.
 
@@ -181,7 +181,7 @@ To break down the precise syntax:
                     the last arm. There should be the same number of lines in this section at the number of arms
                     specified in an earlier section. The shortened syntax for this section is indicated by a `*` in the
                     first line of the section. The next line then contains a distibution to applied to the mean rewards.
-                    The accepted notations are `linear`, which spaces the means according to the algorithm
+                    The accepted notations are `linear`, which spaces the means according to the algorithm.
 
 * **Standard Deviations:** The next line is skipped by the interpreter, but should be `# Standard Deviations` or
                            something equally descriptive. The next lines should be the standard deviations for each arm,
@@ -191,7 +191,7 @@ To break down the precise syntax:
                            The next line then contains a single standard deviation, which is applied to all the lines.
                            Note that a standard deviation is a double greater than 0.
 
-* **Algorithms:** The next line is skipped by the interpreter, but should be `# Algorithms` of something equally
+* **Algorithms:** The next line is skipped by the interpreter, but should be `# Algorithms` or something equally
                   descriptive. The following lines each initialize one algorithm that will be used by the dataset.
                   Initializing an algorithm is done by writing the fully qualified classpath of the class that contains the algorithm. If the algorithm accepts
                   any other arguments, they are given in doubles separated by a comma and a space. The default
