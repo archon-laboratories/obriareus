@@ -1,0 +1,39 @@
+# Distributions to Run
+com.samvbeckmann.obriareus.distributions.Gaussian
+com.samvbeckmann.obriareus.distributions.Poisson
+
+# Budgets to Run
+*
+500
+500
+10
+
+# Number of Trials
+1000
+
+# Number of Arms
+100
+
+# Arm Costs
+*
+1
+
+# Mean Rewards
+*
+linear
+
+# Standard Deviations
+*
+.3
+
+# Algorithms
+com.samvbeckmann.obriareus.algorithms.Greedy
+com.samvbeckmann.obriareus.algorithms.EFirst, .1
+com.samvbeckmann.obriareus.algorithms.EFirst, .2
+com.samvbeckmann.obriareus.algorithms.FKUBE
+com.samvbeckmann.obriareus.algorithms.FKDE, 10
+com.samvbeckmann.obriareus.algorithms.UCBBV1
+com.samvbeckmann.obriareus.algorithms.EProgressive, .1
+com.samvbeckmann.obriareus.algorithms.EProgressive, .2
+com.samvbeckmann.obriareus.algorithms.LSplit, .5
+com.samvbeckmann.obriareus.algorithms.SOAAv, 0
