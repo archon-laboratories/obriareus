@@ -3,7 +3,7 @@ Obriareus
 
 *By: Sam Beckmann, Nate Beckemeyer*
 
-Utility for testing algorithms in the multi-armed bandit problem with budget constraints.
+Framework for testing algorithms in the multi-armed bandit problem with budget constraints.
 
 Changeable Parameters:
 
