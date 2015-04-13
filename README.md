@@ -28,14 +28,12 @@ Changeable Parameters:
 Inputting Data
 --------------
 
-To input a dataset to the program, create a file named `datasetXXX.dat` where `XXX` can be anything.
-Place this file in the `datasets` folder, one level under Multi-Armed Bandit.
-The following two datasets input the same information.
+To input a dataset to the program, create a file in a `datasets` folder your working directory. There are some shortcuts for the syntax of entering data, so the following two sample datasets input the same data:
 
 ```
 # Distributions to Run
-Gaussian
-Poisson
+com.samvbeckmann.obriareus.distributions.Gaussian
+com.samvbeckmann.obriareus.distributions.Poisson
 
 # Budgets to Run
 50
@@ -55,7 +53,7 @@ Poisson
 # Number of Arms
 10
 
-# core.Arm Costs
+# Arm Costs
 1
 1
 1
@@ -92,21 +90,21 @@ Poisson
 .3
 
 # Algorithms
-Greedy
-EFirst, .1
-EFirst, .2
-FKUBE
-FKDE, 10
-UCBBV1
-EProgressive, .1
-EProgressive, .2
-LSplit, .5
-SOAAv, 0
+com.samvbeckmann.obriareus.algorithms.Greedy
+com.samvbeckmann.obriareus.algorithms.EFirst, .1
+com.samvbeckmann.obriareus.algorithms.EFirst, .2
+com.samvbeckmann.obriareus.algorithms.FKUBE
+com.samvbeckmann.obriareus.algorithms.FKDE, 10
+com.samvbeckmann.obriareus.algorithms.UCBBV1
+com.samvbeckmann.obriareus.algorithms.EProgressive, .1
+com.samvbeckmann.obriareus.algorithms.EProgressive, .2
+com.samvbeckmann.obriareus.algorithms.LSplit, .5
+com.samvbeckmann.obriareus.algorithms.SOAAv, 0
 ```
 ```
 # Distributions to Run
-Gaussian
-Poisson
+com.samvbeckmann.obriareus.distributions.Gaussian
+com.samvbeckmann.obriareus.distributions.Poisson
 
 # Budgets to Run
 *
@@ -120,7 +118,7 @@ Poisson
 # Number of Arms
 10
 
-# core.Arm Costs
+# Arm Costs
 *
 1
 
@@ -133,16 +131,16 @@ linear
 .3
 
 # Algorithms
-Greedy
-EFirst, .1
-EFirst, .2
-FKUBE
-FKDE, 10
-UCBBV1
-EProgressive, .1
-EProgressive, .2
-LSplit, .5
-SOAAv, 0
+com.samvbeckmann.obriareus.algorithms.Greedy
+com.samvbeckmann.obriareus.algorithms.EFirst, .1
+com.samvbeckmann.obriareus.algorithms.EFirst, .2
+com.samvbeckmann.obriareus.algorithms.FKUBE
+com.samvbeckmann.obriareus.algorithms.FKDE, 10
+com.samvbeckmann.obriareus.algorithms.UCBBV1
+com.samvbeckmann.obriareus.algorithms.EProgressive, .1
+com.samvbeckmann.obriareus.algorithms.EProgressive, .2
+com.samvbeckmann.obriareus.algorithms.LSplit, .5
+com.samvbeckmann.obriareus.algorithms.SOAAv, 0
 
 ```
 To break down the precise syntax:
@@ -195,8 +193,7 @@ To break down the precise syntax:
 
 * **Algorithms:** The next line is skipped by the interpreter, but should be `# Algorithms` of something equally
                   descriptive. The following lines each initialize one algorithm that will be used by the dataset.
-                  Initializing an algorithm is done by writing the name of the class that contains the algorithm.
-                  (Or classpath, if the algorithm is not in one of the default locations). If the algorithm accepts
+                  Initializing an algorithm is done by writing the fully qualified classpath of the class that contains the algorithm. If the algorithm accepts
                   any other arguments, they are given in doubles separated by a comma and a space. The default
                   algorithms and their arguments are detailed below.
 
@@ -204,13 +201,13 @@ Output
 ------
 
 The program outputs data in two ways: First, a sample of data is outputted the console. The output lists the
-distribution, budget, and algorithm that is being evaluated, followed by the normalized output of the algorithm
-(its average utility minus the average utility of of all the algorithms).
+distribution, budget, and algorithm that is being evaluated, followed by the normalized and absolute output of the algorithm
+(normalized output is the algorithm's average utility minus the average utility of of all the algorithms).
 
 For plotting purposes, the data is also outputted to the `output` folder in the project as a .txt file under the name
-`dataset_distribution.txt` where dataset is the name of the dataset that is being used, and distribution being the
-distribution of rewards for that specific output. The file is formatted with the first item in each line is the
-budget for that line contains the output of, and the remaining items are the normalized rewards of the algorithms,
+`dataset_distribution_normalized.txt` where dataset is the name of the dataset that is being used, distribution being the
+distribution of rewards for that specific output, and normalized being either normalized or absolute, based on what data the file contains. The file is formatted with the first item in each line is the
+budget for that line contains the output of, and the remaining items are the rewards of the algorithms,
 printed in the order the algorithms were initialized in the dataset. All values are separated by commas.
 
 Default Algorithms
@@ -269,7 +266,7 @@ Obriareus contains 8 algorithms by default:
 Default Distributions
 ---------------------
 
-Multi-Armed Bandit contains 2 different reward distributions by default:
+Obriareus contains 2 different reward distributions by default:
 
 * **Gaussian:** A normal distribution of rewards, centered on a passed mean and standard deviation given by a passed
                 standard deviation.
@@ -280,9 +277,8 @@ Multi-Armed Bandit contains 2 different reward distributions by default:
 Extending
 ---------
 
-It is possible to extend Multi-Armed Bandit to implement your own algorithms and reward distributions.
+It is possible to extend Obriareus to implement your own algorithms and reward distributions.
 
-To do so, simply create directories titled `algorithms` and `distributions`, respectively. For algorithms to be
-recognized by the program, they must implement the `IAlgorithms` interface. Reward distributions must implement the
-`IDistribution` interface. To call new algorithms and distributions, simply put the name of their class down in the
+To do so, simply import Obriareus as a library or framework, then create your own algorithms and distributions in your project. For algorithms to be recognized by Obriareus, they must implement the `IAlgorithms` interface. Reward distributions must implement the
+`IDistribution` interface. To call new algorithms and distributions, simply put the fully qualified classpath in the
 appropriate location in the dataset file.
