@@ -17,13 +17,13 @@ public class Gaussian implements IDistribution
     private Random rnd = new Random();
 
     /**
-     * Gets the reward from this distribution, given a mean and standard deviation.
+     * Generates a value based on the Gaussian distribution, given a mean and standard deviation.
      *
-     * @param mean   The mean reward.
-     * @param stdDev The standard deviation of rewards.
-     * @return A returned reward from the distribution.
+     * @param mean   The mean return.
+     * @param stdDev The standard deviation of returns.
+     * @return The value calculated by the distribution.
      */
-    public double getReward(double mean, double stdDev)
+    public double generateValue(double mean, double stdDev)
     {
         return rnd.nextGaussian() * stdDev + mean;
     }

@@ -17,14 +17,14 @@ public class Poisson implements IDistribution
     private Random rnd = new Random();
 
     /**
-     * Gets the reward from this distribution, given a mean and standard deviation.
+     * Given a mean and standard deviation, generates a return based on the Poisson distribution.
      * Calculated according to the Knuth algorithm.
      *
-     * @param mean   The mean reward (lambda).
+     * @param mean   The mean return (lambda).
      * @param stdDev Does nothing.
      * @return A returned reward from the distribution.
      */
-    public double getReward(double mean, double stdDev)
+    public double generateValue(double mean, double stdDev)
     {
         double l = Math.exp(-mean);
         int k = 0;

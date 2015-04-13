@@ -62,7 +62,7 @@ public class Arm
      */
     public double getReward()
     {
-        double reward = currentDistribution.getReward(mean, stdDev);
+        double reward = currentDistribution.generateValue(mean, stdDev);
 
         if (reward < 0)
             return 0;
