@@ -29,7 +29,7 @@ public class Obriareus
             String set = scanInput.next();
             try
             {
-                File inputFile = new File("datasets/dataset" + set + ".dat");
+                File inputFile = new File("datasets/" + set);
                 Dataset dataset = new Dataset(inputFile, set);
                 datasets.add(dataset);
             } catch (IOException e)
@@ -44,4 +44,4 @@ public class Obriareus
         }
     } // end main
 
-} // end Implementation
+} // end Obriareus

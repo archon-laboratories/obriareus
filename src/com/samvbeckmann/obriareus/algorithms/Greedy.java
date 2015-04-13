@@ -1,4 +1,4 @@
-package com.samvbeckmann.obriareus.defaultAlgorithms;
+package com.samvbeckmann.obriareus.algorithms;
 
 import com.samvbeckmann.obriareus.core.Bandit;
 

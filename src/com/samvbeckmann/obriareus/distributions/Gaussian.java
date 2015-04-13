@@ -1,4 +1,4 @@
-package com.samvbeckmann.obriareus.defaultDistributions;
+package com.samvbeckmann.obriareus.distributions;
 
 import com.samvbeckmann.obriareus.core.IDistribution;
 

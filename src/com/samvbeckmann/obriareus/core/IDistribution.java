@@ -1,7 +1,7 @@
 package com.samvbeckmann.obriareus.core;
 
 /**
- * Interface for defaultDistributions that can return rewards.
+ * Interface for Distributions that can return rewards.
  *
  * @author Sam Beckmann, Nate Beckemeyer
  */

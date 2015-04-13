@@ -117,18 +117,11 @@ public class Dataset
             {
                 try
                 {
-                    distributions.add((IDistribution)
-                            Class.forName("com.samvbeckmann.obriareus.defaultDistributions." + distribution).newInstance());
+                    distributions.add((IDistribution) Class.forName(distribution).newInstance());
                     if (printRun) System.out.println("Added Distribution: " + distribution);
                 } catch (Exception e)
                 {
-                    try
-                    {
-                        distributions.add((IDistribution) Class.forName("distributions." + distribution).newInstance());
-                    } catch (Exception e1)
-                    {
-                        System.err.println("Could not add distribution \"" + distribution + "\": " + e1);
-                    }
+                    System.err.println("Could not add distribution \"" + distribution + "\": " + e);
                 }
                 distribution = reader.readLine();
 
@@ -433,7 +426,6 @@ public class Dataset
                 scanInput.useDelimiter(", *");
 
                 String algorithmName = scanInput.next();
-                algorithmName = algorithmName.substring(0, 1).toUpperCase() + algorithmName.substring(1);
                 boolean found = false;
                 IAlgorithm algorithm = null;
                 int count = 0;
@@ -446,35 +438,21 @@ public class Dataset
                 // Get the algorithm
                 try
                 {
-                    algorithm = (IAlgorithm) Class.forName("com.samvbeckmann.obriareus.defaultAlgorithms." + algorithmName).newInstance();
+                    algorithm = (IAlgorithm) Class.forName(algorithmName).newInstance();
                     found = true;
-                } catch (ClassNotFoundException e)
+                } catch (ClassNotFoundException e1)
                 {
-                    try
-                    {
-                        algorithm = (IAlgorithm) Class.forName("algorithms." + algorithmName).newInstance();
-                        found = true;
-                    } catch (ClassNotFoundException e1)
-                    {
-                        System.err.println("Error! Algorithm " + algorithmName + " not found. Excluding!");
-                    } catch (InstantiationException e1)
-                    {
-                        System.err.println("Error! Algorithm " + algorithmName + " not instantiated. Excluding!.");
-                        e1.printStackTrace();
-                    } catch (IllegalAccessException e1)
-                    {
-                        System.err.println("Error! Algorithm " + algorithmName + " not accessed. Excluding!");
-                        e1.printStackTrace();
-                    }
-                } catch (InstantiationException e)
+                    System.err.println("Error! Algorithm " + algorithmName + " not found. Excluding!");
+                } catch (InstantiationException e1)
                 {
                     System.err.println("Error! Algorithm " + algorithmName + " not instantiated. Excluding!.");
-                    e.printStackTrace();
-                } catch (IllegalAccessException e)
+                    e1.printStackTrace();
+                } catch (IllegalAccessException e1)
                 {
                     System.err.println("Error! Algorithm " + algorithmName + " not accessed. Excluding!");
-                    e.printStackTrace();
+                    e1.printStackTrace();
                 }
+
                 if (found)
                 {
                     if (printRun) System.out.println("Algorithm added: " + alg);
