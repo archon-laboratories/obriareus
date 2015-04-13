@@ -573,6 +573,9 @@ public class Dataset
      */
     private void outputFile(double[] means, String distribution, int budget, boolean normalized)
     {
+        File dir = new File("output/");
+        if (!dir.exists())
+            dir.mkdirs();
         String outputNormal = normalized ? "Normalized" : "Absolute";
         try
         {
@@ -591,7 +594,7 @@ public class Dataset
 
         } catch (IOException e)
         {
-            System.err.print("IO Exception! You might not have an output folder." + e + "\n");
+            System.err.print("IO Exception during output!" + e + "\n");
         }
     } // end outputFile
 
