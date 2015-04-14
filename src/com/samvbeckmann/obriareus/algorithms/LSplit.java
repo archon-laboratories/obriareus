@@ -85,12 +85,9 @@ public class LSplit implements com.samvbeckmann.obriareus.core.IAlgorithm
                 {
                     int currentBest = Utilities.getBestFromFeasibles(curBandit, feasibles);
                     if (arms[currentBest].getCost() <= curBandit.getBudget())
-                    {
                         remainingArms.add(currentBest);
-                    } else
-                    {
+                    else
                         i--;
-                    }
                     feasibles.remove(new Integer(currentBest));
                 }
             }
