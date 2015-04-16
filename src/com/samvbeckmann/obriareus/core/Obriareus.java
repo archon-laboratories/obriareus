@@ -59,5 +59,6 @@ public class Obriareus
         {
             System.err.println("Error trying to read dataset \"" + datasetName + "\": " + e);
         }
-    }
+    } // end addDataset
+
 } // end Obriareus
