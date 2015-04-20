@@ -61,28 +61,13 @@ public class Plot
         /* Initial Arguments */
         JavaPlot jPlot = new JavaPlot();
         String norm = normalized ? "Normalized" : "Absolute";
-        PostscriptTerminal epsf = new PostscriptTerminal(String.format("output/graphs/%s_%s_%s.pdf", dataset.toString(),
+        PostscriptTerminal epsf = new PostscriptTerminal(String.format("output/graphs/%s_%s_%s.eps", dataset.toString(),
                 distribution.getName(), norm));
-//        epsf.set("size", "8in, 4in");
         jPlot.setTerminal(epsf);
-//        jPlot.set("term", "eps size 1000, 400");
         jPlot.setTitle(String.format("%s %s %s", dataset.toString(), distribution.getName(), norm));
         jPlot.getAxis("x").setLabel("Budget");
         jPlot.getAxis("y").setLabel((norm) + " Performance");
-        jPlot.setKey(JavaPlot.Key.TOP_LEFT);
-//        jPlot.set("view","equals xyz");
-//        jPlot.set("view", ",2,");
-//        jPlot.set("size", "square");
-//        jPlot.set("ratio", "1");
-
-        /* Test Code, to remove */
-//        double[][] set = data.get(0);
-//        DataSetPlot s = new DataSetPlot(set);
-//        jPlot.addPlot(s);
-//
-//        PlotStyle stl = ((AbstractPlot) jPlot.getPlots().get(0)).getPlotStyle();
-//        stl.setStyle(Style.LINESPOINTS);
-        /* end test code */
+        jPlot.setKey(JavaPlot.Key.OUTSIDE);
 
         /* Add the data as plots */
         for (int i = 0; i < data.size(); i++)
@@ -100,29 +85,8 @@ public class Plot
             stl.setStyle(Style.LINESPOINTS);
         }
 
-        jPlot.newGraph();
-
-//        stl.setLineType(NamedPlotColor.GOLDENROD);
-//        stl.setPointType(5);
-//        stl.setPointSize(8);
-
-
-//        p.addPlot("sin(x)");
-
-//        p.newGraph3D();
-//        double[][] plot3d = {{1, 1.1, 3}, {2, 2.2, 3}, {3, 3.3, 3.4}, {4, 4.3, 5}};
-//        p.addPlot(plot3d);
-
-//        p.newGraph3D();
-//        p.addPlot("sin(x)*sin(y)");
-
-//        p.setMultiTitle("Global test title");
-//        StripeLayout lo = new StripeLayout();
-//        lo.setColumns(9999);
-//        p.getPage().setLayout(lo);
-
+        /* Plot */
         jPlot.plot();
-
         return jPlot;
     }
 }
