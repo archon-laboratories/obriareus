@@ -512,8 +512,8 @@ public class Dataset
                 // NOOP
             }
 
-            Plot plotNormalized = new Plot(budgets.size(), true);
-            Plot plotAbsolute = new Plot(budgets.size(), false);
+            Plot plotNormalized = new Plot(this, true, distribution);
+            Plot plotAbsolute = new Plot(this, false, distribution);
 
             // run for each budget
             for (int budget : budgets)
@@ -623,5 +623,22 @@ public class Dataset
 
         System.out.println();
     } // end displayMeans
+
+    public List<Integer> getBudgets()
+    {
+        return budgets;
+    }
+
+    public List<AlgObject> getAlgorithms()
+    {
+        return algorithms;
+    }
+
+    @Override
+    public String toString()
+    {
+        return fileName;
+    }
+
 
 } // end Dataset

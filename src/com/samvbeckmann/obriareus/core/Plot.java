@@ -5,22 +5,33 @@ import com.panayotis.gnuplot.plot.AbstractPlot;
 import com.panayotis.gnuplot.plot.DataSetPlot;
 import com.panayotis.gnuplot.style.PlotStyle;
 import com.panayotis.gnuplot.style.Style;
+import com.panayotis.gnuplot.terminal.PostscriptTerminal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Mucking about with JavaPlot in attempting to get a reasonable plot
  */
 public class Plot
 {
-    private JavaPlot jPlot;
     private boolean normalized;
-    private double[][] data;
+    private Dataset dataset;
+    private IDistribution distribution;
+    private List<double[][]> data;
     private int counter;
 
-    public Plot(int numBudgets, boolean normalized)
+    public Plot(Dataset dataset, boolean normalized, IDistribution distribution)
     {
+        this.dataset = dataset;
         this.normalized = normalized;
+        this.distribution = distribution;
         counter = 0;
-        data = new double[numBudgets][];
+        data = new ArrayList<double[][]>();
+        for (int i = 0; i < dataset.getAlgorithms().size(); i++)
+        {
+            data.add(new double[dataset.getBudgets().size()][2]);
+        }
     }
 
     /**
@@ -33,41 +44,69 @@ public class Plot
     {
         try
         {
-            data[counter][0] = budget;
-            for (int i = 0; 1 < means.length; i++)
+            for (int i = 0; i < means.length; i++)
             {
-                data[counter][i + 1] = means[i];
+                data.get(i)[counter][0] = budget;
+                data.get(i)[counter][1] = means[i];
             }
             counter++;
         } catch (ArrayIndexOutOfBoundsException e)
         {
-            System.err.print("Encounter a problem trying to add plotting data: " + e);
+            System.err.print("Encountered a problem trying to add plotting data: " + e + "\n");
         }
     }
 
     public JavaPlot generatePlot()
     {
-        jPlot = new JavaPlot();
-        jPlot.setTitle("Testing Output");
-        jPlot.getAxis("x").setLabel("Budget", "Arial", 20);
-        jPlot.getAxis("y").setLabel(normalized ? "Normalized" : "Absolute" + " Performance");
+        /* Initial Arguments */
+        JavaPlot jPlot = new JavaPlot();
+        String norm = normalized ? "Normalized" : "Absolute";
+        PostscriptTerminal epsf = new PostscriptTerminal(String.format("output/graphs/%s_%s_%s.pdf", dataset.toString(),
+                distribution.getName(), norm));
+//        epsf.set("size", "8in, 4in");
+        jPlot.setTerminal(epsf);
+//        jPlot.set("term", "eps size 1000, 400");
+        jPlot.setTitle(String.format("%s %s %s", dataset.toString(), distribution.getName(), norm));
+        jPlot.getAxis("x").setLabel("Budget");
+        jPlot.getAxis("y").setLabel((norm) + " Performance");
+        jPlot.setKey(JavaPlot.Key.TOP_LEFT);
+//        jPlot.set("view","equals xyz");
+//        jPlot.set("view", ",2,");
+//        jPlot.set("size", "square");
+//        jPlot.set("ratio", "1");
 
-//        jPlot.getAxis("x").setBoundaries(-30, 20);
-        jPlot.setKey(JavaPlot.Key.OUTSIDE);
+        /* Test Code, to remove */
+//        double[][] set = data.get(0);
+//        DataSetPlot s = new DataSetPlot(set);
+//        jPlot.addPlot(s);
+//
+//        PlotStyle stl = ((AbstractPlot) jPlot.getPlots().get(0)).getPlotStyle();
+//        stl.setStyle(Style.LINESPOINTS);
+        /* end test code */
 
+        /* Add the data as plots */
+        for (int i = 0; i < data.size(); i++)
+        {
+            double[][] set = data.get(i);
+            DataSetPlot s = new DataSetPlot(set);
+            s.setTitle(dataset.getAlgorithms().get(i).getAlgorithm());
+            jPlot.addPlot(s);
+        }
 
-//        double[][] plot = {{1, 1.1}, {2, 2.2}, {3, 3.3}, {4, 4.3}}; // whats this do
-        DataSetPlot s = new DataSetPlot(data);
-        jPlot.addPlot(s);
-//        jPlot.addPlot("besj0(x)*0.12e1");
-        PlotStyle stl = ((AbstractPlot) jPlot.getPlots().get(1)).getPlotStyle();
-        stl.setStyle(Style.LINESPOINTS);
+        /* Set plot styles */
+        for (int i = 0; i < data.size(); i++)
+        {
+            PlotStyle stl = ((AbstractPlot) jPlot.getPlots().get(i)).getPlotStyle();
+            stl.setStyle(Style.LINESPOINTS);
+        }
+
+        jPlot.newGraph();
+
 //        stl.setLineType(NamedPlotColor.GOLDENROD);
 //        stl.setPointType(5);
 //        stl.setPointSize(8);
-//        jPlot.addPlot("sin(x)");
 
-        jPlot.newGraph();
+
 //        p.addPlot("sin(x)");
 
 //        p.newGraph3D();
@@ -81,6 +120,7 @@ public class Plot
 //        StripeLayout lo = new StripeLayout();
 //        lo.setColumns(9999);
 //        p.getPage().setLayout(lo);
+
         jPlot.plot();
 
         return jPlot;
