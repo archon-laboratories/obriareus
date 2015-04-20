@@ -8,9 +8,9 @@ package com.samvbeckmann.obriareus.core;
 public class Arm
 {
     /**
-     * The distribution that this arm is currently using. Gaussian by default.
+     * The distribution that this arm's reward method is currently using. Gaussian by default.
      */
-    private IDistribution currentDistribution;
+    private IDistribution rewardDistribution;
 
     /**
      * Cost to pull the arm.
@@ -40,7 +40,7 @@ public class Arm
         cost = cost_;
         stdDev = stdDev_;
         mean = mean_;
-        currentDistribution = distribution;
+        rewardDistribution = distribution;
     } // end constructor
 
     /**
@@ -58,11 +58,11 @@ public class Arm
     /**
      * Gets the reward off the arm based off of the currently used reward distribution.
      *
-     * @return the current distribution's reward; -1 if the currentDistribution is missing
+     * @return the current distribution's reward; -1 if the rewardDistribution is missing
      */
     public double getReward()
     {
-        double reward = currentDistribution.getReward(mean, stdDev);
+        double reward = rewardDistribution.generateValue(mean, stdDev);
 
         if (reward < 0)
             return 0;
@@ -88,8 +88,8 @@ public class Arm
     /**
      * @param distribution IDistribution for this arms distribution to be set to.
      */
-    public void setCurrentDistribution(IDistribution distribution)
+    public void setRewardDistribution(IDistribution distribution)
     {
-        currentDistribution = distribution;
+        rewardDistribution = distribution;
     }
 }

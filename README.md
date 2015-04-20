@@ -3,7 +3,7 @@ Obriareus
 
 *By: Sam Beckmann, Nate Beckemeyer*
 
-Utility for testing algorithms in the multi-armed bandit problem with budget constraints.
+Framework for testing algorithms in the multi-armed bandit problem with budget constraints.
 
 Changeable Parameters:
 
@@ -266,19 +266,21 @@ Obriareus contains 8 algorithms by default:
 Default Distributions
 ---------------------
 
-Obriareus contains 2 different reward distributions by default:
+Obriareus contains 3 different value distributions by default:
 
-* **Gaussian:** A normal distribution of rewards, centered on a passed mean and standard deviation given by a passed
+* **Constant:** Returns the same mean value consistently.
+
+* **Gaussian:** A normal distribution of values, centered on a passed mean and standard deviation given by a passed
                 standard deviation.
 
-* **Poisson:** The poisson distribution of rewards, where the rewards center on a mean and only return positive values.
+* **Poisson:** The poisson distribution of values, where the values center on a mean and only return positive values.
                Calculated using the Knuth algorithm.
-
+               
 Extending
 ---------
 
-It is possible to extend Obriareus to implement your own algorithms and reward distributions.
+It is possible to extend Obriareus to implement your own algorithms and distributions.
 
-To do so, simply import Obriareus as a library or framework, then create your own algorithms and distributions in your project. For algorithms to be recognized by Obriareus, they must implement the `IAlgorithms` interface. Reward distributions must implement the
+To do so, simply import Obriareus as a library or framework, then create your own algorithms and distributions in your project. For algorithms to be recognized by Obriareus, they must implement the `IAlgorithms` interface. Distributions must implement the
 `IDistribution` interface. To call new algorithms and distributions, simply put the fully qualified classpath in the
 appropriate location in the dataset file.

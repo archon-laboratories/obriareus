@@ -494,7 +494,7 @@ public class Dataset
         {
             System.out.println("Distribution: " + distribution.getName() + "\n");
             for (Arm current : datasetArms)
-                current.setCurrentDistribution(distribution);
+                current.setRewardDistribution(distribution);
 
 
             try // Delete absolute output file if it exists

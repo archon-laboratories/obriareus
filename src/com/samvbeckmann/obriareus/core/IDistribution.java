@@ -8,13 +8,13 @@ package com.samvbeckmann.obriareus.core;
 public interface IDistribution
 {
     /**
-     * Gets the reward from this distribution, given a mean and standard deviation.
+     * Generates a value based on this distribution, given a mean and standard deviation.
      *
      * @param mean   The mean reward.
      * @param stdDev The standard deviation of rewards.
      * @return A returned reward from the distribution.
      */
-    double getReward(double mean, double stdDev);
+    double generateValue(double mean, double stdDev);
 
     /**
      * To print the name of the distribution.
