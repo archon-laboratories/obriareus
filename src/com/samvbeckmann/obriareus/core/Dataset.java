@@ -512,6 +512,8 @@ public class Dataset
                 // NOOP
             }
 
+            Plot plotNormalized = new Plot(this, true, distribution);
+            Plot plotAbsolute = new Plot(this, false, distribution);
 
             // run for each budget
             for (int budget : budgets)
@@ -558,8 +560,13 @@ public class Dataset
 
                 displayMeans(normalizedRewards, meanRewards);
                 outputFile(normalizedRewards, distribution.getName(), budget, true);
+                plotNormalized.addToDataset(normalizedRewards, budget);
                 outputFile(meanRewards, distribution.getName(), budget, false);
+                plotAbsolute.addToDataset(meanRewards, budget);
             }
+
+            plotNormalized.generatePlot();
+            plotAbsolute.generatePlot();
         }
     } // end runSet
 
@@ -616,5 +623,22 @@ public class Dataset
 
         System.out.println();
     } // end displayMeans
+
+    public List<Integer> getBudgets()
+    {
+        return budgets;
+    }
+
+    public List<AlgObject> getAlgorithms()
+    {
+        return algorithms;
+    }
+
+    @Override
+    public String toString()
+    {
+        return fileName;
+    }
+
 
 } // end Dataset
