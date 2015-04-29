@@ -14,7 +14,7 @@ public class Gaussian implements IDistribution
     /**
      * Random generator for the Distribution.
      */
-    private Random rnd = new Random();
+    private static Random rnd = new Random();
 
     /**
      * Generates a value based on the Gaussian distribution, given a mean and standard deviation.
@@ -23,6 +23,7 @@ public class Gaussian implements IDistribution
      * @param stdDev The standard deviation of returns.
      * @return The value calculated by the distribution.
      */
+    @Override
     public double generateValue(double mean, double stdDev)
     {
         return rnd.nextGaussian() * stdDev + mean;

@@ -55,7 +55,7 @@ public class FKUBE implements com.samvbeckmann.obriareus.core.IAlgorithm
             {
                 //Make sure we can't go over budget here.
                 int x = Utilities.randomIndex(temp, curBandit.getRnd());
-                if (arms[x].getCost() <= curBandit.getBudget())
+                if (arms[x].getCostMean() <= curBandit.getBudget())
                 {
                     curBandit.pull(x);
                     if (debugFKUBE) System.out.println(Utilities.getPullResult(getName(), x, arms[x], memories[x]));

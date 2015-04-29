@@ -53,6 +53,7 @@ public class Obriareus
         try
         {
             File inputFile = new File("datasets/" + datasetName);
+            dataset2 peppy = new dataset2();
             Dataset dataset = new Dataset(inputFile, datasetName);
             datasets.add(dataset);
         } catch (IOException e)

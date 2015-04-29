@@ -69,7 +69,7 @@ public class UCBBV1 implements com.samvbeckmann.obriareus.core.IAlgorithm
             for (int i = 0; i < arms.length; i++)
             {
                 int index = (i + start) % arms.length;
-                if (arms[index].getCost() <= curBandit.getBudget()
+                if (arms[index].getCostMean() <= curBandit.getBudget()
                         && (currentBest < 0 || dValues[index] > dValues[currentBest]))
                 {
                     currentBest = index;

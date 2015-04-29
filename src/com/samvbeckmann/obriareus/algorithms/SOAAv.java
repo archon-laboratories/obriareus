@@ -48,7 +48,7 @@ public class SOAAv implements com.samvbeckmann.obriareus.core.IAlgorithm
             {
                 int armToPull = activeArms.get(Utilities.randomIndex(indices, curBandit.getRnd()));
 
-                if (arms[armToPull].getCost() <= curBandit.getBudget())
+                if (arms[armToPull].getCostMean() <= curBandit.getBudget())
                 {
                     curBandit.pull(armToPull);
                     if (debugSOAAv) System.out.println(Utilities.getPullResult(
@@ -58,7 +58,7 @@ public class SOAAv implements com.samvbeckmann.obriareus.core.IAlgorithm
             }
 
             for (Integer activeArm : activeArms)
-                passAverageRatio += memories[activeArm].getRatio() / arms[activeArm].getCost();
+                passAverageRatio += memories[activeArm].getRatio() / arms[activeArm].getCostMean();
 
             passAverageRatio = passAverageRatio / activeArms.size();
             activeArms.clear();
@@ -66,7 +66,7 @@ public class SOAAv implements com.samvbeckmann.obriareus.core.IAlgorithm
             // Update activeArms for next iteration
             for (int i = 0; i < arms.length; i++)
             {
-                if (arms[i].getCost() <= curBandit.getBudget()
+                if (arms[i].getCostMean() <= curBandit.getBudget()
                         && memories[i].getRatio() >= (1 + xValue) * passAverageRatio)
                 {
                     activeArms.add(i);

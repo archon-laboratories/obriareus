@@ -52,7 +52,7 @@ public class LSplit implements com.samvbeckmann.obriareus.core.IAlgorithm
         {
             for (int i = 0; i < remainingArms.size(); i++)
             {
-                if (arms[i].getCost() <= budget)
+                if (arms[i].getCostMean() <= budget)
                 {
                     curBandit.pull(remainingArms.get(i));
                     if (debugLSplit) System.out.println(Utilities.getPullResult(getName(), remainingArms.get(i),
@@ -84,7 +84,7 @@ public class LSplit implements com.samvbeckmann.obriareus.core.IAlgorithm
                 if (!feasibles.isEmpty())
                 {
                     int currentBest = Utilities.getBestFromFeasibles(curBandit, feasibles);
-                    if (arms[currentBest].getCost() <= curBandit.getBudget())
+                    if (arms[currentBest].getCostMean() <= curBandit.getBudget())
                         remainingArms.add(currentBest);
                     else
                         i--;

@@ -69,7 +69,7 @@ public class Bandit
         int count = 0;
         memories = new ArmMemory[arms.length];
         for (Arm current : arms)
-            memories[count++] = new ArmMemory(current.getCost());
+            memories[count++] = new ArmMemory(current.getCostMean());
     } // end constructor
 
     /**
@@ -87,12 +87,12 @@ public class Bandit
      */
     private static void findCosts()
     {
-        double min = arms[0].getCost();
+        double min = arms[0].getCostMean();
 
         // Implemented as a foreach loop because totalCost needs to be incremented by the cost of the first arm as well
         for (Arm current : arms)
         {
-            double curCost = current.getCost();
+            double curCost = current.getCostMean();
             if (curCost < min)
                 min = curCost;
             totalCost += curCost;

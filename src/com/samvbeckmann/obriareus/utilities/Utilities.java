@@ -115,7 +115,7 @@ public final class Utilities
         return
                 String.format("[%s] Pulled arm %d (mean = [%.3f], sd = [%.3f], est. ratio = [%.3f]); Got Reward %.3f",
                         algName, armNum, memory.getMeanReward(),
-                        arm.getStdDev(), memory.getRatio(), memory.getRecentReward());
+                        arm.getRewardDev(), memory.getRatio(), memory.getRecentReward());
     }
 
     /**

@@ -55,7 +55,7 @@ public class FKDE implements com.samvbeckmann.obriareus.core.IAlgorithm
             double[] armProb = new double[numArms]; // Probability of pulling the corresponding arms
             for (int z = 0; z < numArms; z++)
             {
-                if (arms[z].getCost() <= curBandit.getBudget())
+                if (arms[z].getCostMean() <= curBandit.getBudget())
                 {
                     armProb[z] = epsT; // Set it up
                     numFeasibleArms++;

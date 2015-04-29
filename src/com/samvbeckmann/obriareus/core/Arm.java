@@ -1,5 +1,8 @@
 package com.samvbeckmann.obriareus.core;
 
+import com.samvbeckmann.obriareus.distributions.Constant;
+import com.samvbeckmann.obriareus.distributions.Gaussian;
+
 /**
  * Defines an arm, of which a bandit can pull
  *
@@ -13,34 +16,47 @@ public class Arm
     private IDistribution rewardDistribution;
 
     /**
-     * Cost to pull the arm.
-     */
-    private final double cost;
-
-    /**
      * Standard deviation of the reward.
      */
-    private final double stdDev;
+    private final double rewardDev;
 
     /**
      * Mean reward for the arm.
      */
-    private final double mean;
+    private final double rewardMean;
+
+    /**
+     * The distribution that this arm's costMean method is currently using. Constant by default.
+     */
+    private IDistribution costDistribution;
+
+    /**
+     * Cost to pull the arm.
+     */
+    private final double costMean;
+
+    /**
+     * Standard deviation of arm cost
+     */
+    private final double costDev;
 
     /**
      * Value and distribution assigning Arm constructor.
-     *
-     * @param cost_        Cost to pull the arm.
-     * @param stdDev_      Standard deviation of the reward of the arm.
-     * @param mean_        Mean reward for the arm.
-     * @param distribution The distribution used by the arm
+     *  @param costMean_        Cost to pull the arm.
+     * @param rewardDev_      Standard deviation of the reward of the arm.
+     * @param rewardMean_        Mean reward for the arm.
+     * @param rDist The distribution used by the arm
+     * @param costDev_ Standard deviation of the cost of the arm
      */
-    public Arm(double cost_, double stdDev_, double mean_, IDistribution distribution)
+    public Arm(double rewardDev_, double rewardMean_, IDistribution rDist,
+               double costDev_, double costMean_, IDistribution cDist)
     {
-        cost = cost_;
-        stdDev = stdDev_;
-        mean = mean_;
-        rewardDistribution = distribution;
+        rewardDev = rewardDev_;
+        rewardMean = rewardMean_;
+        rewardDistribution = rDist;
+        costDev = costDev_;
+        costMean = costMean_;
+        costDistribution = cDist;
     } // end constructor
 
     /**
@@ -52,7 +68,7 @@ public class Arm
      */
     public Arm(double cost_, double stdDev_, double mean_)
     {
-        this(cost_, stdDev_, mean_, null);
+        this(stdDev_, mean_, new Gaussian(), 0, cost_, new Constant());
     } // end constructor
 
     /**
@@ -62,7 +78,7 @@ public class Arm
      */
     public double getReward()
     {
-        double reward = rewardDistribution.generateValue(mean, stdDev);
+        double reward = rewardDistribution.generateValue(rewardMean, rewardDev);
 
         if (reward < 0)
             return 0;
@@ -72,17 +88,17 @@ public class Arm
     /**
      * @return The standard deviation of the arm
      */
-    public double getStdDev()
+    public double getRewardDev()
     {
-        return stdDev;
+        return rewardDev;
     }
 
     /**
-     * @return the cost to pull the arm
+     * @return the costMean to pull the arm
      */
-    public double getCost()
+    public double getCostMean()
     {
-        return cost;
+        return costMean;
     }
 
     /**
@@ -92,4 +108,10 @@ public class Arm
     {
         rewardDistribution = distribution;
     }
+
+    public void setCostDistribution(IDistribution costDistribution)
+    {
+        this.costDistribution = costDistribution;
+    }
+
 }

@@ -59,7 +59,7 @@ public class EFirst implements com.samvbeckmann.obriareus.core.IAlgorithm
                 Utilities.generateIndices(remainingIndices, arms.length);
 
             int armIndex = Utilities.randomIndex(remainingIndices, curBandit.getRnd()); // Get a random remaining index
-            if (arms[armIndex].getCost() <= eBudget)
+            if (arms[armIndex].getCostMean() <= eBudget)
             {
                 // Pull it!
                 curBandit.pull(armIndex);
@@ -67,7 +67,7 @@ public class EFirst implements com.samvbeckmann.obriareus.core.IAlgorithm
                     System.out.println(Utilities.getPullResult(
                             getName(), armIndex, arms[armIndex], memories[armIndex]));
 
-                eBudget -= arms[armIndex].getCost();
+                eBudget -= arms[armIndex].getCostMean();
             }
         }
         // eBudget has run out. Begin exploitation phase.
@@ -82,7 +82,7 @@ public class EFirst implements com.samvbeckmann.obriareus.core.IAlgorithm
             if (debugEFirst)
                 System.out.println(Utilities.getPullResult(getName(), bestArm, arms[bestArm], memories[bestArm]));
 
-            if (arms[bestArm].getCost() > curBandit.getBudget()) // Does the best arm cost too much?
+            if (arms[bestArm].getCostMean() > curBandit.getBudget()) // Does the best arm cost too much?
             {
                 // Reassign the arms, taking into account budget constraints.
                 bestArm = Utilities.getBestArm(curBandit);
