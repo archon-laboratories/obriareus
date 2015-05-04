@@ -27,7 +27,7 @@ public class Plot
         this.normalized = normalized;
         this.distribution = distribution;
         counter = 0;
-        data = new ArrayList<double[][]>();
+        data = new ArrayList<>();
         for (int i = 0; i < dataset.getAlgorithms().size(); i++)
         {
             data.add(new double[dataset.getBudgets().size()][2]);
@@ -61,9 +61,10 @@ public class Plot
         /* Initial Arguments */
         JavaPlot jPlot = new JavaPlot();
         String norm = normalized ? "Normalized" : "Absolute";
-        PostscriptTerminal epsf = new PostscriptTerminal(String.format("output/graphs/%s_%s_%s.eps", dataset.toString(),
-                distribution.getName(), norm));
-        jPlot.setTerminal(epsf);
+        PostscriptTerminal ePSF = new PostscriptTerminal(String.format("output/graphs/%s_%s_%s.eps",
+                dataset.toString(), distribution.getName(), norm));
+
+        jPlot.setTerminal(ePSF);
         jPlot.setTitle(String.format("%s %s %s", dataset.toString(), distribution.getName(), norm));
         jPlot.getAxis("x").setLabel("Budget");
         jPlot.getAxis("y").setLabel((norm) + " Performance");
@@ -74,7 +75,12 @@ public class Plot
         {
             double[][] set = data.get(i);
             DataSetPlot s = new DataSetPlot(set);
-            s.setTitle(dataset.getAlgorithms().get(i).getAlgorithm());
+            String inputParameters = "";
+            ArrayList<Double> inputs = (ArrayList<Double>) dataset.getAlgorithms().get(i).getInputParameters();
+            for (Double input : inputs)
+                inputParameters += ", " + input;
+
+            s.setTitle(dataset.getAlgorithms().get(i).getAlgorithm() + inputParameters);
             jPlot.addPlot(s);
         }
 

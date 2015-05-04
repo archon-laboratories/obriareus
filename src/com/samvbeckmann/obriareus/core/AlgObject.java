@@ -50,7 +50,7 @@ public class AlgObject
     /**
      * @return The list of input parameters.
      */
-    public List getInputParameters()
+    public List<Double> getInputParameters()
     {
         return inputParameters;
     }
