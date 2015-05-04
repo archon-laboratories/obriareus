@@ -1,0 +1,58 @@
+{
+  "config": {
+    "defaultRewardDistribution": "com.samvbeckmann.obriareus.distributions.Gaussian",
+    "defaultCostDistribution": "com.samvbeckmann.obriareus.distributions.Constant",
+    "numberTrials": 1000,
+    "input": {
+      "budgets": "automatic",
+      "armRewardMeans": "manual",
+      "armRewardDevs": "manual",
+      "armCostMeans": "manual",
+      "armCostDevs": "manual",
+      "numArms": "manual"
+    }
+  },
+  "budgets": [50, 500, 50],
+  "algorithms": [
+    ["com.samvbeckmann.obriareus.algorithms.EFirst", 0.1],
+    ["com.samvbeckmann.obriareus.algorithms.EFirst", 0.2],
+    ["com.samvbeckmann.obriareus.algorithms.EProgressive", 0.1],
+    ["com.samvbeckmann.obriareus.algorithms.EProgressive", 0.2],
+    ["com.samvbeckmann.obriareus.algorithms.FKDE", 10],
+    ["com.samvbeckmann.obriareus.algorithms.FKUBE"],
+    ["com.samvbeckmann.obriareus.algorithms.UCBBV1", 0.2],
+    ["com.samvbeckmann.obriareus.algorithms.LSplit", 0.5],
+    ["com.samvbeckmann.obriareus.algorithms.SOAAv", 0],
+    ["com.samvbeckmann.obriareus.algorithms.Greedy"]
+  ],
+  "arms": [
+    {
+      "rewardDistribution" : "com.samvbeckmann.obriareus.distributions.Gaussian",
+      "rewardMean" : "5",
+      "rewardStdDev" : "1.2",
+
+      "costDistribution" : "com.samvbeckmann.obriareus.distributions.Poisson",
+      "costMean" : "6",
+      "costStdDev" : "0"
+    },
+    {
+      "rewardDistribution" : "com.samvbeckmann.obriareus.distributions.Gaussian",
+      "rewardMean" : "5",
+      "rewardStdDev" : "1.2",
+
+      "costDistribution" : "com.samvbeckmann.obriareus.distributions.Poisson",
+      "costMean" : "6",
+      "costStdDev" : "0"
+    },
+    {
+
+      "rewardDistribution" : "com.samvbeckmann.obriareus.distributions.Gaussian",
+      "rewardMean" : "5",
+      "rewardStdDev" : "1.3",
+
+      "costDistribution" : "com.samvbeckmann.obriareus.distributions.Poisson",
+      "costMean" : "6",
+      "costStdDev" : "0"
+    }
+  ]
+}

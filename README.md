@@ -157,7 +157,7 @@ To break down the precise syntax:
                Each budget will run once for each distribution. The shortened syntax for this is indicated by making
                the first line under `# Budgets to Run` equal to `*`. The next line should contain the minimum budget.
                The line after that contains the maximum budget. The final line contains the increment by which the
-               budget increases by. An example can be found in the second dataset above.
+               budget increases. An example can be found in the second dataset above.
 
 * **Number of Trials:** The next line is skipped by the interpreter, but should be `# Number of Trials`  or something
                         equally descriptive. The next line contains the number of trials that will be averaged for

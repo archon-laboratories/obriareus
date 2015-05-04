@@ -94,7 +94,7 @@ public class Arm
     }
 
     /**
-     * @return the costMean to pull the arm
+     * @return The mean cost to pull the arm
      */
     public double getCostMean()
     {

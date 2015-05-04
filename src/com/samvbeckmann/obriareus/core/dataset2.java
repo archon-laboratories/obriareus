@@ -7,6 +7,7 @@ import com.samvbeckmann.obriareus.distributions.Gaussian;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Nate Beckemeyer and Sam Beckmann.
@@ -28,7 +29,15 @@ public class dataset2
      */
     private ArrayList<AlgObject> algorithms = new ArrayList<AlgObject>();
 
+    /**
+     * Contains the arms to be used in the trial.
+     */
     private ArrayList<Arm> arms = new ArrayList<>();
+
+    /**
+     * Number of arms.
+     */
+    private int numArms;
 
     /**
      * Number of trials to be performed
@@ -36,11 +45,13 @@ public class dataset2
     private int numTrials;
 
     /**
-     * Number of arms (consistent across trials)
+     * Default distribution for rewards.
      */
-    private int numArms;
-
     private IDistribution defaultRDist;
+
+    /**
+     * Default distribution for costs.
+     */
     private IDistribution defaultCDist;
 
     /**
@@ -63,11 +74,27 @@ public class dataset2
      */
     private String fileName;
 
-    public IDistribution getDistribution(String classPath)
+    /**
+     * Contains instantiations of each distribution, so multiple are not created unnecessarily.
+     */
+    HashMap<String, IDistribution> distributions = new HashMap<>(8, (float) .75);
+
+    /**
+     * Gets a distribution from its classpath; reuses distributions if they have already been instantiated
+     * @param classPath The classpath of the distribution
+     * @return The corresponding distribution
+     */
+    private IDistribution getDistribution(String classPath)
     {
         try
         {
-            return (IDistribution) Class.forName(classPath).newInstance();
+            IDistribution dist = (IDistribution) Class.forName(classPath).newInstance();
+
+            if (distributions.get(classPath) != null)
+                return distributions.get(classPath);
+            distributions.put(classPath, dist);
+
+            return dist;
         } catch (Exception e)
         {
             System.out.println("Warning! Could not locate distribution " + classPath);
@@ -75,19 +102,77 @@ public class dataset2
         }
     }
 
-    public IAlgorithm getAlgorithm(String classPath)
+    /**
+     * Gets an algorithm from its classpath
+     * @param classPath The classpath of the algorithm
+     * @return The corresponding algorithm
+     */
+    private IAlgorithm getAlgorithm(String classPath)
     {
         try
         {
             return (IAlgorithm) Class.forName(classPath).newInstance();
         } catch (Exception e)
         {
-            System.out.println("Warning! Could not locate distribution " + classPath);
+            System.out.println("Warning! Could not locate algorithm " + classPath);
             return null;
         }
     }
 
-    private void implementConfig(JsonReader reader) throws IOException
+    /**
+     * Flags that which is manual vs. automated
+     * @param reader The JsonReader parsing the file
+     * @param manual The array of flags
+     * @throws IOException
+     */
+    private void flagAutomation(JsonReader reader, boolean[] manual) throws IOException
+    {
+        reader.beginObject(); // Input
+        while (reader.hasNext())
+        {
+            String tag = reader.nextName();
+            String value = reader.nextString();
+
+            if (value.equalsIgnoreCase("manual"))
+                switch (tag)
+                {
+                    case "budgets":
+                        manual[0] = true;
+                        break;
+
+                    case "armRewardMeans":
+                        manual[1] = true;
+                        break;
+
+                    case "armRewardDevs":
+                        manual[2] = true;
+                        break;
+
+                    case "armCostMeans":
+                        manual[3] = true;
+                        break;
+
+                    case "armCostDevs":
+                        manual[4] = true;
+                        break;
+
+                    case "numArms":
+                        manual[5] = true;
+                        break;
+                }
+            else if (tag.equalsIgnoreCase("numArms"))
+                numArms = Integer.parseInt(value);
+        }
+        reader.endObject();
+    }
+
+    /**
+     * Implements the configuration part of the file
+     * @param reader The JsonReader parsing the file
+     * @param manual The configuration flags
+     * @throws IOException
+     */
+    private void implementConfig(JsonReader reader, boolean[] manual) throws IOException
     {
         reader.beginObject();
         while (reader.hasNext())
@@ -103,6 +188,14 @@ public class dataset2
                     defaultCDist = getDistribution(reader.nextString());
                     break;
 
+                case "numberTrials":
+                    numTrials = reader.nextInt();
+                    break;
+
+                case "input":
+                    flagAutomation(reader, manual);
+                    break;
+
                 default:
                     System.out.println("Warning! Item " + tag + " not accounted for!");
                     reader.skipValue();
@@ -112,7 +205,40 @@ public class dataset2
         reader.endObject();
     }
 
-    public void addAlgorithms(JsonReader reader) throws IOException
+    /**
+     * Adds budgets to the dataset
+     * @param reader The JsonReader parsing the file
+     * @param manual Contains whether or not this process is automated
+     * @throws IOException
+     */
+    private void addBudgets(JsonReader reader, boolean manual[]) throws IOException
+    {
+        reader.beginArray();
+
+        while (reader.hasNext())
+            if (reader.peek() == null)
+                reader.skipValue();
+            else
+                budgets.add(reader.nextInt());
+
+        reader.endArray();
+
+        if (manual[0])
+            return;
+
+        int min = budgets.remove(0); // The minimum budget to run
+        int max = budgets.remove(0); // The maximum budget to run
+        int increment = budgets.remove(0); // The amount by which to increment
+        for (int cur = min; cur <= max; cur += increment)
+            budgets.add(cur);
+    }
+
+    /**
+     * Adds algorithms to the dataset
+     * @param reader The JsonReader parsing the file
+     * @throws IOException
+     */
+    private void addAlgorithms(JsonReader reader) throws IOException
     {
         reader.beginArray();
         while (reader.hasNext())
@@ -139,20 +265,13 @@ public class dataset2
         reader.endArray();
     }
 
-    public void addBudgets(JsonReader reader) throws IOException
-    {
-        reader.beginArray();
-
-        while (reader.hasNext())
-            if (reader.peek() == null)
-                reader.skipValue();
-            else
-                budgets.add(reader.nextInt());
-
-        reader.endArray();
-    }
-
-    private void addArms(JsonReader reader) throws IOException
+    /**
+     * Adds arms to the dataset
+     * @param reader The JsonReader parsing the file
+     * @param manual The configuration flags
+     * @throws IOException
+     */
+    private void addArms(JsonReader reader, boolean[] manual) throws IOException
     {
         IDistribution rDist;
         IDistribution cDist;
@@ -207,7 +326,8 @@ public class dataset2
                             break;
 
                         default:
-                            System.out.println("Warning! Tag " + tag + " in arms array not found!");
+                            System.out.println("Warning! Tag " + tag + " in arms array not found! Skipping.");
+                            reader.skipValue();
                             break;
                     }
 
@@ -217,9 +337,16 @@ public class dataset2
                 arms.add(new Arm(rDev, rMean, rDist, cDev, cMean, cDist));
             }
         }
+        reader.endArray();
     }
 
-    private void initalizeTrial(JsonReader reader) throws IOException
+    /**
+     * Outermost parser of the JSON file
+     * @param reader The JsonReader parsing the file
+     * @param manual Configuration flags
+     * @throws IOException
+     */
+    private void initalizeTrial(JsonReader reader, boolean[] manual) throws IOException
     {
         reader.beginObject();
         while (reader.hasNext())
@@ -228,23 +355,23 @@ public class dataset2
             switch (tag)
             {
                 case "config":
-                    implementConfig(reader);
+                    implementConfig(reader, manual);
+                    break;
+
+                case "budgets":
+                    addBudgets(reader, manual);
                     break;
 
                 case "algorithms":
                     addAlgorithms(reader);
                     break;
 
-                case "budgets":
-                    addBudgets(reader);
-                    break;
-
                 case "arms":
-                    addArms(reader);
+                    addArms(reader, manual);
                     break;
 
                 default:
-                    System.out.println("Warning! Main tag " + tag + " not found!");
+                    System.out.println("Warning! Outermost tag " + tag + " not found!");
             }
         }
         reader.endObject();
@@ -259,11 +386,15 @@ public class dataset2
             defaultCDist = new Constant();
 
             JsonReader reader = new JsonReader(new FileReader("datasets/3arms.json"));
+            boolean[] manual = new boolean[6];
 
-            initalizeTrial(reader);
+            reader.setLenient(true); // Allows for the inclusion of comments
+            initalizeTrial(reader, manual);
+            reader.close();
         } catch (IOException E)
         {
-            System.err.println("Nopeity-nope! There was an IOException error. Try again.");
+            E.printStackTrace();
+            System.exit(1);
         }
 
     }

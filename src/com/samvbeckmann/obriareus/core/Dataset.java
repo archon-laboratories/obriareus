@@ -390,7 +390,7 @@ public class Dataset
                     stdDev = Double.parseDouble(stringDeviation);
                     if (stdDev < 0)
                     {
-                        System.out.println("ERROR: Standard deviation of an arm set to " + stdDev + ", less than zero.");
+                        System.out.println("ERROR: Standard deviation of an arm set to " + stdDev + "; less than zero.");
                         System.exit(8);
                     }
                     stdDevs[i] = stdDev;
